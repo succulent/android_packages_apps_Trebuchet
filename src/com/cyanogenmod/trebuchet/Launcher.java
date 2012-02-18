@@ -263,6 +263,7 @@ public final class Launcher extends Activity
     private boolean mShowSearchBar;
     private boolean mShowDockDivider;
     private boolean mAutoRotate;
+    private boolean mShowWallpaper;
     private int mAllAppsCorner;
     private int mSearchCorner;
 
@@ -303,6 +304,7 @@ public final class Launcher extends Activity
         mShowSearchBar = PreferencesProvider.Interface.Homescreen.getShowSearchBar(this);
         mShowDockDivider = PreferencesProvider.Interface.Homescreen.Indicator.getShowDockDivider(this);
         mAutoRotate = PreferencesProvider.Interface.General.getAutoRotate(this, getResources().getBoolean(R.bool.config_defaultAutoRotate));
+        mShowWallpaper = PreferencesProvider.Interface.Drawer.Background.getBackgroundShowWallpaper(this);
         mAllAppsCorner = PreferencesProvider.Interface.Icons.getAllAppsIconCorner(this);
         mSearchCorner = PreferencesProvider.Interface.Icons.getSearchIconCorner(this);
         if ((mAllAppsCorner == mSearchCorner) && mShowSearchBar) {
@@ -818,6 +820,7 @@ public final class Launcher extends Activity
         // Setup AppsCustomize
         mAppsCustomizeTabHost = (AppsCustomizeTabHost)
                 findViewById(R.id.apps_customize_pane);
+        if (mShowWallpaper) mAppsCustomizeTabHost.setBackgroundColor(0x00000000);
         mAppsCustomizeContent = (AppsCustomizeView)
                 mAppsCustomizeTabHost.findViewById(R.id.apps_customize_pane_content);
         mAppsCustomizeContent.setup(this, dragController);
@@ -2387,6 +2390,15 @@ public final class Launcher extends Activity
                 @Override
                 public void onAnimationStart(Animator animation) {
                     updateWallpaperVisibility(true);
+                    if (mShowWallpaper) {
+                        mWorkspace.setVisibility(View.GONE);
+                        if (LauncherApplication.isScreenLarge()) {
+                            mAllAppsButton.setVisibility(View.GONE);
+                        } else {
+                            mDockDivider.setVisibility(View.INVISIBLE);
+                            hideHotseat(true);
+                        }
+                    }
                     // Prepare the position
                     toView.setTranslationX(0.0f);
                     toView.setTranslationY(0.0f);
@@ -2411,7 +2423,7 @@ public final class Launcher extends Activity
                         hideDockDivider();
                     }
                     if (!animationCancelled) {
-                        updateWallpaperVisibility(false);
+                        if (!mShowWallpaper) updateWallpaperVisibility(false);
                     }
                 }
 
@@ -2437,6 +2449,15 @@ public final class Launcher extends Activity
                 mStateAnimation.start();
             }
         } else {
+            if (mShowWallpaper) {
+                mWorkspace.setVisibility(View.GONE);
+                if (LauncherApplication.isScreenLarge()) {
+                    mAllAppsButton.setVisibility(View.GONE);
+                } else {
+                    mDockDivider.setVisibility(View.INVISIBLE);
+                    hideHotseat(animated);
+                }
+            }
             toView.setTranslationX(0.0f);
             toView.setTranslationY(0.0f);
             toView.setScaleX(1.0f);
@@ -2453,7 +2474,7 @@ public final class Launcher extends Activity
                     hideDockDivider();
                 }
             }
-            updateWallpaperVisibility(false);
+            if (!mShowWallpaper) updateWallpaperVisibility(false);
         }
     }
 
@@ -2477,6 +2498,15 @@ public final class Launcher extends Activity
 
         setPivotsForZoom(fromView, scaleFactor);
         updateWallpaperVisibility(true);
+        if (mShowWallpaper) {
+            mWorkspace.setVisibility(View.VISIBLE);
+            if (LauncherApplication.isScreenLarge()) {
+                mAllAppsButton.setVisibility(View.VISIBLE);
+            } else {
+                mDockDivider.setVisibility(View.VISIBLE);
+                showHotseat(animated);
+            }
+        }
         showHotseat(animated);
         if (animated) {
             final float oldScaleX = fromView.getScaleX();
@@ -2506,6 +2536,15 @@ public final class Launcher extends Activity
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     updateWallpaperVisibility(true);
+                    if (mShowWallpaper) {
+                        mWorkspace.setVisibility(View.VISIBLE);
+                        if (LauncherApplication.isScreenLarge()) {
+                            mAllAppsButton.setVisibility(View.VISIBLE);
+                        } else {
+                            mDockDivider.setVisibility(View.VISIBLE);
+                            showHotseat(true);
+                        }
+                    }
                     fromView.setVisibility(View.GONE);
                     if (fromView instanceof LauncherTransitionable) {
                         ((LauncherTransitionable) fromView).onLauncherTransitionEnd(instance,

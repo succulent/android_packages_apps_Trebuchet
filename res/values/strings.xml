@@ -323,6 +323,9 @@ s -->
     <string name="preferences_interface_drawer_indicator_enable_summary">Show current page indicator at the bottom of the screen</string>
     <string name="preferences_interface_drawer_indicator_fade_title">Fade Indicator</string>
     <string name="preferences_interface_drawer_indicator_fade_summary">Fade the indicator after the page has changed</string>
+    <string name="preferences_interface_drawer_background_category">Drawer Background</string>
+    <string name="preferences_interface_drawer_background_show_wallpaper_title">Show Wallpaper</string>
+    <string name="preferences_interface_drawer_background_show_wallpaper_summary">Show your wallpaper as the drawer background</string>
 
     <!-- Dock -->
     <string name="preferences_interface_dock_title">Dock</string>

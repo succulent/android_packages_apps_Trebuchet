@@ -104,6 +104,12 @@ public final class PreferencesProvider {
                     return preferences.getBoolean("ui_drawer_indicator_fade", true);
                 }
             }
+            public static class Background {
+                public static boolean getBackgroundShowWallpaper(Context context) {
+                    final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                    return preferences.getBoolean("ui_drawer_background_show_wallpaper", false);
+                }
+            }
         }
 
         public static class Dock {
