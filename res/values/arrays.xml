@@ -62,4 +62,28 @@
         <item>CubeOut</item>
         <item>Stack</item>
     </string-array>
+    <string-array name="preferences_interface_all_apps_button_corner_entries">
+        <item>Upper right</item>
+        <item>Lower right</item>
+        <item>Lower left</item>
+        <item>Upper left </item>
+    </string-array>
+    <string-array name="preferences_interface_all_apps_button_corner_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="preferences_interface_search_button_corner_entries">
+        <item>Upper right</item>
+        <item>Lower right</item>
+        <item>Lower left</item>
+        <item>Upper left </item>
+    </string-array>
+    <string-array name="preferences_interface_search_button_corner_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 </resources>

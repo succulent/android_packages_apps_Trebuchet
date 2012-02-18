@@ -19,6 +19,8 @@ package com.cyanogenmod.trebuchet.preference;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.lang.Integer;
+
 import com.cyanogenmod.trebuchet.Workspace;
 import com.cyanogenmod.trebuchet.AppsCustomizePagedView;
 
@@ -109,7 +111,14 @@ public final class PreferencesProvider {
         }
 
         public static class Icons {
-
+            public static int getAllAppsIconCorner(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return Integer.parseInt(preferences.getString("preferences_interface_icons_all_apps", "0"));
+            }
+            public static int getSearchIconCorner(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return Integer.parseInt(preferences.getString("preferences_interface_icons_search", "3"));
+            }
         }
 
         public static class General {

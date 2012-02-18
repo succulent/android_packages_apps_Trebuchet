@@ -118,7 +118,18 @@
         <!-- Icons -->
         <PreferenceScreen android:key="ui_icons"
             android:title="@string/preferences_interface_icons_title">
-
+                <ListPreference android:key="preferences_interface_icons_all_apps"
+                    android:title="@string/preferences_interface_icons_all_apps"
+                    android:summary="@string/preferences_interface_icons_all_apps_summary"
+                    android:entries="@array/preferences_interface_all_apps_button_corner_entries"
+                    android:entryValues="@array/preferences_interface_all_apps_button_corner_values"
+                    android:defaultValue="0" />
+                <ListPreference android:key="preferences_interface_icons_search"
+                    android:title="@string/preferences_interface_icons_search"
+                    android:summary="@string/preferences_interface_icons_search_summary"
+                    android:entries="@array/preferences_interface_search_button_corner_entries"
+                    android:entryValues="@array/preferences_interface_search_button_corner_values"
+                    android:defaultValue="3" />
         </PreferenceScreen>
 
         <!-- General -->

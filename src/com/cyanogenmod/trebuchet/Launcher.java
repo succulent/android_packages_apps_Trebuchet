@@ -69,6 +69,7 @@ import android.text.TextUtils;
 import android.text.method.TextKeyListener;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -89,8 +90,10 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Advanceable;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -260,6 +263,8 @@ public final class Launcher extends Activity
     private boolean mShowSearchBar;
     private boolean mShowDockDivider;
     private boolean mAutoRotate;
+    private int mAllAppsCorner;
+    private int mSearchCorner;
 
     private Runnable mBuildLayersRunnable = new Runnable() {
         public void run() {
@@ -298,6 +303,11 @@ public final class Launcher extends Activity
         mShowSearchBar = PreferencesProvider.Interface.Homescreen.getShowSearchBar(this);
         mShowDockDivider = PreferencesProvider.Interface.Homescreen.Indicator.getShowDockDivider(this);
         mAutoRotate = PreferencesProvider.Interface.General.getAutoRotate(this, getResources().getBoolean(R.bool.config_defaultAutoRotate));
+        mAllAppsCorner = PreferencesProvider.Interface.Icons.getAllAppsIconCorner(this);
+        mSearchCorner = PreferencesProvider.Interface.Icons.getSearchIconCorner(this);
+        if ((mAllAppsCorner == mSearchCorner) && mShowSearchBar) {
+            mAllAppsCorner = Math.max(0, mAllAppsCorner - 1);
+        }
 
         if (PROFILE_STARTUP) {
             android.os.Debug.startMethodTracing(
@@ -815,6 +825,13 @@ public final class Launcher extends Activity
         // Get the all apps button
         mAllAppsButton = findViewById(R.id.all_apps_button);
         if (mAllAppsButton != null) {
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout
+                    .LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            params.addRule((mAllAppsCorner < 2) ? RelativeLayout.ALIGN_PARENT_RIGHT :
+                    RelativeLayout.ALIGN_PARENT_LEFT);
+            params.addRule((mAllAppsCorner == 0 || mAllAppsCorner == 3) ?
+                    RelativeLayout.ALIGN_PARENT_TOP : RelativeLayout.ALIGN_PARENT_BOTTOM);
+            mAllAppsButton.setLayoutParams(params);
             mAllAppsButton.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -832,6 +849,16 @@ public final class Launcher extends Activity
         dragController.addDropTarget(mWorkspace);
         if (mSearchDropTargetBar != null) {
             mSearchDropTargetBar.setup(this, dragController);
+            boolean topSearch = (mSearchCorner == 0 || mSearchCorner == 3);
+            if (!topSearch || (!mShowSearchBar && (mAllAppsCorner == 1 || mAllAppsCorner == 2))) {
+                FrameLayout.LayoutParams searchParams = new FrameLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.MATCH_PARENT,
+                        getResources().getDimensionPixelSize(R.dimen.qsb_bar_height));
+                searchParams.gravity = Gravity.BOTTOM;
+                mSearchDropTargetBar.setLayoutParams(searchParams);
+                mWorkspace.setPadding(0, 0, 0, getResources().getDimensionPixelSize(
+                        R.dimen.workspace_content_large_only_top_margin));
+            }
         }
     }
 

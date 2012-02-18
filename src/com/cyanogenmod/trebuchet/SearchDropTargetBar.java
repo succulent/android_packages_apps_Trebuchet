@@ -28,6 +28,8 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import com.cyanogenmod.trebuchet.preference.PreferencesProvider;
 
 /*
@@ -53,6 +55,7 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
     private ButtonDropTarget mDeleteDropTarget;
     private int mBarHeight;
     private boolean mDeferOnDragEnd = false;
+    private int mSearchCorner;
 
     private Drawable mPreviousBackground;
 
@@ -64,6 +67,7 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
         super(context, attrs, defStyle);
 
         mShowQSBSearchBar = PreferencesProvider.Interface.Homescreen.getShowSearchBar(context);
+        mSearchCorner = PreferencesProvider.Interface.Icons.getSearchIconCorner(context);
     }
 
     public void setup(Launcher launcher, DragController dragController) {
@@ -82,6 +86,27 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
 
         // Get the individual components
         mQSBSearchBar = findViewById(R.id.qsb_search_bar);
+        boolean searchRight = mSearchCorner < 2;
+        if (searchRight) {
+            ImageView searchButton = (ImageView) findViewById(R.id.search_button);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout
+                    .LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            params.addRule((mSearchCorner == 0 || mSearchCorner == 3) ?
+                    RelativeLayout.ALIGN_PARENT_TOP : RelativeLayout.ALIGN_PARENT_BOTTOM);
+            searchButton.setLayoutParams(params);
+            View searchDivider = findViewById(R.id.search_divider);
+            RelativeLayout.LayoutParams dividerParams = new RelativeLayout.LayoutParams(RelativeLayout
+                    .LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+            dividerParams.addRule(RelativeLayout.LEFT_OF, searchButton.getId());
+            searchDivider.setLayoutParams(dividerParams);
+            View voiceButton = findViewById(R.id.voice_button);
+            RelativeLayout.LayoutParams voiceParams = new RelativeLayout.LayoutParams(RelativeLayout
+                    .LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            voiceParams.addRule(RelativeLayout.LEFT_OF, searchDivider.getId());
+            voiceButton.setLayoutParams(voiceParams);
+        }
+
         mDropTargetBar = findViewById(R.id.drag_target_bar);
         mInfoDropTarget = (ButtonDropTarget) mDropTargetBar.findViewById(R.id.info_target_text);
         mDeleteDropTarget = (ButtonDropTarget) mDropTargetBar.findViewById(R.id.delete_target_text);

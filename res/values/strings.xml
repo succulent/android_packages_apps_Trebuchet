@@ -329,6 +329,10 @@ s -->
 
     <!-- Icons -->
     <string name="preferences_interface_icons_title">Icons</string>
+    <string name="preferences_interface_icons_all_apps">All apps position</string>
+    <string name="preferences_interface_icons_all_apps_summary">Choose the all apps button corner</string>
+    <string name="preferences_interface_icons_search">Search position</string>
+    <string name="preferences_interface_icons_search_summary">Choose the search button corner</string>
 
     <!-- General -->
     <string name="preferences_interface_general_title">General</string>
