@@ -825,13 +825,15 @@ public final class Launcher extends Activity
         // Get the all apps button
         mAllAppsButton = findViewById(R.id.all_apps_button);
         if (mAllAppsButton != null) {
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout
-                    .LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            params.addRule((mAllAppsCorner < 2) ? RelativeLayout.ALIGN_PARENT_RIGHT :
-                    RelativeLayout.ALIGN_PARENT_LEFT);
-            params.addRule((mAllAppsCorner == 0 || mAllAppsCorner == 3) ?
-                    RelativeLayout.ALIGN_PARENT_TOP : RelativeLayout.ALIGN_PARENT_BOTTOM);
-            mAllAppsButton.setLayoutParams(params);
+            if (LauncherApplication.isScreenLarge()) {
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout
+                        .LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                params.addRule((mAllAppsCorner < 2) ? RelativeLayout.ALIGN_PARENT_RIGHT :
+                        RelativeLayout.ALIGN_PARENT_LEFT);
+                params.addRule((mAllAppsCorner == 0 || mAllAppsCorner == 3) ?
+                        RelativeLayout.ALIGN_PARENT_TOP : RelativeLayout.ALIGN_PARENT_BOTTOM);
+                mAllAppsButton.setLayoutParams(params);
+            }
             mAllAppsButton.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -850,7 +852,8 @@ public final class Launcher extends Activity
         if (mSearchDropTargetBar != null) {
             mSearchDropTargetBar.setup(this, dragController);
             boolean topSearch = (mSearchCorner == 0 || mSearchCorner == 3);
-            if (!topSearch || (!mShowSearchBar && (mAllAppsCorner == 1 || mAllAppsCorner == 2))) {
+            if ((!topSearch || (!mShowSearchBar && (mAllAppsCorner == 1 || mAllAppsCorner == 2)))
+                    && LauncherApplication.isScreenLarge()) {
                 FrameLayout.LayoutParams searchParams = new FrameLayout.LayoutParams(
                         RelativeLayout.LayoutParams.MATCH_PARENT,
                         getResources().getDimensionPixelSize(R.dimen.qsb_bar_height));
