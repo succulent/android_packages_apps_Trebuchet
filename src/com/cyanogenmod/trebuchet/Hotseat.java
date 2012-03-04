@@ -25,8 +25,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.cyanogenmod.trebuchet.preference.PreferencesProvider;
+
 public class Hotseat extends FrameLayout {
-    private static final int sAllAppsButtonRank = 2; // In the middle of the dock
+    private static int sAllAppsButtonRank = 2; // In the middle of the dock
 
     private Launcher mLauncher;
     private CellLayout mContent;
@@ -34,6 +36,8 @@ public class Hotseat extends FrameLayout {
     private int mCellCountX;
     private int mCellCountY;
     private boolean mIsLandscape;
+
+    private Context mContext;
 
     public Hotseat(Context context) {
         this(context, null);
@@ -52,6 +56,8 @@ public class Hotseat extends FrameLayout {
         mCellCountY = a.getInt(R.styleable.Hotseat_cellCountY, -1);
         mIsLandscape = context.getResources().getConfiguration().orientation ==
             Configuration.ORIENTATION_LANDSCAPE;
+
+        mContext = context;
     }
 
     public void setup(Launcher launcher) {
@@ -83,6 +89,10 @@ public class Hotseat extends FrameLayout {
         super.onFinishInflate();
         if (mCellCountX < 0) mCellCountX = LauncherModel.getCellCountX();
         if (mCellCountY < 0) mCellCountY = LauncherModel.getCellCountY();
+        int prefCount = PreferencesProvider.Interface.Homescreen.getHotseatApps(mContext);
+        sAllAppsButtonRank = (int) prefCount / 2;
+        if (mIsLandscape) mCellCountY = prefCount;
+        else mCellCountX = prefCount;
         mContent = (CellLayout) findViewById(R.id.layout);
         mContent.setGridSize(mCellCountX, mCellCountY);
 

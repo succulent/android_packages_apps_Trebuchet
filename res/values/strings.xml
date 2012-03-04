@@ -307,6 +307,11 @@ s -->
     <string name="preferences_interface_homescreen_indicator_fade_summary">Fade the indicator after the homescreen has changed</string>
     <string name="preferences_interface_homescreen_indicator_background_title">Show Dock Divider</string>
     <string name="preferences_interface_homescreen_indicator_background_summary">Show the background behind the indicator</string>
+    <string name="preferences_interface_homescreen_general_width_landscape_apps">Landscape - # of apps wide</string>
+    <string name="preferences_interface_homescreen_general_height_landscape_apps">Landscape - # of apps high</string>
+    <string name="preferences_interface_homescreen_general_width_portrait_apps">Portrait - # of apps wide</string>
+    <string name="preferences_interface_homescreen_general_height_portrait_apps">Portrait - # of apps high</string>
+    <string name="preferences_interface_homescreen_general_hotseat_apps">Hotseat - # of apps</string>
 
     <!-- Drawer -->
     <string name="preferences_interface_drawer_title">Drawer</string>

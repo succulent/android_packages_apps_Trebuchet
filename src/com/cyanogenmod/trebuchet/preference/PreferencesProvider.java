@@ -39,6 +39,26 @@ public final class PreferencesProvider {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return preferences.getInt("ui_homescreen_default_screen", def + 1) - 1;
             }
+            public static int getLandscapeAppsWidth(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getInt("ui_width_landscape_apps", 0);
+            }
+            public static int getLandscapeAppsHeight(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getInt("ui_height_landscape_apps", 0);
+            }
+            public static int getPortraitAppsWidth(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getInt("ui_width_portrait_apps", 0);
+            }
+            public static int getPortraitAppsHeight(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getInt("ui_height_portrait_apps", 0);
+            }
+            public static int getHotseatApps(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getInt("ui_hotseat_apps", 0);
+            }
             public static boolean getShowSearchBar(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return preferences.getBoolean("ui_homescreen_general_search", true);

@@ -334,6 +334,19 @@ public class Workspace extends PagedView
         cellCountY = a.getInt(R.styleable.Workspace_cellCountY, cellCountY);
         a.recycle();
 
+        int prefCountX = 0;
+        int prefCountY = 0;
+        if (LauncherApplication.isScreenLandscape(context)) {
+            prefCountX = PreferencesProvider.Interface.Homescreen.getLandscapeAppsWidth(context);
+            prefCountY = PreferencesProvider.Interface.Homescreen.getLandscapeAppsHeight(context);
+        } else {
+            prefCountX = PreferencesProvider.Interface.Homescreen.getPortraitAppsWidth(context);
+            prefCountY = PreferencesProvider.Interface.Homescreen.getPortraitAppsHeight(context);
+        }
+
+        if (prefCountX > 0) cellCountX = prefCountX;
+        if (prefCountY > 0) cellCountY = prefCountY;
+
         LauncherModel.updateWorkspaceLayoutCells(cellCountX, cellCountY);
         setHapticFeedbackEnabled(false);
 

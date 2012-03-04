@@ -119,7 +119,7 @@ public class LauncherApplication extends Application {
     }
 
     public static boolean isScreenLarge() {
-        return sIsScreenLarge;
+        return sIsScreenLarge && (sScreenDensity <= 1f);
     }
 
     public static boolean isScreenLandscape(Context context) {
