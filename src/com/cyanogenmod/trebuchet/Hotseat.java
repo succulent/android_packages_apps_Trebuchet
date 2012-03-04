@@ -90,7 +90,9 @@ public class Hotseat extends FrameLayout {
         if (mCellCountX < 0) mCellCountX = LauncherModel.getCellCountX();
         if (mCellCountY < 0) mCellCountY = LauncherModel.getCellCountY();
         int prefCount = PreferencesProvider.Interface.Homescreen.getHotseatApps(mContext);
-        sAllAppsButtonRank = (int) prefCount / 2;
+        int allAppsRank = PreferencesProvider.Interface.Homescreen.getHotseatAllAppsPosition(mContext);
+        if (allAppsRank == 0) sAllAppsButtonRank = (int) prefCount / 2;
+        else sAllAppsButtonRank = allAppsRank - 1;
         if (mIsLandscape) mCellCountY = prefCount;
         else mCellCountX = prefCount;
         mContent = (CellLayout) findViewById(R.id.layout);

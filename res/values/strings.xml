@@ -307,11 +307,18 @@ s -->
     <string name="preferences_interface_homescreen_indicator_fade_summary">Fade the indicator after the homescreen has changed</string>
     <string name="preferences_interface_homescreen_indicator_background_title">Show Dock Divider</string>
     <string name="preferences_interface_homescreen_indicator_background_summary">Show the background behind the indicator</string>
-    <string name="preferences_interface_homescreen_general_width_landscape_apps">Landscape - # of apps wide</string>
-    <string name="preferences_interface_homescreen_general_height_landscape_apps">Landscape - # of apps high</string>
-    <string name="preferences_interface_homescreen_general_width_portrait_apps">Portrait - # of apps wide</string>
-    <string name="preferences_interface_homescreen_general_height_portrait_apps">Portrait - # of apps high</string>
-    <string name="preferences_interface_homescreen_general_hotseat_apps">Hotseat - # of apps</string>
+    <string name="preferences_interface_homescreen_general_width_landscape_apps">Landscape columns</string>
+    <string name="preferences_interface_homescreen_general_width_landscape_apps_summary"># of landscape columns (0 for default)</string>
+    <string name="preferences_interface_homescreen_general_height_landscape_apps">Landscape rows</string>
+    <string name="preferences_interface_homescreen_general_height_landscape_apps_summary"># of landscape rows (0 for default)</string>
+    <string name="preferences_interface_homescreen_general_width_portrait_apps">Portrait columns</string>
+    <string name="preferences_interface_homescreen_general_width_portrait_apps_summary"># of portrait columns (0 for default)</string>
+    <string name="preferences_interface_homescreen_general_height_portrait_apps">Portrait rows</string>
+    <string name="preferences_interface_homescreen_general_height_portrait_apps_summary"># of portrait rows (0 for default)</string>
+    <string name="preferences_interface_homescreen_general_hotseat_apps">Hotseat app spaces</string>
+    <string name="preferences_interface_homescreen_general_hotseat_apps_summary"># of hotseat app spaces</string>
+    <string name="preferences_interface_homescreen_general_hotseat_all_apps">Hotseat all apps position</string>
+    <string name="preferences_interface_homescreen_general_hotseat_all_apps_summary">Position of all apps button (0 for default)</string>
 
     <!-- Drawer -->
     <string name="preferences_interface_drawer_title">Drawer</string>

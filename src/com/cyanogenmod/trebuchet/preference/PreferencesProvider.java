@@ -57,7 +57,11 @@ public final class PreferencesProvider {
             }
             public static int getHotseatApps(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getInt("ui_hotseat_apps", 0);
+                return preferences.getInt("ui_hotseat_apps", 5);
+            }
+            public static int getHotseatAllAppsPosition(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getInt("ui_hotseat_all_apps", 0);
             }
             public static boolean getShowSearchBar(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
