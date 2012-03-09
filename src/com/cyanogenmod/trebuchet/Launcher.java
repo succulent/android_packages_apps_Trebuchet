@@ -47,6 +47,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.ContentObserver;
@@ -1912,6 +1913,26 @@ public final class Launcher extends Activity
         }
     }
 
+    void startShortcutUninstallActivity(ShortcutInfo shortcutInfo) {
+        PackageManager pm = getPackageManager();
+        ResolveInfo resolveInfo = pm.resolveActivity(shortcutInfo.intent, 0);
+        if ((resolveInfo.activityInfo.applicationInfo.flags &
+                android.content.pm.ApplicationInfo.FLAG_SYSTEM) != 0) {
+            // System applications cannot be installed. For now, show a toast explaining that.
+            // We may give them the option of disabling apps this way.
+            int messageId = R.string.uninstall_system_app_text;
+            Toast.makeText(this, messageId, Toast.LENGTH_SHORT).show();
+        } else {
+            String packageName = shortcutInfo.intent.getComponent().getPackageName();
+            String className = shortcutInfo.intent.getComponent().getClassName();
+            Intent intent = new Intent(
+                    Intent.ACTION_DELETE, Uri.fromParts("package", packageName, className));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                    Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+            startActivity(intent);
+        }
+    }
+
     boolean startActivitySafely(Intent intent, Object tag) {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         try {
@@ -2953,10 +2974,14 @@ public final class Launcher extends Activity
         // Find the app market activity by resolving an intent.
         // (If multiple app markets are installed, it will return the ResolverActivity.)
         ComponentName activityName = intent.resolveActivity(getPackageManager());
+
+        if (activityName != null) {
+            mAppMarketIntent = intent;
+        }
+
         if (activityName != null && (ViewConfiguration.get(this).hasPermanentMenuKey() ||
                 getResources().getBoolean(R.bool.config_cyanogenmod))) {
             int coi = getCurrentOrientationIndexForGlobalIcons();
-            mAppMarketIntent = intent;
             sAppMarketIcon[coi] = updateTextButtonWithIconFromExternalActivity(
                     R.id.market_button, activityName, R.drawable.ic_launcher_market_holo);
             marketButton.setVisibility(View.VISIBLE);
