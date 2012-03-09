@@ -338,6 +338,9 @@ s -->
     <string name="preferences_interface_drawer_background_category">Drawer Background</string>
     <string name="preferences_interface_drawer_background_show_wallpaper_title">Show Wallpaper</string>
     <string name="preferences_interface_drawer_background_show_wallpaper_summary">Show your wallpaper as the drawer background</string>
+    <string name="preferences_interface_drawer_topbar_category">Tab Bar</string>
+    <string name="preferences_interface_drawer_topbar_hide_topbar_title">Hide drawer tab bar</string>
+    <string name="preferences_interface_drawer_topbar_hide_topbar_summary">Hide the drawer tab bar at the top of the screen</string>
 
     <!-- Dock -->
     <string name="preferences_interface_dock_title">Dock</string>

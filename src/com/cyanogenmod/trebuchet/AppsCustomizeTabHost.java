@@ -153,6 +153,9 @@ public class AppsCustomizeTabHost extends TabHost implements LauncherTransitiona
 
         // Hide the tab bar until we measure
         mTabsContainer.setAlpha(0f);
+
+        boolean hideTopBar = PreferencesProvider.Interface.Drawer.TopBar.getHideTopbar(mContext);
+        if (hideTopBar) mTabsContainer.setVisibility(View.GONE);
     }
 
     @Override

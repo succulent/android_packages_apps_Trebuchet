@@ -251,6 +251,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
     private boolean mJoinWidgetsApps;
     private boolean mShowScrollingIndicator;
     private boolean mFadeScrollingIndicator;
+    private boolean mHideTopBar;
 
     public AppsCustomizePagedView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -300,6 +301,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         mFadeInAdjacentScreens = PreferencesProvider.Interface.Drawer.Scrolling.getFadeInAdjacentScreens(context);
         mShowScrollingIndicator = PreferencesProvider.Interface.Drawer.Indicator.getShowScrollingIndicator(context);
         mFadeScrollingIndicator = PreferencesProvider.Interface.Drawer.Indicator.getFadeScrollingIndicator(context);
+        mHideTopBar = PreferencesProvider.Interface.Drawer.TopBar.getHideTopbar(context);
 
         if (!mShowScrollingIndicator) {
             disableScrollingIndicator();
@@ -464,6 +466,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         mWidgetSpacingLayout.calculateCellCount(width, height, maxCellCountX, maxCellCountY);
         mCellCountX = mWidgetSpacingLayout.getCellCountX();
         mCellCountY = mWidgetSpacingLayout.getCellCountY();
+        if (mHideTopBar) mCellCountY++;
         updatePageCounts();
 
         // Force a measure to update recalculate the gaps
