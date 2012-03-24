@@ -226,7 +226,8 @@ public class LauncherModel extends BroadcastReceiver {
                 // as in Workspace.onDrop. Here, we just add/remove them from the list of items
                 // that are on the desktop, as appropriate
                 if (modelItem.container == LauncherSettings.Favorites.CONTAINER_DESKTOP ||
-                        modelItem.container == LauncherSettings.Favorites.CONTAINER_HOTSEAT) {
+                        modelItem.container == LauncherSettings.Favorites.CONTAINER_HOTSEAT ||
+                        modelItem.container == LauncherSettings.Favorites.CONTAINER_HOTSEAT_TWO) {
                     if (!sWorkspaceItems.contains(modelItem)) {
                         sWorkspaceItems.add(modelItem);
                     }
@@ -256,6 +257,9 @@ public class LauncherModel extends BroadcastReceiver {
         if (context instanceof Launcher && screen < 0 &&
                 container == LauncherSettings.Favorites.CONTAINER_HOTSEAT) {
             item.screen = ((Launcher) context).getHotseat().getOrderInHotseat(cellX, cellY);
+        } else if (context instanceof Launcher && screen < 0 &&
+                container == LauncherSettings.Favorites.CONTAINER_HOTSEAT_TWO) {
+            item.screen = ((Launcher) context).getHotseatTwo().getOrderInHotseat(cellX, cellY);
         } else {
             item.screen = screen;
         }
@@ -415,6 +419,9 @@ public class LauncherModel extends BroadcastReceiver {
         if (context instanceof Launcher && screen < 0 &&
                 container == LauncherSettings.Favorites.CONTAINER_HOTSEAT) {
             item.screen = ((Launcher) context).getHotseat().getOrderInHotseat(cellX, cellY);
+        } else if (context instanceof Launcher && screen < 0 &&
+                container == LauncherSettings.Favorites.CONTAINER_HOTSEAT_TWO) {
+            item.screen = ((Launcher) context).getHotseatTwo().getOrderInHotseat(cellX, cellY);
         } else {
             item.screen = screen;
         }
@@ -446,7 +453,8 @@ public class LauncherModel extends BroadcastReceiver {
                     case LauncherSettings.Favorites.ITEM_TYPE_APPLICATION:
                     case LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT:
                         if (item.container == LauncherSettings.Favorites.CONTAINER_DESKTOP ||
-                                item.container == LauncherSettings.Favorites.CONTAINER_HOTSEAT) {
+                                item.container == LauncherSettings.Favorites.CONTAINER_HOTSEAT ||
+                                item.container == LauncherSettings.Favorites.CONTAINER_HOTSEAT_TWO) {
                             sWorkspaceItems.add(item);
                         }
                         break;
@@ -930,6 +938,18 @@ public class LauncherModel extends BroadcastReceiver {
                     occupied[Launcher.MAX_SCREEN_COUNT][item.screen][0] = item;
                     return true;
                 }
+            } else if (item.container == LauncherSettings.Favorites.CONTAINER_HOTSEAT_TWO) {
+                // We use the last index to refer to the hotseat and the screen as the rank, so
+                // test and update the occupied state accordingly
+                if (occupied[Launcher.MAX_SCREEN_COUNT + 1][item.screen][0] != null) {
+                    Log.e(TAG, "Error loading shortcut into hotseat " + item
+                        + " into position (" + item.screen + ":" + item.cellX + "," + item.cellY
+                        + ") occupied by " + occupied[Launcher.MAX_SCREEN_COUNT + 1][item.screen][0]);
+                    return false;
+                } else {
+                    occupied[Launcher.MAX_SCREEN_COUNT + 1][item.screen][0] = item;
+                    return true;
+                }
             } else if (item.container != LauncherSettings.Favorites.CONTAINER_DESKTOP) {
                 // Skip further checking if it is not the hotseat or workspace container
                 return true;
@@ -981,7 +1001,7 @@ public class LauncherModel extends BroadcastReceiver {
             // Load workspace in reverse order to ensure that latest items are loaded first (and
             // before any earlier duplicates)
             final ItemInfo occupied[][][] =
-                    new ItemInfo[Launcher.MAX_SCREEN_COUNT + 1][mCellCountX + 1][mCellCountY + 1];
+                    new ItemInfo[Launcher.MAX_SCREEN_COUNT + 2][mCellCountX + 1][mCellCountY + 1];
 
             try {
                 final int idIndex = c.getColumnIndexOrThrow(LauncherSettings.Favorites._ID);
@@ -1063,6 +1083,7 @@ public class LauncherModel extends BroadcastReceiver {
                                 switch (container) {
                                 case LauncherSettings.Favorites.CONTAINER_DESKTOP:
                                 case LauncherSettings.Favorites.CONTAINER_HOTSEAT:
+                                case LauncherSettings.Favorites.CONTAINER_HOTSEAT_TWO:
                                     sWorkspaceItems.add(info);
                                     break;
                                 default:
@@ -1108,6 +1129,7 @@ public class LauncherModel extends BroadcastReceiver {
                             switch (container) {
                                 case LauncherSettings.Favorites.CONTAINER_DESKTOP:
                                 case LauncherSettings.Favorites.CONTAINER_HOTSEAT:
+                                case LauncherSettings.Favorites.CONTAINER_HOTSEAT_TWO:
                                     sWorkspaceItems.add(folderInfo);
                                     break;
                             }
@@ -1142,7 +1164,8 @@ public class LauncherModel extends BroadcastReceiver {
 
                                 container = c.getInt(containerIndex);
                                 if (container != LauncherSettings.Favorites.CONTAINER_DESKTOP &&
-                                    container != LauncherSettings.Favorites.CONTAINER_HOTSEAT) {
+                                    container != LauncherSettings.Favorites.CONTAINER_HOTSEAT &&
+                                    container != LauncherSettings.Favorites.CONTAINER_HOTSEAT_TWO) {
                                     Log.e(TAG, "Widget found where container "
                                         + "!= CONTAINER_DESKTOP nor CONTAINER_HOTSEAT - ignoring!");
                                     continue;

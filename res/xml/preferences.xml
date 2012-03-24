@@ -35,6 +35,25 @@
                     launcher:maxExternal="ui_homescreen_screens"
                     launcher:max="7"
                     launcher:min="1" />
+                <com.cyanogenmod.trebuchet.preference.NumberPickerPreference android:key="ui_homescreen_screen_padding_vertical"
+                    android:title="@string/preferences_interface_homescreen_general_screen_padding_vertical_title"
+                    android:summary="@string/preferences_interface_homescreen_general_screen_padding_vertical_summary"
+                    android:defaultValue="0"
+                    launcher:max="10"
+                    launcher:min="0" />
+                <com.cyanogenmod.trebuchet.preference.NumberPickerPreference android:key="ui_homescreen_screen_padding_horizontal"
+                    android:title="@string/preferences_interface_homescreen_general_screen_padding_horizontal_title"
+                    android:summary="@string/preferences_interface_homescreen_general_screen_padding_horizontal_summary"
+                    android:defaultValue="0"
+                    launcher:max="10"
+                    launcher:min="0" />
+                <CheckBoxPreference android:key="ui_homescreen_general_phone_search"
+                    android:title="@string/preferences_interface_homescreen_general_search_title"
+                    android:summary="@string/preferences_interface_homescreen_general_search_summary"
+                    android:defaultValue="true" />
+                <CheckBoxPreference android:key="ui_homescreen_general_resize_any_widget"
+                    android:title="@string/preferences_interface_homescreen_general_resize_any_widget_title"
+                    android:summary="@string/preferences_interface_homescreen_general_resize_any_widget_summary" />
                 <com.cyanogenmod.trebuchet.preference.NumberPickerPreference android:key="ui_width_portrait_apps"
                     android:title="@string/preferences_interface_homescreen_general_width_portrait_apps"
                     android:summary="@string/preferences_interface_homescreen_general_width_portrait_apps_summary"
@@ -59,40 +78,6 @@
                     android:defaultValue="0"
                     launcher:max="10"
                     launcher:min="0" />
-                <com.cyanogenmod.trebuchet.preference.NumberPickerPreference android:key="ui_hotseat_apps"
-                    android:title="@string/preferences_interface_homescreen_general_hotseat_apps"
-                    android:summary="@string/preferences_interface_homescreen_general_hotseat_apps_summary"
-                    android:defaultValue="5"
-                    launcher:max="9"
-                    launcher:min="1" />
-                <com.cyanogenmod.trebuchet.preference.NumberPickerPreference android:key="ui_hotseat_all_apps"
-                    android:title="@string/preferences_interface_homescreen_general_hotseat_all_apps"
-                    android:summary="@string/preferences_interface_homescreen_general_hotseat_all_apps_summary"
-                    android:defaultValue="0"
-                    launcher:max="9"
-                    launcher:min="0" />
-                <com.cyanogenmod.trebuchet.preference.NumberPickerPreference android:key="ui_homescreen_screen_padding_vertical"
-                    android:title="@string/preferences_interface_homescreen_general_screen_padding_vertical_title"
-                    android:summary="@string/preferences_interface_homescreen_general_screen_padding_vertical_summary"
-                    android:defaultValue="0"
-                    launcher:max="10"
-                    launcher:min="0" />
-                <com.cyanogenmod.trebuchet.preference.NumberPickerPreference android:key="ui_homescreen_screen_padding_horizontal"
-                    android:title="@string/preferences_interface_homescreen_general_screen_padding_horizontal_title"
-                    android:summary="@string/preferences_interface_homescreen_general_screen_padding_horizontal_summary"
-                    android:defaultValue="0"
-                    launcher:max="10"
-                    launcher:min="0" />
-                <CheckBoxPreference android:key="ui_homescreen_general_search"
-                    android:title="@string/preferences_interface_homescreen_general_search_title"
-                    android:summary="@string/preferences_interface_homescreen_general_search_summary"
-                    android:defaultValue="true" />
-                <CheckBoxPreference android:key="ui_homescreen_general_resize_any_widget"
-                    android:title="@string/preferences_interface_homescreen_general_resize_any_widget_title"
-                    android:summary="@string/preferences_interface_homescreen_general_resize_any_widget_summary" />
-                <CheckBoxPreference android:key="ui_homescreen_general_hide_icon_labels"
-                    android:title="@string/preferences_interface_homescreen_general_hide_icon_labels_title"
-                    android:summary="@string/preferences_interface_homescreen_general_hide_icon_labels_summary" />
             </PreferenceCategory>
             <PreferenceCategory android:title="@string/preferences_interface_homescreen_scrolling_category">
                 <ListPreference android:key="ui_homescreen_scrolling_transition_effect"
@@ -120,10 +105,6 @@
                     android:summary="@string/preferences_interface_homescreen_indicator_fade_summary"
                     android:defaultValue="true"
                     android:dependency="ui_homescreen_indicator_enable" />
-                <CheckBoxPreference android:key="ui_homescreen_indicator_background"
-                    android:title="@string/preferences_interface_homescreen_indicator_background_title"
-                    android:summary="@string/preferences_interface_homescreen_indicator_background_summary"
-                    android:defaultValue="true" />
             </PreferenceCategory>
         </PreferenceScreen>
 
@@ -175,24 +156,38 @@
         <!-- Dock -->
         <PreferenceScreen android:key="ui_dock"
             android:title="@string/preferences_interface_dock_title">
-
+                <CheckBoxPreference android:key="ui_homescreen_general_show_hotseat"
+                    android:title="@string/preferences_interface_homescreen_general_show_hotseat_title"
+                    android:summary="@string/preferences_interface_homescreen_general_show_hotseat_summary" />
+                <CheckBoxPreference android:key="ui_homescreen_indicator_background"
+                    android:title="@string/preferences_interface_homescreen_indicator_background_title"
+                    android:summary="@string/preferences_interface_homescreen_indicator_background_summary" />
+                <CheckBoxPreference android:key="ui_homescreen_tablet_dock_divider_two"
+                    android:title="@string/preferences_interface_tablet_dock_divider_two_title"
+                    android:summary="@string/preferences_interface_tablet_dock_divider_two_summary" />
+                <com.cyanogenmod.trebuchet.preference.NumberPickerPreference android:key="ui_hotseat_apps"
+                    android:title="@string/preferences_interface_homescreen_general_hotseat_apps"
+                    android:summary="@string/preferences_interface_homescreen_general_hotseat_apps_summary"
+                    android:defaultValue="5"
+                    launcher:max="9"
+                    launcher:min="1" />
+                <com.cyanogenmod.trebuchet.preference.NumberPickerPreference android:key="ui_hotseat_all_apps"
+                    android:title="@string/preferences_interface_homescreen_general_hotseat_all_apps"
+                    android:summary="@string/preferences_interface_homescreen_general_hotseat_all_apps_summary"
+                    android:defaultValue="0"
+                    launcher:max="9"
+                    launcher:min="0" />
+                <CheckBoxPreference android:key="ui_homescreen_general_show_hotseat_allapps"
+                    android:title="@string/preferences_interface_homescreen_general_show_hotseat_allapps_title"
+                    android:summary="@string/preferences_interface_homescreen_general_show_hotseat_allapps_summary" />
         </PreferenceScreen>
 
         <!-- Icons -->
         <PreferenceScreen android:key="ui_icons"
             android:title="@string/preferences_interface_icons_title">
-                <ListPreference android:key="preferences_interface_icons_all_apps"
-                    android:title="@string/preferences_interface_icons_all_apps"
-                    android:summary="@string/preferences_interface_icons_all_apps_summary"
-                    android:entries="@array/preferences_interface_all_apps_button_corner_entries"
-                    android:entryValues="@array/preferences_interface_all_apps_button_corner_values"
-                    android:defaultValue="0" />
-                <ListPreference android:key="preferences_interface_icons_search"
-                    android:title="@string/preferences_interface_icons_search"
-                    android:summary="@string/preferences_interface_icons_search_summary"
-                    android:entries="@array/preferences_interface_search_button_corner_entries"
-                    android:entryValues="@array/preferences_interface_search_button_corner_values"
-                    android:defaultValue="3" />
+                <CheckBoxPreference android:key="ui_homescreen_general_hide_icon_labels"
+                    android:title="@string/preferences_interface_homescreen_general_hide_icon_labels_title"
+                    android:summary="@string/preferences_interface_homescreen_general_hide_icon_labels_summary" />
         </PreferenceScreen>
 
         <!-- General -->
@@ -201,6 +196,87 @@
             <CheckBoxPreference android:key="ui_general_orientation"
                 android:title="@string/preferences_interface_general_orientation_title"
                 android:defaultValue="@bool/config_defaultAutoRotate" />
+        </PreferenceScreen>
+
+        <!-- Tablet -->
+        <PreferenceScreen android:key="ui_tablet"
+            android:title="@string/preferences_interface_tablet_title">
+            <PreferenceCategory android:title="@string/preferences_interface_tablet_show_workspace_allapps_title">
+                <CheckBoxPreference android:key="ui_tablet_workspace_allapps"
+                    android:title="@string/preferences_interface_tablet_show_workspace_allapps_title"
+                    android:summary="@string/preferences_interface_tablet_show_workspace_allapps_summary"
+                    android:defaultValue="true" />
+                <ListPreference android:key="ui_tablet_all_apps_corner"
+                    android:title="@string/preferences_interface_tablet_all_apps_corner_title"
+                    android:summary="@string/preferences_interface_tablet_all_apps_corner_summary"
+                    android:entries="@array/preferences_interface_all_apps_button_corner_entries"
+                    android:entryValues="@array/preferences_interface_all_apps_button_corner_values"
+                    android:dependency="ui_tablet_workspace_allapps"
+                    android:defaultValue="0" />
+                <CheckBoxPreference android:key="preferences_interface_icons_hotseat"
+                    android:title="@string/preferences_interface_icons_hotseat_title"
+                    android:summary="@string/preferences_interface_icons_hotseat_summary"
+                    android:dependency="ui_tablet_workspace_allapps"
+                    android:defaultValue="false" />
+                <CheckBoxPreference android:key="preferences_interface_icons_market"
+                    android:title="@string/preferences_interface_icons_market_title"
+                    android:summary="@string/preferences_interface_icons_market_summary"
+                    android:dependency="ui_tablet_workspace_allapps"
+                    android:defaultValue="false" />
+                <CheckBoxPreference android:key="preferences_interface_icons_settings_right"
+                    android:title="@string/preferences_interface_icons_settings_right_title"
+                    android:summary="@string/preferences_interface_icons_settings_right_summary"
+                    android:dependency="ui_tablet_workspace_allapps"
+                    android:defaultValue="false" />
+            </PreferenceCategory>
+
+            <PreferenceCategory android:title="@string/preferences_interface_tablet_search_category">
+                <CheckBoxPreference android:key="ui_homescreen_general_search"
+                    android:title="@string/preferences_interface_homescreen_general_search_title"
+                    android:summary="@string/preferences_interface_homescreen_general_search_summary"
+                    android:defaultValue="true" />
+               <ListPreference android:key="ui_tablet_search_corner"
+                    android:title="@string/preferences_interface_tablet_search_corner_title"
+                    android:summary="@string/preferences_interface_tablet_search_corner_summary"
+                    android:entries="@array/preferences_interface_search_button_corner_entries"
+                    android:entryValues="@array/preferences_interface_search_button_corner_values"
+                    android:dependency="ui_homescreen_general_search"
+                    android:defaultValue="3" />
+                <CheckBoxPreference android:key="preferences_interface_icons_settings"
+                    android:title="@string/preferences_interface_icons_settings_title"
+                    android:summary="@string/preferences_interface_icons_settings_summary"
+                    android:dependency="ui_homescreen_general_search"
+                    android:defaultValue="false" />
+                <CheckBoxPreference android:key="preferences_interface_icons_market_left"
+                    android:title="@string/preferences_interface_icons_market_left_title"
+                    android:summary="@string/preferences_interface_icons_market_left_summary"
+                    android:dependency="ui_homescreen_general_search"
+                    android:defaultValue="false" />
+            </PreferenceCategory>
+
+            <PreferenceCategory android:title="@string/preferences_interface_tablet_combined_category">
+                <CheckBoxPreference android:key="ui_tablet_workspace_combined_bar"
+                    android:title="@string/preferences_interface_tablet_workspace_combined_bar_title"
+                    android:summary="@string/preferences_interface_tablet_workspace_combined_bar_summary"
+                    android:dependency="ui_tablet_workspace_allapps"
+                    android:defaultValue="false" />
+                <CheckBoxPreference android:key="ui_tablet_workspace_allapps_center"
+                    android:title="@string/preferences_interface_tablet_center_allapps_title"
+                    android:summary="@string/preferences_interface_tablet_center_allapps_summary"
+                    android:dependency="ui_tablet_workspace_allapps"
+                    android:defaultValue="false" />
+            </PreferenceCategory>
+
+            <PreferenceCategory android:title="@string/preferences_interface_tablet_paging_category">
+                <CheckBoxPreference android:key="preferences_interface_tablet_page_controls"
+                    android:title="@string/preferences_interface_tablet_page_controls_title"
+                    android:summary="@string/preferences_interface_tablet_page_controls_summary"
+                    android:defaultValue="true" />
+                <CheckBoxPreference android:key="preferences_interface_tablet_page_outline"
+                    android:title="@string/preferences_interface_tablet_page_outline_title"
+                    android:summary="@string/preferences_interface_tablet_page_outline_summary"
+                    android:defaultValue="true" />
+            </PreferenceCategory>
         </PreferenceScreen>
     </PreferenceCategory>
 

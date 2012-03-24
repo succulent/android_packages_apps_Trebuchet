@@ -11,7 +11,7 @@
      distributed under the License is distributed on an "AS IS" BASIS,
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
-     limitations under the License.
+     limitations under the License .
 -->
 
 <com.cyanogenmod.trebuchet.DragLayer
@@ -31,7 +31,7 @@
     <include layout="@layout/all_apps_bar"
         android:id="@+id/all_apps_bar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="@dimen/qsb_bar_height" />
 
     <include layout="@layout/qsb_bar"
         android:id="@+id/qsb_bar"
@@ -56,4 +56,36 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />
+
+    <include layout="@layout/hotseat"
+        android:id="@+id/hotseat"
+        android:layout_marginRight="@dimen/button_bar_horizontal_padding"
+        android:layout_width="@dimen/button_bar_height_plus_padding"
+        android:layout_height="match_parent"
+        android:layout_gravity="right" />
+
+    <include layout="@layout/hotseat"
+        android:id="@+id/hotseat_two"
+        android:layout_marginLeft="@dimen/button_bar_horizontal_padding"
+        android:layout_width="@dimen/button_bar_height_plus_padding"
+        android:layout_height="match_parent"
+        android:layout_gravity="left" />
+
+    <include
+        android:id="@+id/dock_divider"
+        layout="@layout/workspace_divider"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginRight="@dimen/button_bar_height"
+        android:layout_marginTop="@dimen/qsb_bar_height"
+        android:layout_gravity="right" />
+
+    <include
+        android:id="@+id/dock_divider_two"
+        layout="@layout/workspace_divider"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/button_bar_height"
+        android:layout_marginTop="@dimen/qsb_bar_height"
+        android:layout_gravity="left" />
 </com.cyanogenmod.trebuchet.DragLayer>

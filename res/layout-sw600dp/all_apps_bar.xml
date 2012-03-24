@@ -17,8 +17,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:launcher="http://schemas.android.com/apk/res/com.cyanogenmod.trebuchet"
     style="@style/SearchDropTargetBar"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <!-- AppsCustomize icon -->
     <com.cyanogenmod.trebuchet.HolographicImageView
         android:id="@+id/all_apps_button"
@@ -34,6 +34,122 @@
         android:src="@drawable/ic_home_all_apps_holo_dark"
         android:focusable="true"
         android:clickable="true"
+        android:visibility="gone"
         android:contentDescription="@string/accessibility_all_apps_button" />
+
+    <ImageView
+        style="@style/SearchButtonDivider"
+        android:id="@+id/button_divider_all_apps"
+        android:layout_toLeftOf="@+id/all_apps_button"
+        android:src="@drawable/divider_launcher_holo"
+        android:visibility="gone"
+        android:focusable="false"
+        android:clickable="false" />
+
+    <!-- Hotseat icon -->
+    <com.cyanogenmod.trebuchet.HolographicImageView
+        style="@style/SearchButton.Voice"
+        android:id="@+id/workspace_hotseat_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/button_divider_all_apps"
+        android:src="@drawable/hotseat_btn"
+        android:onClick="onClickHotseatButton"
+        android:visibility="gone"
+        android:focusable="true"
+        android:clickable="true"
+        android:contentDescription="@string/preferences_interface_homescreen_general_show_hotseat_title" />
+
+    <ImageView
+        style="@style/SearchButtonDivider"
+        android:id="@+id/button_divider_all_apps_two"
+        android:layout_toLeftOf="@+id/workspace_hotseat_button"
+        android:src="@drawable/divider_launcher_holo"
+        android:visibility="gone"
+        android:focusable="false"
+        android:clickable="false" />
+
+    <!-- Market icon -->
+    <com.cyanogenmod.trebuchet.HolographicImageView
+        style="@style/SearchButton.Voice"
+        android:id="@+id/workspace_market_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/button_divider_all_apps_two"
+        android:src="@drawable/ic_launcher_market_holo"
+        android:onClick="onClickAppMarketButton"
+        android:visibility="gone"
+        android:focusable="true"
+        android:clickable="true"
+        android:contentDescription="@string/market" />
+
+    <ImageView
+        style="@style/SearchButtonDivider"
+        android:id="@+id/button_divider_all_apps_three"
+        android:layout_toLeftOf="@+id/workspace_market_button"
+        android:src="@drawable/divider_launcher_holo"
+        android:visibility="gone"
+        android:focusable="false"
+        android:clickable="false" />
+
+    <!-- Settings icon -->
+    <com.cyanogenmod.trebuchet.HolographicImageView
+        style="@style/SearchButton.Voice"
+        android:id="@+id/workspace_settings_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/button_divider_all_apps_three"
+        android:src="@drawable/quicksettings_btn"
+        android:onClick="onClickSettingsButton"
+        android:visibility="gone"
+        android:focusable="true"
+        android:clickable="true"
+        android:contentDescription="@string/accessibility_voice_search_button" />
+
+    <ImageView
+        style="@style/SearchButtonDivider"
+        android:id="@+id/button_divider_all_apps_four"
+        android:layout_toLeftOf="@+id/workspace_settings_button"
+        android:src="@drawable/divider_launcher_holo"
+        android:visibility="gone"
+        android:focusable="false"
+        android:clickable="false" />
+
+    <!-- Voice search icon -->
+    <com.cyanogenmod.trebuchet.HolographicImageView
+        style="@style/SearchButton.Voice"
+        android:id="@+id/workspace_voice_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/button_divider_all_apps_four"
+        android:src="@drawable/ic_home_voice_search_holo"
+        android:onClick="onClickVoiceButton"
+        android:focusable="true"
+        android:clickable="true"
+        android:visibility="gone"
+        android:contentDescription="@string/accessibility_voice_search_button" />
+
+    <ImageView
+        style="@style/SearchButtonDivider"
+        android:id="@+id/button_divider_all_apps_five"
+        android:layout_toLeftOf="@+id/workspace_voice_button"
+        android:src="@drawable/divider_launcher_holo"
+        android:visibility="gone"
+        android:focusable="false"
+        android:clickable="false" />
+
+   <!-- Global search icon -->
+   <com.cyanogenmod.trebuchet.HolographicImageView
+        style="@style/SearchButton"
+        android:id="@+id/workspace_search_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/workspace_voice_button"
+        android:src="@drawable/ic_home_search_normal_holo"
+        android:onClick="onClickSearchButton"
+        android:focusable="true"
+        android:clickable="true"
+        android:visibility="gone"
+        android:contentDescription="@string/accessibility_search_button" />
 </RelativeLayout>
 

@@ -91,7 +91,7 @@ s -->
     <!-- Error message when user has filled a home screen, possibly not used -->
     <string name="out_of_space">No more room on this Home screen.</string>
     <!-- Error message when user tries to drop an invalid item on the hotseat -->
-    <string name="invalid_hotseat_item">This widget is too large for the hotseat.</string>
+    <string name="invalid_hotseat_item">This widget is too large for the dock.</string>
     <!-- Message displayed when a shortcut is created by an external application -->
     <string name="shortcut_installed">Shortcut \"<xliff:g id="name" example="Browser">%s</xliff:g>\" created.</string>
     <!-- Message displayed when a shortcut is uninstalled by an external application -->
@@ -291,9 +291,9 @@ s -->
     <string name="preferences_interface_homescreen_general_screens_summary">Number of screens on the homescreen</string>
     <string name="preferences_interface_homescreen_general_default_screen_title">Default screen</string>
     <string name="preferences_interface_homescreen_general_default_screen_summary">Choose the default homescreen</string>
-    <string name="preferences_interface_homescreen_general_screen_padding_vertical_title">Vertical Padding</string>
+    <string name="preferences_interface_homescreen_general_screen_padding_vertical_title">Vertical padding</string>
     <string name="preferences_interface_homescreen_general_screen_padding_vertical_summary">Extra vertical spacing on the homescreen</string>
-    <string name="preferences_interface_homescreen_general_screen_padding_horizontal_title">Horizontal Padding</string>
+    <string name="preferences_interface_homescreen_general_screen_padding_horizontal_title">Horizontal padding</string>
     <string name="preferences_interface_homescreen_general_screen_padding_horizontal_summary">Extra horizontal spacing on the homescreen</string>
     <string name="preferences_interface_homescreen_general_search_title">Search bar</string>
     <string name="preferences_interface_homescreen_general_search_summary">Enable persistent search bar</string>
@@ -313,8 +313,8 @@ s -->
     <string name="preferences_interface_homescreen_indicator_enable_summary">Show current page indicator at the bottom of the screen</string>
     <string name="preferences_interface_homescreen_indicator_fade_title">Fade indicator</string>
     <string name="preferences_interface_homescreen_indicator_fade_summary">Fade the indicator after the homescreen has changed</string>
-    <string name="preferences_interface_homescreen_indicator_background_title">Show dock divider</string>
-    <string name="preferences_interface_homescreen_indicator_background_summary">Show the background behind the indicator</string>
+    <string name="preferences_interface_homescreen_indicator_background_title">Show bottom/right dock divider</string>
+    <string name="preferences_interface_homescreen_indicator_background_summary">Show the dock divider for the bottom/right dock</string>
     <string name="preferences_interface_homescreen_general_width_landscape_apps">Landscape columns</string>
     <string name="preferences_interface_homescreen_general_width_landscape_apps_summary"># of landscape columns (0 for automatic)</string>
     <string name="preferences_interface_homescreen_general_height_landscape_apps">Landscape rows</string>
@@ -323,10 +323,14 @@ s -->
     <string name="preferences_interface_homescreen_general_width_portrait_apps_summary"># of portrait columns (0 for automatic)</string>
     <string name="preferences_interface_homescreen_general_height_portrait_apps">Portrait rows</string>
     <string name="preferences_interface_homescreen_general_height_portrait_apps_summary"># of portrait rows (0 for automatic)</string>
-    <string name="preferences_interface_homescreen_general_hotseat_apps">Hotseat app spaces</string>
-    <string name="preferences_interface_homescreen_general_hotseat_apps_summary"># of hotseat app spaces</string>
-    <string name="preferences_interface_homescreen_general_hotseat_all_apps">Hotseat all apps position</string>
+    <string name="preferences_interface_homescreen_general_hotseat_apps">Dock app spaces</string>
+    <string name="preferences_interface_homescreen_general_hotseat_apps_summary"># of dock app spaces</string>
+    <string name="preferences_interface_homescreen_general_hotseat_all_apps">Dock all apps position</string>
     <string name="preferences_interface_homescreen_general_hotseat_all_apps_summary">Position of all apps button (0 for automatic)</string>
+    <string name="preferences_interface_homescreen_general_show_hotseat_title">Dock</string>
+    <string name="preferences_interface_homescreen_general_show_hotseat_summary">Show the dock on the workspace</string>
+    <string name="preferences_interface_homescreen_general_show_hotseat_allapps_title">Dock all apps button</string>
+    <string name="preferences_interface_homescreen_general_show_hotseat_allapps_summary">Show the all apps button in the dock</string>
 
     <!-- Drawer -->
     <string name="preferences_interface_drawer_title">Drawer</string>
@@ -344,7 +348,7 @@ s -->
     <string name="preferences_interface_drawer_indicator_fade_title">Fade indicator</string>
     <string name="preferences_interface_drawer_indicator_fade_summary">Fade the indicator after the page has changed</string>
     <string name="preferences_interface_drawer_background_category">Drawer Background</string>
-    <string name="preferences_interface_drawer_background_show_wallpaper_title">Show Wallpaper</string>
+    <string name="preferences_interface_drawer_background_show_wallpaper_title">Show wallpaper</string>
     <string name="preferences_interface_drawer_background_show_wallpaper_summary">Show your wallpaper as the drawer background</string>
     <string name="preferences_interface_drawer_topbar_category">Tab Bar</string>
     <string name="preferences_interface_drawer_topbar_hide_topbar_title">Hide drawer tab bar</string>
@@ -353,12 +357,40 @@ s -->
     <!-- Dock -->
     <string name="preferences_interface_dock_title">Dock</string>
 
+    <!-- Tablet -->
+    <string name="preferences_interface_tablet_title">Tablet</string>
+    <string name="preferences_interface_tablet_combined_category">Search bar disabled options</string>
+    <string name="preferences_interface_tablet_search_category">Search bar</string>
+    <string name="preferences_interface_tablet_paging_category">Workspace page transitions</string>
+    <string name="preferences_interface_tablet_show_workspace_allapps_title">All apps bar</string>
+    <string name="preferences_interface_tablet_show_workspace_allapps_summary">Show the all apps bar on the workspace</string>
+    <string name="preferences_interface_tablet_center_allapps_title">Center all apps bar</string>
+    <string name="preferences_interface_tablet_center_allapps_summary">Center all apps bar horizontally when search bar is disabled</string>
+    <string name="preferences_interface_tablet_workspace_combined_bar_title">Combine search and all apps bar</string>
+    <string name="preferences_interface_tablet_workspace_combined_bar_summary">Combine search and all apps bar when search bar is disabled</string>
+    <string name="preferences_interface_tablet_all_apps_corner_title">All apps bar position</string>
+    <string name="preferences_interface_tablet_all_apps_corner_summary">Choose the all apps bar corner</string>
+    <string name="preferences_interface_tablet_search_corner_title">Search bar position</string>
+    <string name="preferences_interface_tablet_search_corner_summary">Choose the search drop bar corner</string>
+    <string name="preferences_interface_tablet_page_outline_title">Page outlines</string>
+    <string name="preferences_interface_tablet_page_outline_summary">Show page outlines when changing pages</string>
+    <string name="preferences_interface_tablet_page_controls_title">Onscreen controls</string>
+    <string name="preferences_interface_tablet_page_controls_summary">Show all apps and search controls when changing pages</string>
+    <string name="preferences_interface_icons_market_left_title">Google Play button</string>
+    <string name="preferences_interface_icons_market_left_summary">Show the Google Play button in the search bar</string>
+    <string name="preferences_interface_icons_settings_right_title">Settings button</string>
+    <string name="preferences_interface_icons_settings_right_summary">Show the settings button the in all apps bar</string>
+    <string name="preferences_interface_tablet_dock_divider_two_title">Show top/left dock divider</string>
+    <string name="preferences_interface_tablet_dock_divider_two_summary">Show the dock divider for the top/left dock</string>
+
     <!-- Icons -->
     <string name="preferences_interface_icons_title">Icons</string>
-    <string name="preferences_interface_icons_all_apps">All apps position</string>
-    <string name="preferences_interface_icons_all_apps_summary">Choose the all apps button corner</string>
-    <string name="preferences_interface_icons_search">Search position</string>
-    <string name="preferences_interface_icons_search_summary">Choose the search button corner</string>
+    <string name="preferences_interface_icons_hotseat_title">Dock toggle button</string>
+    <string name="preferences_interface_icons_hotseat_summary">Show the dock toggle button in the all apps bar</string>
+    <string name="preferences_interface_icons_market_title">Google Play button</string>
+    <string name="preferences_interface_icons_market_summary">Show the Google Play button in the all apps bar</string>
+    <string name="preferences_interface_icons_settings_title">Settings button</string>
+    <string name="preferences_interface_icons_settings_summary">Show the settings button in the search bar</string>
 
     <!-- General -->
     <string name="preferences_interface_general_title">General</string>

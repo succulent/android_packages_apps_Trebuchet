@@ -267,7 +267,9 @@ public class Workspace extends PagedView
     private boolean mShowScrollingIndicator;
     private boolean mFadeScrollingIndicator;
     private boolean mShowDockDivider;
+    private boolean mShowDockDividerTwo;
     private TransitionEffect mTransitionEffect;
+    private boolean mShowOutlinesWhenScrolling;
 
     /**
      * Used to inflate the Workspace from XML.
@@ -373,6 +375,8 @@ public class Workspace extends PagedView
         mShowScrollingIndicator = PreferencesProvider.Interface.Homescreen.Indicator.getShowScrollingIndicator(context);
         mFadeScrollingIndicator = PreferencesProvider.Interface.Homescreen.Indicator.getFadeScrollingIndicator(context);
         mShowDockDivider = PreferencesProvider.Interface.Homescreen.Indicator.getShowDockDivider(context);
+        mShowDockDividerTwo = PreferencesProvider.Interface.Homescreen.Indicator.getShowDockDividerTwo(context);
+        mShowOutlinesWhenScrolling = PreferencesProvider.Interface.Tablet.getShowPageOutlines(context);
 
         mLauncher = (Launcher) context;
         initWorkspace();
@@ -611,6 +615,26 @@ public class Workspace extends PagedView
                 x = mLauncher.getHotseat().getCellXFromOrder(screen);
                 y = mLauncher.getHotseat().getCellYFromOrder(screen);
             }
+        } else if (container == LauncherSettings.Favorites.CONTAINER_HOTSEAT_TWO) {
+            layout = mLauncher.getHotseatTwo().getLayout();
+            child.setOnKeyListener(null);
+
+            // Hide folder title in the hotseat
+             if (!mHideIconLabels) {
+                // Hide titles in the hotseat
+                if (child instanceof FolderIcon) {
+                    ((FolderIcon) child).setTextVisible(false);
+                }
+            }
+
+            if (screen < 0) {
+                screen = mLauncher.getHotseatTwo().getOrderInHotseat(x, y);
+            } else {
+                // Note: We do this to ensure that the hotseat is always laid out in the orientation
+                // of the hotseat in order regardless of which orientation they were added
+                x = mLauncher.getHotseatTwo().getCellXFromOrder(screen);
+                y = mLauncher.getHotseatTwo().getCellYFromOrder(screen);
+            }
         } else {
             if (!mHideIconLabels) {
                 // Show titles if not in the hotseat
@@ -782,6 +806,10 @@ public class Workspace extends PagedView
     protected void onPageBeginMoving() {
         super.onPageBeginMoving();
 
+        if (LauncherApplication.isScreenLarge() && !mDragController.dragging()) {
+            mLauncher.hideWorkspaceItems();
+        }
+
         if (isHardwareAccelerated()) {
             updateChildrenLayersEnabled();
         } else {
@@ -796,7 +824,7 @@ public class Workspace extends PagedView
         }
 
         // Only show page outlines as we pan if we are on large screen
-        if (LauncherApplication.isScreenLarge()) {
+        if (LauncherApplication.isScreenLarge() && mShowOutlinesWhenScrolling) {
             showOutlines();
         }
     }
@@ -817,6 +845,8 @@ public class Workspace extends PagedView
             // Only hide page outlines as we pan if we are on large screen
             if (LauncherApplication.isScreenLarge()) {
                 hideOutlines();
+                mLauncher.hideHotseatOutlines();
+                mLauncher.showWorkspaceItems();
             }
         }
         mOverScrollMaxBackgroundAlpha = 0.0f;
@@ -2354,6 +2384,8 @@ public class Workspace extends PagedView
             // We want the point to be mapped to the dragTarget.
             if (mLauncher.isHotseatLayout(mDragTargetLayout)) {
                 mapPointFromSelfToSibling(mLauncher.getHotseat(), mDragViewVisualCenter);
+            } else if (mLauncher.isHotseatTwoLayout(mDragTargetLayout)) {
+                mapPointFromSelfToSibling(mLauncher.getHotseatTwo(), mDragViewVisualCenter);
             } else {
                 mapPointFromSelfToChild(mDragTargetLayout, mDragViewVisualCenter, null);
             }
@@ -2511,6 +2543,8 @@ public class Workspace extends PagedView
         if (mDragTargetLayout != null) {
             if (mLauncher.isHotseatLayout(mDragTargetLayout)) {
                 mapPointFromSelfToSibling(mLauncher.getHotseat(), mDragViewVisualCenter);
+            } else if (mLauncher.isHotseatTwoLayout(mDragTargetLayout)) {
+                mapPointFromSelfToSibling(mLauncher.getHotseatTwo(), mDragViewVisualCenter);
             } else {
                 mapPointFromSelfToChild(mDragTargetLayout, mDragViewVisualCenter, null);
             }
@@ -2530,9 +2564,15 @@ public class Workspace extends PagedView
                 // Move internally
                 boolean hasMovedLayouts = (getParentCellLayoutForView(cell) != dropTargetLayout);
                 boolean hasMovedIntoHotseat = mLauncher.isHotseatLayout(dropTargetLayout);
-                long container = hasMovedIntoHotseat ?
-                        LauncherSettings.Favorites.CONTAINER_HOTSEAT :
-                        LauncherSettings.Favorites.CONTAINER_DESKTOP;
+                boolean hasMovedIntoHotseatTwo = mLauncher.isHotseatTwoLayout(dropTargetLayout);
+                long container;
+                if (hasMovedIntoHotseat) {
+                    container = LauncherSettings.Favorites.CONTAINER_HOTSEAT;
+                } else if (hasMovedIntoHotseatTwo) {
+                    container = LauncherSettings.Favorites.CONTAINER_HOTSEAT_TWO;
+                } else {
+                    container = LauncherSettings.Favorites.CONTAINER_DESKTOP;
+                }
                 int screen = (mTargetCell[0] < 0) ?
                         mDragInfo.screen : indexOfChild(dropTargetLayout);
                 int spanX = mDragInfo != null ? mDragInfo.spanX : 1;
@@ -2558,7 +2598,7 @@ public class Workspace extends PagedView
                         (int) mDragViewVisualCenter[1], mDragInfo.spanX, mDragInfo.spanY, cell,
                         dropTargetLayout, mTargetCell);
 
-                if (mCurrentPage != screen && !hasMovedIntoHotseat) {
+                if (mCurrentPage != screen && !hasMovedIntoHotseat && !hasMovedIntoHotseatTwo) {
                     snapScreen = screen;
                     snapToPage(screen);
                 }
@@ -2580,7 +2620,8 @@ public class Workspace extends PagedView
                     cell.setId(LauncherModel.getCellLayoutChildId(container, mDragInfo.screen,
                             mTargetCell[0], mTargetCell[1], mDragInfo.spanX, mDragInfo.spanY));
 
-                    if (container != LauncherSettings.Favorites.CONTAINER_HOTSEAT &&
+                    if ((container != LauncherSettings.Favorites.CONTAINER_HOTSEAT ||
+                             container != LauncherSettings.Favorites.CONTAINER_HOTSEAT_TWO) &&
                             cell instanceof LauncherAppWidgetHostView) {
                         final CellLayout cellLayout = dropTargetLayout;
                         // We post this call so that the widget has a chance to be placed
@@ -2688,6 +2729,7 @@ public class Workspace extends PagedView
         // don't need to show the outlines
         if (LauncherApplication.isScreenLarge()) {
             showOutlines();
+            mLauncher.showHotseatOutlines();
         }
     }
 
@@ -2707,6 +2749,7 @@ public class Workspace extends PagedView
 
         if (!mIsPageMoving) {
             hideOutlines();
+            mLauncher.hideHotseatOutlines();
         }
     }
 
@@ -2783,6 +2826,7 @@ public class Workspace extends PagedView
 
             // Show the current page outlines to indicate that we can accept this drop
             showOutlines();
+            mLauncher.showHotseatOutlines();
             layout.onDragEnter();
             layout.visualizeDropLocation(null, mDragOutline, x, y, 1, 1, null, null);
 
@@ -2847,6 +2891,7 @@ public class Workspace extends PagedView
             // Hide the page outlines after the drop
             layout.onDragExit();
             hideOutlines();
+            mLauncher.hideHotseatOutlines();
             return true;
         }
         return super.onDragEvent(event);
@@ -3064,6 +3109,12 @@ public class Workspace extends PagedView
                     layout = mLauncher.getHotseat().getLayout();
                 }
             }
+            if (mLauncher.getHotseatTwo() != null && !isExternalDragWidget(d)) {
+                mLauncher.getHotseatTwo().getHitRect(r);
+                if (r.contains(d.x, d.y)) {
+                    layout = mLauncher.getHotseatTwo().getLayout();
+                }
+            }
             if (layout == null) {
                 layout = findMatchingPageForDragOver(d.dragView, d.x, d.y, false);
             }
@@ -3085,7 +3136,7 @@ public class Workspace extends PagedView
 
                 boolean isInSpringLoadedMode = (mState == State.SPRING_LOADED);
                 if (isInSpringLoadedMode) {
-                    if (mLauncher.isHotseatLayout(layout)) {
+                    if (mLauncher.isHotseatLayout(layout) || mLauncher.isHotseatTwoLayout(layout)) {
                         mSpringLoadedDragController.cancel();
                     } else {
                         mSpringLoadedDragController.setAlarm(mDragTargetLayout);
@@ -3098,6 +3149,12 @@ public class Workspace extends PagedView
                 mLauncher.getHotseat().getHitRect(r);
                 if (r.contains(d.x, d.y)) {
                     layout = mLauncher.getHotseat().getLayout();
+                }
+            }
+            if (mLauncher.getHotseatTwo() != null && !isDragWidget(d)) {
+                mLauncher.getHotseatTwo().getHitRect(r);
+                if (r.contains(d.x, d.y)) {
+                    layout = mLauncher.getHotseatTwo().getLayout();
                 }
             }
             if (layout == null) {
@@ -3121,6 +3178,8 @@ public class Workspace extends PagedView
             // We want the point to be mapped to the dragTarget.
             if (mLauncher.isHotseatLayout(mDragTargetLayout)) {
                 mapPointFromSelfToSibling(mLauncher.getHotseat(), mDragViewVisualCenter);
+            } else if (mLauncher.isHotseatTwoLayout(mDragTargetLayout)) {
+                mapPointFromSelfToSibling(mLauncher.getHotseatTwo(), mDragViewVisualCenter);
             } else {
                 mapPointFromSelfToChild(mDragTargetLayout, mDragViewVisualCenter, null);
             }
@@ -3258,12 +3317,17 @@ public class Workspace extends PagedView
             spanY = mDragInfo.spanY;
         }
 
-        final long container = mLauncher.isHotseatLayout(cellLayout) ?
-                LauncherSettings.Favorites.CONTAINER_HOTSEAT :
-                    LauncherSettings.Favorites.CONTAINER_DESKTOP;
+        final long container;
+        if (mLauncher.isHotseatLayout(cellLayout)) {
+            container = LauncherSettings.Favorites.CONTAINER_HOTSEAT;
+        } else if (mLauncher.isHotseatTwoLayout(cellLayout)) {
+             container = LauncherSettings.Favorites.CONTAINER_HOTSEAT_TWO;
+        } else {
+            container = LauncherSettings.Favorites.CONTAINER_DESKTOP;
+        }
         final int screen = indexOfChild(cellLayout);
         if (!mLauncher.isHotseatLayout(cellLayout) && screen != mCurrentPage
-                && mState != State.SPRING_LOADED) {
+                && mState != State.SPRING_LOADED && !mLauncher.isHotseatTwoLayout(cellLayout)) {
             snapToPage(screen);
         }
 
@@ -3500,6 +3564,8 @@ public class Workspace extends PagedView
             CellLayout cellLayout;
             if (mLauncher.isHotseatLayout(target)) {
                 cellLayout = mLauncher.getHotseat().getLayout();
+            } else if (mLauncher.isHotseatTwoLayout(target)) {
+                cellLayout = mLauncher.getHotseatTwo().getLayout();
             } else {
                 cellLayout = (CellLayout) getPageAt(mDragInfo.screen);
             }
@@ -3550,6 +3616,13 @@ public class Workspace extends PagedView
         if (mLauncher.getHotseat() != null) {
             Rect r = new Rect();
             mLauncher.getHotseat().getHitRect(r);
+            if (r.contains(x, y)) {
+                return false;
+            }
+        }
+        if (mLauncher.getHotseatTwo() != null) {
+            Rect r = new Rect();
+            mLauncher.getHotseatTwo().getHitRect(r);
             if (r.contains(x, y)) {
                 return false;
             }
@@ -3638,6 +3711,9 @@ public class Workspace extends PagedView
         if (mLauncher.getHotseat() != null) {
             layouts.add(mLauncher.getHotseat().getLayout());
         }
+        if (mLauncher.getHotseatTwo() != null) {
+            layouts.add(mLauncher.getHotseatTwo().getLayout());
+        }
         return layouts;
     }
 
@@ -3653,6 +3729,9 @@ public class Workspace extends PagedView
         }
         if (mLauncher.getHotseat() != null) {
             childrenLayouts.add(mLauncher.getHotseat().getLayout().getChildrenLayout());
+        }
+        if (mLauncher.getHotseatTwo() != null) {
+            childrenLayouts.add(mLauncher.getHotseatTwo().getLayout().getChildrenLayout());
         }
         return childrenLayouts;
     }
@@ -3866,11 +3945,13 @@ public class Workspace extends PagedView
 
         final ImageView qsbDivider = (ImageView) (parent.findViewById(R.id.qsb_divider));
         final ImageView dockDivider = (ImageView) (parent.findViewById(R.id.dock_divider));
+        final ImageView dockDividerTwo = (ImageView) (parent.findViewById(R.id.dock_divider_two));
         final ImageView scrollIndicator = getScrollingIndicator();
 
         cancelScrollingIndicatorAnimations();
         if (qsbDivider != null && mShowSearchBar) qsbDivider.setAlpha(reducedFade);
         if (dockDivider != null && mShowDockDivider) dockDivider.setAlpha(reducedFade);
+        if (dockDividerTwo != null && mShowDockDividerTwo) dockDividerTwo.setAlpha(reducedFade);
         if (scrollIndicator != null && mShowScrollingIndicator) scrollIndicator.setAlpha(1 - fade);
     }
 }

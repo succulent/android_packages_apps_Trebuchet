@@ -193,6 +193,7 @@ public final class Launcher extends Activity
     private Workspace mWorkspace;
     private View mQsbDivider;
     private View mDockDivider;
+    private View mDockDividerTwo;
     private DragLayer mDragLayer;
     private DragController mDragController;
 
@@ -205,7 +206,10 @@ public final class Launcher extends Activity
     private FolderInfo mFolderInfo;
 
     private Hotseat mHotseat;
+    private Hotseat mHotseatTwo;
+    private RelativeLayout mAllAppsBar;
     private View mAllAppsButton;
+    private ImageView mHotseatButton;
 
     private SearchDropTargetBar mSearchDropTargetBar;
     private AppsCustomizeTabHost mAppsCustomizeTabHost;
@@ -263,11 +267,24 @@ public final class Launcher extends Activity
     // Preferences
     private boolean mShowSearchBar;
     private boolean mShowDockDivider;
+    private boolean mShowDockDividerTwo;
     private boolean mHideIconLabels;
     private boolean mAutoRotate;
     private boolean mShowWallpaper;
     private int mAllAppsCorner;
     private int mSearchCorner;
+    private boolean mCenterAllApps;
+    private boolean mAllAppsTop;
+    private boolean mAllAppsLeft;
+    private boolean mSearchTop;
+    private boolean mShowMarketButton;
+    private boolean mShowSettingsRight;
+    private boolean mShowHotseat;
+    private boolean mShowAllAppsWorkspace;
+    private boolean mShowAllAppsHotseat;
+    private boolean mShowHotseatButton;
+    private boolean mShowPageControls;
+    private boolean mCombinedBar;
 
     private Runnable mBuildLayersRunnable = new Runnable() {
         public void run() {
@@ -305,14 +322,37 @@ public final class Launcher extends Activity
         // Preferences
         mShowSearchBar = PreferencesProvider.Interface.Homescreen.getShowSearchBar(this);
         mShowDockDivider = PreferencesProvider.Interface.Homescreen.Indicator.getShowDockDivider(this);
+        mShowDockDividerTwo = PreferencesProvider.Interface.Homescreen.Indicator.getShowDockDividerTwo(this);
         mHideIconLabels = PreferencesProvider.Interface.Homescreen.getHideIconLabels(this);
         mAutoRotate = PreferencesProvider.Interface.General.getAutoRotate(this, getResources().getBoolean(R.bool.config_defaultAutoRotate));
         mShowWallpaper = PreferencesProvider.Interface.Drawer.Background.getBackgroundShowWallpaper(this);
-        mAllAppsCorner = PreferencesProvider.Interface.Icons.getAllAppsIconCorner(this);
-        mSearchCorner = PreferencesProvider.Interface.Icons.getSearchIconCorner(this);
-        if ((mAllAppsCorner == mSearchCorner) && mShowSearchBar) {
-            mAllAppsCorner = Math.max(0, mAllAppsCorner - 1);
+        mCenterAllApps = PreferencesProvider.Interface.Tablet.getCenterAllAppsWorkspace(this);
+        mAllAppsCorner = PreferencesProvider.Interface.Tablet.getAllAppsBarCorner(this);
+        mSearchCorner = PreferencesProvider.Interface.Tablet.getSearchBarCorner(this);
+        mShowHotseatButton = PreferencesProvider.Interface.Icons.getHotseatButton(this);
+        mShowMarketButton = PreferencesProvider.Interface.Icons.getShowMarketButton(this);
+        mShowHotseat = PreferencesProvider.Interface.Homescreen.getShowHotseat(this);
+        mShowAllAppsWorkspace = PreferencesProvider.Interface.Tablet.getShowAllAppsWorkspace(this);
+        mShowAllAppsHotseat = PreferencesProvider.Interface.Homescreen.getShowAllAppsHotseat(this);
+        mShowPageControls = PreferencesProvider.Interface.Tablet.getShowPageControls(this);
+        mShowSettingsRight = PreferencesProvider.Interface.Tablet.getShowSettingsRight(this);
+        mCombinedBar = PreferencesProvider.Interface.Tablet.getCombinedBar(this);
+
+        // Combine all apps and search bar and hide search bar if they are on the same corner
+        if ((mAllAppsCorner == mSearchCorner) && mShowSearchBar &&
+                LauncherApplication.isScreenLarge()) {
+            SharedPreferences prefs =
+                    getSharedPreferences(PreferencesProvider.PREFERENCES_KEY, Context.MODE_PRIVATE);
+            prefs.edit().putBoolean("ui_tablet_workspace_combined_bar", true).commit();
+            prefs.edit().putBoolean("ui_homescreen_general_search", false).commit();
+            mCombinedBar = true;
+            mShowSearchBar = false;
         }
+
+        // All apps and search positions
+        mAllAppsLeft = mAllAppsCorner > 1 ? true : false;
+        mAllAppsTop = mAllAppsCorner == 0 || mAllAppsCorner == 3;
+        mSearchTop = mSearchCorner == 0 || mSearchCorner == 3;
 
         if (PROFILE_STARTUP) {
             android.os.Debug.startMethodTracing(
@@ -790,6 +830,7 @@ public final class Launcher extends Activity
         mWorkspace = (Workspace) mDragLayer.findViewById(R.id.workspace);
         mQsbDivider = (ImageView) findViewById(R.id.qsb_divider);
         mDockDivider = (ImageView) findViewById(R.id.dock_divider);
+        mDockDividerTwo = (ImageView) findViewById(R.id.dock_divider_two);
 
         // Setup the drag layer
         mDragLayer.setup(this, dragController);
@@ -798,6 +839,11 @@ public final class Launcher extends Activity
         mHotseat = (Hotseat) findViewById(R.id.hotseat);
         if (mHotseat != null) {
             mHotseat.setup(this);
+            if (mShowAllAppsHotseat) mHotseat.resetLayout();
+        }
+        mHotseatTwo = (Hotseat) findViewById(R.id.hotseat_two);
+        if (mHotseatTwo != null) {
+            mHotseatTwo.setup(this);
         }
 
         // Setup the workspace
@@ -809,16 +855,41 @@ public final class Launcher extends Activity
         // Get the search/delete bar
         mSearchDropTargetBar = (SearchDropTargetBar) mDragLayer.findViewById(R.id.qsb_bar);
 
-        final View qsbDivider = findViewById(R.id.qsb_divider);
-        final View dockDivider = findViewById(R.id.dock_divider);
         // Hide the search divider if we are hiding search bar
-        if (!mShowSearchBar && qsbDivider != null) {
-            qsbDivider.setVisibility(View.GONE);
+        if (!mShowSearchBar && mQsbDivider != null) {
+            mQsbDivider.setVisibility(View.GONE);
         }
 
-        if (!mShowDockDivider && dockDivider != null) {
-            dockDivider.setVisibility(View.GONE);
+        // Hide the dock dividers and set up padding if necessary
+        if (!mShowDockDivider && mDockDivider != null) {
+            mDockDivider.setVisibility(View.GONE);
+            if (mQsbDivider != null) mQsbDivider.setVisibility(View.GONE);
         }
+        if (!mShowDockDividerTwo && mDockDividerTwo != null) {
+            if (mDockDividerTwo != null) mDockDividerTwo.setVisibility(View.GONE);
+        }
+        if (mShowDockDivider && (!mSearchTop || (!mShowSearchBar && !mAllAppsTop)) &&
+                LauncherApplication.isScreenLarge() &&
+                LauncherApplication.isScreenLandscape(getApplicationContext())) {
+            FrameLayout.LayoutParams dividerMargins = new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.MATCH_PARENT);
+            dividerMargins.setMargins(0, 0,
+                    getResources().getDimensionPixelSize(R.dimen.button_bar_height),
+                    getResources().getDimensionPixelSize(R.dimen.qsb_bar_height));
+            dividerMargins.gravity = Gravity.RIGHT;
+            mDockDivider.setLayoutParams(dividerMargins);
+        }
+        if (mShowDockDividerTwo && (!mSearchTop || (!mShowSearchBar && !mAllAppsTop)) &&
+                LauncherApplication.isScreenLarge() &&
+                LauncherApplication.isScreenLandscape(getApplicationContext())) {
+            FrameLayout.LayoutParams dividerTwoMargins = new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.MATCH_PARENT);
+            dividerTwoMargins.setMargins(getResources().getDimensionPixelSize(R.dimen.button_bar_height),
+                    0, 0, getResources().getDimensionPixelSize(R.dimen.qsb_bar_height));
+            dividerTwoMargins.gravity = Gravity.LEFT;
+            mDockDividerTwo.setLayoutParams(dividerTwoMargins);
+        }
+        if ((mShowDockDivider || mShowDockDividerTwo) && !mShowHotseat) hideDockDivider(false);
 
         // Setup AppsCustomize
         mAppsCustomizeTabHost = (AppsCustomizeTabHost)
@@ -828,18 +899,137 @@ public final class Launcher extends Activity
                 mAppsCustomizeTabHost.findViewById(R.id.apps_customize_pane_content);
         mAppsCustomizeContent.setup(this, dragController);
 
-        // Get the all apps button
+        // Setup the all apps bar
+        mAllAppsBar = (RelativeLayout) findViewById(R.id.all_apps_bar);
         mAllAppsButton = findViewById(R.id.all_apps_button);
-        if (mAllAppsButton != null) {
-            if (LauncherApplication.isScreenLarge()) {
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout
+        View marketButton = findViewById(R.id.workspace_market_button);
+        View settingsButton = findViewById(R.id.workspace_settings_button);
+        mHotseatButton = (ImageView) findViewById(R.id.workspace_hotseat_button);
+        View searchButton = findViewById(R.id.workspace_search_button);
+        View voiceButton = findViewById(R.id.workspace_voice_button);
+        View buttonDivider = findViewById(R.id.button_divider_all_apps);
+        View buttonDividerTwo = findViewById(R.id.button_divider_all_apps_two);
+        View buttonDividerThree = findViewById(R.id.button_divider_all_apps_three);
+        View buttonDividerFour = findViewById(R.id.button_divider_all_apps_four);
+        View buttonDividerFive = findViewById(R.id.button_divider_all_apps_five);
+
+        if (mAllAppsBar != null && mShowAllAppsWorkspace) {
+            RelativeLayout.LayoutParams allAppsParams = new RelativeLayout.LayoutParams(RelativeLayout
+                    .LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            allAppsParams.addRule(!mAllAppsLeft ? RelativeLayout.ALIGN_PARENT_RIGHT :
+                    RelativeLayout.ALIGN_PARENT_LEFT);
+            mAllAppsButton.setLayoutParams(allAppsParams);
+            mAllAppsButton.setVisibility(View.VISIBLE);
+
+            if (mShowHotseatButton) {
+                RelativeLayout.LayoutParams dividerParams = new RelativeLayout.LayoutParams(RelativeLayout
                         .LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                params.addRule((mAllAppsCorner < 2) ? RelativeLayout.ALIGN_PARENT_RIGHT :
-                        RelativeLayout.ALIGN_PARENT_LEFT);
-                params.addRule((mAllAppsCorner == 0 || mAllAppsCorner == 3) ?
-                        RelativeLayout.ALIGN_PARENT_TOP : RelativeLayout.ALIGN_PARENT_BOTTOM);
-                mAllAppsButton.setLayoutParams(params);
+                dividerParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
+                        RelativeLayout.RIGHT_OF, mAllAppsButton.getId());
+                dividerParams.addRule(RelativeLayout.CENTER_VERTICAL);
+                buttonDivider.setLayoutParams(dividerParams);
+                buttonDivider.setVisibility(View.VISIBLE);
+
+                RelativeLayout.LayoutParams hotseatParams = new RelativeLayout.LayoutParams(RelativeLayout
+                        .LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                hotseatParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
+                        RelativeLayout.RIGHT_OF, buttonDivider.getId());
+                mHotseatButton.setLayoutParams(hotseatParams);
+                if (mAllAppsTop) {
+                    mHotseatButton.setImageResource(mShowHotseat ?
+                            R.drawable.hotseat_btn : R.drawable.hotseat_close_btn);
+                } else {
+                    mHotseatButton.setImageResource(mShowHotseat ?
+                            R.drawable.hotseat_close_btn : R.drawable.hotseat_btn);
+                }
+                mHotseatButton.setVisibility(View.VISIBLE);
             }
+
+            if (mShowMarketButton) {
+                RelativeLayout.LayoutParams dividerTwoParams = new RelativeLayout.LayoutParams(RelativeLayout
+                        .LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                dividerTwoParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
+                        RelativeLayout.RIGHT_OF, mShowHotseatButton ? mHotseatButton.getId() : 
+                        mAllAppsButton.getId());
+                dividerTwoParams.addRule(RelativeLayout.CENTER_VERTICAL);
+                buttonDividerTwo.setLayoutParams(dividerTwoParams);
+                buttonDividerTwo.setVisibility(View.VISIBLE);
+
+                RelativeLayout.LayoutParams marketParams = new RelativeLayout.LayoutParams(RelativeLayout
+                        .LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                marketParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
+                        RelativeLayout.RIGHT_OF, buttonDividerTwo.getId());
+                marketButton.setLayoutParams(marketParams);
+                marketButton.setVisibility(View.VISIBLE);
+            }
+
+            if (mShowSettingsRight) {
+                RelativeLayout.LayoutParams dividerThreeParams = new RelativeLayout.LayoutParams(RelativeLayout
+                        .LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                dividerThreeParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
+                        RelativeLayout.RIGHT_OF, mShowMarketButton ? marketButton.getId() :
+                        (mShowHotseatButton ? mHotseatButton.getId() : mAllAppsButton.getId()));
+                dividerThreeParams.addRule(RelativeLayout.CENTER_VERTICAL);
+                buttonDividerThree.setLayoutParams(dividerThreeParams);
+                buttonDividerThree.setVisibility(View.VISIBLE);
+
+                RelativeLayout.LayoutParams settingsParams = new RelativeLayout.LayoutParams(RelativeLayout
+                        .LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                settingsParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
+                        RelativeLayout.RIGHT_OF, buttonDividerThree.getId());
+                settingsButton.setLayoutParams(settingsParams);
+                settingsButton.setVisibility(View.VISIBLE);
+            }
+
+            // Setup combined bar
+            if (mCombinedBar && !mShowSearchBar) {
+                RelativeLayout.LayoutParams dividerFourParams = new RelativeLayout.LayoutParams(RelativeLayout
+                        .LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                dividerFourParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
+                        RelativeLayout.RIGHT_OF, mShowSettingsRight ? settingsButton.getId() :
+                        (mShowMarketButton ? marketButton.getId() :
+                        (mShowHotseatButton ? mHotseatButton.getId() : mAllAppsButton.getId())));
+                dividerFourParams.addRule(RelativeLayout.CENTER_VERTICAL);
+                buttonDividerFour.setLayoutParams(dividerFourParams);
+                buttonDividerFour.setVisibility(View.VISIBLE);
+
+                RelativeLayout.LayoutParams searchParams = new RelativeLayout.LayoutParams(RelativeLayout
+                        .LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                searchParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
+                        RelativeLayout.RIGHT_OF, buttonDividerFour.getId());
+                searchButton.setLayoutParams(searchParams);
+                searchButton.setVisibility(View.VISIBLE);
+
+                RelativeLayout.LayoutParams dividerFiveParams = new RelativeLayout.LayoutParams(RelativeLayout
+                        .LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                dividerFiveParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
+                        RelativeLayout.RIGHT_OF, searchButton.getId());
+                dividerFiveParams.addRule(RelativeLayout.CENTER_VERTICAL);
+                buttonDividerFive.setLayoutParams(dividerFiveParams);
+                buttonDividerFive.setVisibility(View.VISIBLE);
+
+                RelativeLayout.LayoutParams voiceParams = new RelativeLayout.LayoutParams(RelativeLayout
+                        .LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                voiceParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
+                        RelativeLayout.RIGHT_OF, buttonDividerFive.getId());
+                voiceButton.setLayoutParams(voiceParams);
+                voiceButton.setVisibility(View.VISIBLE);
+            }
+
+            // Set gravity of all apps bar to bottom
+            if (!mAllAppsTop) {
+                FrameLayout.LayoutParams allAppsBarParams = new FrameLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.MATCH_PARENT,
+                        getResources().getDimensionPixelSize(R.dimen.qsb_bar_height));
+                allAppsBarParams.gravity = Gravity.BOTTOM;
+                mAllAppsBar.setLayoutParams(allAppsBarParams);
+            }
+
+            // Center the apps bar
+            if (!mShowSearchBar && mCenterAllApps) {
+                mAllAppsBar.setGravity(Gravity.CENTER);
+            }
+
             mAllAppsButton.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -850,15 +1040,17 @@ public final class Launcher extends Activity
                 }
             });
         }
+
         // Setup the drag controller (drop targets have to be added in reverse order in priority)
         dragController.setDragScoller(mWorkspace);
         dragController.setScrollView(mDragLayer);
         dragController.setMoveTarget(mWorkspace);
         dragController.addDropTarget(mWorkspace);
+
+        // Setup search drop target bar and move to bottom if necessary
         if (mSearchDropTargetBar != null) {
             mSearchDropTargetBar.setup(this, dragController);
-            boolean topSearch = (mSearchCorner == 0 || mSearchCorner == 3);
-            if ((!topSearch || (!mShowSearchBar && (mAllAppsCorner == 1 || mAllAppsCorner == 2)))
+            if (((mShowSearchBar && !mSearchTop) || (!mShowSearchBar && !mAllAppsTop))
                     && LauncherApplication.isScreenLarge()) {
                 FrameLayout.LayoutParams searchParams = new FrameLayout.LayoutParams(
                         RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -1801,6 +1993,8 @@ public final class Launcher extends Activity
             } else {
                 onClickAllAppsButton(v);
             }
+        } else if (v == mHotseatButton) {
+                onClickHotseatButton(v);
         }
     }
 
@@ -1835,6 +2029,18 @@ public final class Launcher extends Activity
         startActivity(intent);
     }
 
+     /**
+     * Event handler for the settings button
+     *
+     * @param v The view that was clicked.
+     */
+    public void onClickSettingsButton(View v) {
+        v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+
+        startActivity(new Intent(Settings.ACTION_SETTINGS)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    }
+
     /**
      * Event handler for the "grid" button that appears on the home screen, which
      * enters all apps mode.
@@ -1850,10 +2056,43 @@ public final class Launcher extends Activity
         v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
     }
 
+     /**
+     * Event handler for the market button
+     *
+     * @param v The view that was clicked.
+     */
     public void onClickAppMarketButton(View v) {
         if (mAppMarketIntent != null) {
             startActivitySafely(mAppMarketIntent, "app market");
         }
+    }
+
+     /**
+     * Event handler for the hotseat button
+     *
+     * @param v The view that was clicked.
+     */
+    public void onClickHotseatButton(View v) {
+        if (mHotseat.getVisibility() == View.VISIBLE) {
+            hideHotseat(true);
+            hideDockDivider(true);
+            mShowHotseat = false;
+        } else {
+            mShowHotseat = true;
+            showHotseat(true);
+            showDockDivider(true);
+        }
+        if (mAllAppsTop) {
+            mHotseatButton.setImageResource(mShowHotseat ? R.drawable.hotseat_btn :
+                R.drawable.hotseat_close_btn);
+        } else {
+            mHotseatButton.setImageResource(mShowHotseat ? R.drawable.hotseat_close_btn :
+                R.drawable.hotseat_btn);
+        }
+
+        SharedPreferences prefs =
+                getSharedPreferences(PreferencesProvider.PREFERENCES_KEY, Context.MODE_PRIVATE);
+        prefs.edit().putBoolean("ui_homescreen_general_show_hotseat", mShowHotseat).commit();
     }
 
     public void onClickOverflowMenuButton(View v) {
@@ -2013,7 +2252,8 @@ public final class Launcher extends Activity
         PropertyValuesHolder scaleY = PropertyValuesHolder.ofFloat("scaleY", 1.5f);
 
         FolderInfo info = (FolderInfo) fi.getTag();
-        if (info.container == LauncherSettings.Favorites.CONTAINER_HOTSEAT) {
+        if (info.container == LauncherSettings.Favorites.CONTAINER_HOTSEAT ||
+                info.container == LauncherSettings.Favorites.CONTAINER_HOTSEAT_TWO) {
             CellLayout cl = (CellLayout) fi.getParent().getParent();
             CellLayout.LayoutParams lp = (CellLayout.LayoutParams) fi.getLayoutParams();
             cl.setFolderLeaveBehindCell(lp.cellX, lp.cellY);
@@ -2032,7 +2272,8 @@ public final class Launcher extends Activity
 
         FolderInfo info = (FolderInfo) fi.getTag();
         CellLayout cl = null;
-        if (info.container == LauncherSettings.Favorites.CONTAINER_HOTSEAT) {
+        if (info.container == LauncherSettings.Favorites.CONTAINER_HOTSEAT ||
+                info.container == LauncherSettings.Favorites.CONTAINER_HOTSEAT_TWO) {
             cl = (CellLayout) fi.getParent().getParent();
         }
 
@@ -2123,7 +2364,8 @@ public final class Launcher extends Activity
         // The hotseat touch handling does not go through Workspace, and we always allow long press
         // on hotseat items.
         final View itemUnderLongClick = longClickCellInfo.cell;
-        boolean allowLongPress = isHotseatLayout(v) || mWorkspace.allowLongPress();
+        boolean allowLongPress = isHotseatLayout(v) || isHotseatTwoLayout(v) ||
+                mWorkspace.allowLongPress();
         if (allowLongPress && !mDragController.isDragging()) {
             if (itemUnderLongClick == null) {
                 // User long pressed on empty space
@@ -2144,9 +2386,20 @@ public final class Launcher extends Activity
         return mHotseat != null && layout != null &&
                 (layout instanceof CellLayout) && (layout == mHotseat.getLayout());
     }
+
+    boolean isHotseatTwoLayout(View layout) {
+        return mHotseatTwo != null && layout != null &&
+                (layout instanceof CellLayout) && (layout == mHotseatTwo.getLayout());
+    }
+
     Hotseat getHotseat() {
         return mHotseat;
     }
+
+    Hotseat getHotseatTwo() {
+        return mHotseatTwo;
+    }
+
     SearchDropTargetBar getSearchBar() {
         return mSearchDropTargetBar;
     }
@@ -2158,6 +2411,12 @@ public final class Launcher extends Activity
         if (container == LauncherSettings.Favorites.CONTAINER_HOTSEAT) {
             if (mHotseat != null) {
                 return mHotseat.getLayout();
+            } else {
+                return null;
+            }
+        } else if (container == LauncherSettings.Favorites.CONTAINER_HOTSEAT_TWO) {
+            if (mHotseatTwo != null) {
+                return mHotseatTwo.getLayout();
             } else {
                 return null;
             }
@@ -2418,16 +2677,12 @@ public final class Launcher extends Activity
 
                 @Override
                 public void onAnimationStart(Animator animation) {
-                    updateWallpaperVisibility(true);
-                    if (mShowWallpaper) {
-                        mWorkspace.setVisibility(View.GONE);
-                        if (LauncherApplication.isScreenLarge()) {
-                            mAllAppsButton.setVisibility(View.GONE);
-                        } else {
-                            mDockDivider.setVisibility(View.INVISIBLE);
-                            hideHotseat(true);
-                        }
-                    }
+                    if (!mShowWallpaper) updateWallpaperVisibility(true);
+                    mWorkspace.setVisibility(View.GONE);
+                    hideHotseat(true);
+                    hideAllAppsBar(true);
+                    hideSearchBar(true);
+                    hideDockDivider(true);
                     // Prepare the position
                     toView.setTranslationX(0.0f);
                     toView.setTranslationY(0.0f);
@@ -2446,13 +2701,12 @@ public final class Launcher extends Activity
                                 scaleAnim, false);
                     }
 
-                    if (!springLoaded && !LauncherApplication.isScreenLarge()) {
+                    if (!springLoaded) {
                         // Hide the workspace scrollbar
                         mWorkspace.hideScrollingIndicator(true);
-                        hideDockDivider();
                     }
-                    if (!animationCancelled) {
-                        if (!mShowWallpaper) updateWallpaperVisibility(false);
+                    if (!animationCancelled && !mShowWallpaper) {
+                        updateWallpaperVisibility(false);
                     }
                 }
 
@@ -2478,15 +2732,11 @@ public final class Launcher extends Activity
                 mStateAnimation.start();
             }
         } else {
-            if (mShowWallpaper) {
-                mWorkspace.setVisibility(View.GONE);
-                if (LauncherApplication.isScreenLarge()) {
-                    mAllAppsButton.setVisibility(View.GONE);
-                } else {
-                    mDockDivider.setVisibility(View.INVISIBLE);
-                    hideHotseat(animated);
-                }
-            }
+            mWorkspace.setVisibility(View.GONE);
+            hideDockDivider(animated);
+            hideAllAppsBar(animated);
+            hideHotseat(animated);
+            hideSearchBar(animated);
             toView.setTranslationX(0.0f);
             toView.setTranslationY(0.0f);
             toView.setScaleX(1.0f);
@@ -2497,10 +2747,9 @@ public final class Launcher extends Activity
                 ((LauncherTransitionable) toView).onLauncherTransitionStart(instance, null, false);
                 ((LauncherTransitionable) toView).onLauncherTransitionEnd(instance, null, false);
 
-                if (!springLoaded && !LauncherApplication.isScreenLarge()) {
+                if (!springLoaded) {
                     // Hide the workspace scrollbar
                     mWorkspace.hideScrollingIndicator(true);
-                    hideDockDivider();
                 }
             }
             if (!mShowWallpaper) updateWallpaperVisibility(false);
@@ -2526,17 +2775,9 @@ public final class Launcher extends Activity
         final View fromView = mAppsCustomizeTabHost;
 
         setPivotsForZoom(fromView, scaleFactor);
-        updateWallpaperVisibility(true);
-        if (mShowWallpaper) {
-            mWorkspace.setVisibility(View.VISIBLE);
-            if (LauncherApplication.isScreenLarge()) {
-                mAllAppsButton.setVisibility(View.VISIBLE);
-            } else {
-                mDockDivider.setVisibility(View.VISIBLE);
-                showHotseat(animated);
-            }
-        }
-        showHotseat(animated);
+
+        if (!mShowWallpaper) updateWallpaperVisibility(true);
+
         if (animated) {
             final float oldScaleX = fromView.getScaleX();
             final float oldScaleY = fromView.getScaleY();
@@ -2564,16 +2805,12 @@ public final class Launcher extends Activity
             alphaAnim.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    updateWallpaperVisibility(true);
-                    if (mShowWallpaper) {
-                        mWorkspace.setVisibility(View.VISIBLE);
-                        if (LauncherApplication.isScreenLarge()) {
-                            mAllAppsButton.setVisibility(View.VISIBLE);
-                        } else {
-                            mDockDivider.setVisibility(View.VISIBLE);
-                            showHotseat(true);
-                        }
-                    }
+                    if (!mShowWallpaper) updateWallpaperVisibility(true);
+                    mWorkspace.setVisibility(View.VISIBLE);
+                    showDockDivider(true);
+                    showAllAppsBar(true);
+                    showHotseat(true);
+                    if (!springLoaded) showSearchBar(true);
                     fromView.setVisibility(View.GONE);
                     if (fromView instanceof LauncherTransitionable) {
                         ((LauncherTransitionable) fromView).onLauncherTransitionEnd(instance,
@@ -2592,6 +2829,13 @@ public final class Launcher extends Activity
                 ((LauncherTransitionable) fromView).onLauncherTransitionEnd(instance, null, true);
             }
             mWorkspace.hideScrollingIndicator(false);
+            mWorkspace.setVisibility(View.VISIBLE);
+            showDockDivider(true);
+            showHotseat(true);
+            if (!springLoaded) {
+                showSearchBar(true);
+                showAllAppsBar(true);
+            }
         }
     }
 
@@ -2619,11 +2863,6 @@ public final class Launcher extends Activity
             mWorkspace.setVisibility(View.VISIBLE);
             hideAppsCustomizeHelper(animated, false);
 
-            // Show the search bar and hotseat
-            mSearchDropTargetBar.showSearchBar(animated);
-            // We only need to animate in the dock divider if we're going from spring loaded mode
-            showDockDivider(animated && mState == State.APPS_CUSTOMIZE_SPRING_LOADED);
-
             // Set focus to the AppsCustomize button
             if (mAllAppsButton != null) {
                 mAllAppsButton.requestFocus();
@@ -2649,9 +2888,6 @@ public final class Launcher extends Activity
         showAppsCustomizeHelper(animated, false);
         mAppsCustomizeTabHost.requestFocus();
 
-        // Hide the search bar and hotseat
-        mSearchDropTargetBar.hideSearchBar(animated);
-
         // Change the state *after* we've called all the transition code
         mState = State.APPS_CUSTOMIZE;
 
@@ -2668,7 +2904,7 @@ public final class Launcher extends Activity
         if (mState == State.APPS_CUSTOMIZE) {
             mWorkspace.changeState(Workspace.State.SPRING_LOADED);
             hideAppsCustomizeHelper(true, true);
-            hideDockDivider();
+            hideDockDivider(true);
             mState = State.APPS_CUSTOMIZE_SPRING_LOADED;
         }
     }
@@ -2684,7 +2920,6 @@ public final class Launcher extends Activity
                     // exitSpringLoadedDragMode made it visible. This is a bit hacky; we should
                     // clean up our state transition functions
                     mAppsCustomizeTabHost.setVisibility(View.GONE);
-                    mSearchDropTargetBar.showSearchBar(true);
                     showWorkspace(true);
                 } else {
                     exitSpringLoadedDragMode();
@@ -2705,13 +2940,30 @@ public final class Launcher extends Activity
         // Otherwise, we are not in spring loaded mode, so don't do anything.
     }
 
-    void hideDockDivider() {
+    void hideDockDivider(boolean animated) {
         if (mQsbDivider != null && mDockDivider != null) {
             if (mShowSearchBar) {
                 mQsbDivider.setVisibility(View.INVISIBLE);
             }
             if (mShowDockDivider) {
                 mDockDivider.setVisibility(View.INVISIBLE);
+            }
+        } else if (mDockDivider != null && mShowDockDivider) {
+            if (animated) {
+                int duration = mSearchDropTargetBar.getTransitionOutDuration();
+                mDockDivider.animate().alpha(0f).setDuration(duration);
+                if (mDockDividerTwo != null && mShowDockDividerTwo) {
+                    mDockDividerTwo.animate().alpha(0f).setDuration(duration);
+                }
+            } else {
+                mDockDivider.setAlpha(0f);
+                if (mDockDividerTwo != null && mShowDockDividerTwo) {
+                    mDockDividerTwo.setAlpha(0f);
+                }
+            }
+            mDockDivider.setVisibility(View.INVISIBLE);
+            if (mDockDividerTwo != null && mShowDockDividerTwo) {
+                mDockDividerTwo.setVisibility(View.INVISIBLE);
             }
         }
     }
@@ -2745,6 +2997,23 @@ public final class Launcher extends Activity
                 mDividerAnimator.setDuration(mSearchDropTargetBar.getTransitionInDuration());
                 mDividerAnimator.start();
             }
+        } else if (mDockDivider != null && mShowDockDivider && mShowHotseat) {
+            mDockDivider.setVisibility(View.VISIBLE);
+            if (mDockDividerTwo != null && mShowDockDividerTwo) {
+                mDockDividerTwo.setVisibility(View.VISIBLE);
+            }
+            if (animated) {
+                int duration = mSearchDropTargetBar.getTransitionInDuration();
+                mDockDivider.animate().alpha(1f).setDuration(duration);
+                if (mDockDividerTwo != null && mShowDockDividerTwo) {
+                    mDockDividerTwo.animate().alpha(1f).setDuration(duration);
+                }
+            } else {
+                mDockDivider.setAlpha(1f);
+                if (mDockDividerTwo != null && mShowDockDividerTwo) {
+                    mDockDividerTwo.setAlpha(1f);
+                }
+            }
         }
     }
 
@@ -2760,16 +3029,60 @@ public final class Launcher extends Activity
         return mState == State.APPS_CUSTOMIZE;
     }
 
+    void showAllAppsBar(boolean animated) {
+        if (mAllAppsBar != null && mState != State.APPS_CUSTOMIZE_SPRING_LOADED) {
+            mAllAppsBar.setVisibility(View.VISIBLE);
+            if (animated) {
+                int duration = mSearchDropTargetBar.getTransitionInDuration();
+                mAllAppsBar.animate().alpha(1f).setDuration(duration);
+            } else {
+                mAllAppsBar.setAlpha(1f);
+            }
+        }
+    }
+
+    void hideAllAppsBar(boolean animated) {
+        if (mAllAppsBar != null) {
+            if (animated) {
+                int duration = mSearchDropTargetBar.getTransitionOutDuration();
+                mAllAppsBar.animate().alpha(0f).setDuration(duration);
+            } else {
+                mAllAppsBar.setAlpha(0f);
+            }
+            mAllAppsBar.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    void showSearchBar(boolean animated) {
+        mSearchDropTargetBar.showSearchBar(animated);
+    }
+
+    void hideSearchBar(boolean animated) {
+        mSearchDropTargetBar.hideSearchBar(animated);
+    }
+
     /**
      * Shows the hotseat area.
      */
     void showHotseat(boolean animated) {
-        if (!LauncherApplication.isScreenLarge()) {
-            if (animated) {
-                int duration = mSearchDropTargetBar.getTransitionInDuration();
-                mHotseat.animate().alpha(1f).setDuration(duration);
-            } else {
-                mHotseat.setAlpha(1f);
+        if (mShowHotseat) {
+            if (mHotseat != null) {
+                mHotseat.setVisibility(View.VISIBLE);
+                if (animated) {
+                    int duration = mSearchDropTargetBar.getTransitionInDuration();
+                    mHotseat.animate().alpha(1f).setDuration(duration);
+                } else {
+                    mHotseat.setAlpha(1f);
+                }
+            }
+            if (mHotseatTwo != null) {
+                mHotseatTwo.setVisibility(View.VISIBLE);
+                if (animated) {
+                    int duration = mSearchDropTargetBar.getTransitionInDuration();
+                    mHotseatTwo.animate().alpha(1f).setDuration(duration);
+                } else {
+                    mHotseatTwo.setAlpha(1f);
+                }
             }
         }
     }
@@ -2778,12 +3091,76 @@ public final class Launcher extends Activity
      * Hides the hotseat area.
      */
     void hideHotseat(boolean animated) {
-        if (!LauncherApplication.isScreenLarge()) {
+        if (mHotseat != null) {
             if (animated) {
                 int duration = mSearchDropTargetBar.getTransitionOutDuration();
                 mHotseat.animate().alpha(0f).setDuration(duration);
             } else {
                 mHotseat.setAlpha(0f);
+            }
+            mHotseat.setVisibility(View.INVISIBLE);
+        }
+        if (mHotseatTwo != null) {
+            if (animated) {
+                int duration = mSearchDropTargetBar.getTransitionOutDuration();
+                mHotseatTwo.animate().alpha(0f).setDuration(duration);
+            } else {
+                mHotseatTwo.setAlpha(0f);
+            }
+            mHotseatTwo.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    /**
+     * Shows the desktop items that don't scroll.
+     */
+    void showWorkspaceItems() {
+        if (!mShowPageControls) {
+            showAllAppsBar(true);
+            showSearchBar(true);
+        }
+        showDockDivider(true);
+        showHotseat(true);
+
+    }
+
+    /**
+     * Hides the desktop items that don't scroll.
+     */
+    void hideWorkspaceItems() {
+        if (!mShowPageControls) {
+            hideAllAppsBar(true);
+            hideSearchBar(true);
+        }
+        hideDockDivider(true);
+        hideHotseat(true);
+
+    }
+
+    /**
+     * Shows the hotseat area outline.
+     */
+    void showHotseatOutlines() {
+        if (mShowHotseat) {
+            if (mHotseat != null) {
+                mHotseat.showOutlines();
+            }
+            if (mHotseatTwo != null) {
+                mHotseatTwo.showOutlines();
+            }
+        }
+    }
+
+    /**
+     * Hides the hotseat area outline.
+     */
+    void hideHotseatOutlines() {
+        if (mShowHotseat) {
+            if (mHotseat != null) {
+                mHotseat.hideOutlines();
+            }
+            if (mHotseatTwo != null) {
+                mHotseatTwo.hideOutlines();
             }
         }
     }
@@ -3169,7 +3546,7 @@ public final class Launcher extends Activity
             layoutParent.removeAllViewsInLayout();
         }
         mWidgetsToAdvance.clear();
-        if (mHotseat != null) {
+        if (mHotseat != null && mShowAllAppsHotseat) {
             mHotseat.resetLayout();
         }
     }
@@ -3189,6 +3566,11 @@ public final class Launcher extends Activity
             // Short circuit if we are loading dock items for a configuration which has no dock
             if (item.container == LauncherSettings.Favorites.CONTAINER_HOTSEAT &&
                     mHotseat == null) {
+                continue;
+            }
+
+            if (item.container == LauncherSettings.Favorites.CONTAINER_HOTSEAT_TWO &&
+                    mHotseatTwo == null) {
                 continue;
             }
 
@@ -3428,6 +3810,7 @@ public final class Launcher extends Activity
             setRequestedOrientation(mapConfigurationOriActivityInfoOri(getCurrentOrientation()));
         }
     }
+
     public void unlockScreenOrientationOnLargeUI() {
         if (LauncherApplication.isScreenLarge()) {
             mHandler.postDelayed(new Runnable() {

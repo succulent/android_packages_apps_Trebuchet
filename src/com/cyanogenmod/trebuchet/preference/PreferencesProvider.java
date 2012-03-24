@@ -78,6 +78,16 @@ public final class PreferencesProvider {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return preferences.getBoolean("ui_homescreen_general_search", true);
             }
+            public static boolean getShowAllAppsHotseat(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("ui_homescreen_general_show_hotseat_allapps",
+                        !LauncherApplication.isScreenLarge());
+            }
+            public static boolean getShowHotseat(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("ui_homescreen_general_show_hotseat",
+                        !LauncherApplication.isScreenLarge());
+            }
             public static boolean getResizeAnyWidget(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return preferences.getBoolean("ui_homescreen_general_resize_any_widget", false);
@@ -112,7 +122,12 @@ public final class PreferencesProvider {
                 }
                 public static boolean getShowDockDivider(Context context) {
                     final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                    return preferences.getBoolean("ui_homescreen_indicator_background", true);
+                    return preferences.getBoolean("ui_homescreen_indicator_background",
+                            !LauncherApplication.isScreenLarge());
+                }
+                public static boolean getShowDockDividerTwo(Context context) {
+                    final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                    return preferences.getBoolean("ui_homescreen_tablet_dock_divider_two", false);
                 }
             }
         }
@@ -161,14 +176,57 @@ public final class PreferencesProvider {
 
         }
 
-        public static class Icons {
-            public static int getAllAppsIconCorner(Context context) {
+        public static class Tablet {
+            public static boolean getShowAllAppsWorkspace(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return Integer.parseInt(preferences.getString("preferences_interface_icons_all_apps", "0"));
+                return preferences.getBoolean("ui_tablet_workspace_allapps", true);
             }
-            public static int getSearchIconCorner(Context context) {
+            public static boolean getCenterAllAppsWorkspace(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return Integer.parseInt(preferences.getString("preferences_interface_icons_search", "3"));
+                return preferences.getBoolean("ui_tablet_workspace_allapps_center", false);
+            }
+            public static boolean getCombinedBar(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("ui_tablet_workspace_combined_bar", false);
+            }
+            public static int getAllAppsBarCorner(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return Integer.parseInt(preferences.getString("ui_tablet_all_apps_corner", "0"));
+            }
+            public static int getSearchBarCorner(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return Integer.parseInt(preferences.getString("ui_tablet_search_corner", "3"));
+            }
+            public static boolean getShowPageOutlines(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("preferences_interface_tablet_page_outline", true);
+            }
+            public static boolean getShowPageControls(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("preferences_interface_tablet_page_controls", true);
+            }
+            public static boolean getShowMarketLeft(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("preferences_interface_icons_market_left", false);
+            }
+            public static boolean getShowSettingsRight(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("preferences_interface_icons_settings_right", false);
+            }
+        }
+
+        public static class Icons {
+            public static boolean getHotseatButton(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("preferences_interface_icons_hotseat", false);
+            }
+            public static boolean getShowMarketButton(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("preferences_interface_icons_market", false);
+            }
+            public static boolean getShowSettingsButton(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("preferences_interface_icons_settings", false);
             }
         }
 

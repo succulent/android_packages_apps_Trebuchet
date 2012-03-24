@@ -54,4 +54,50 @@
         android:focusable="true"
         android:clickable="true"
         android:contentDescription="@string/accessibility_voice_search_button" />
+
+    <ImageView
+        style="@style/SearchButtonDivider"
+        android:id="@+id/search_divider_two"
+        android:layout_toRightOf="@+id/voice_button"
+        android:src="@drawable/divider_launcher_holo"
+        android:visibility="gone"
+        android:focusable="false"
+        android:clickable="false" />
+
+    <!-- Settings icon -->
+    <com.cyanogenmod.trebuchet.HolographicImageView
+        style="@style/SearchButton.Voice"
+        android:id="@+id/settings_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/search_divider_two"
+        android:src="@drawable/quicksettings_btn"
+        android:onClick="onClickSettingsButton"
+        android:visibility="gone"
+        android:focusable="true"
+        android:clickable="true"
+        android:contentDescription="@string/accessibility_voice_search_button" />
+
+    <ImageView
+        style="@style/SearchButtonDivider"
+        android:id="@+id/search_divider_three"
+        android:layout_toRightOf="@+id/settings_button"
+        android:src="@drawable/divider_launcher_holo"
+        android:visibility="gone"
+        android:focusable="false"
+        android:clickable="false" />
+
+    <!-- Market icon -->
+    <com.cyanogenmod.trebuchet.HolographicImageView
+        style="@style/SearchButton.Voice"
+        android:id="@+id/search_market_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/search_divider_three"
+        android:src="@drawable/ic_launcher_market_holo"
+        android:onClick="onClickAppMarketButton"
+        android:visibility="gone"
+        android:focusable="true"
+        android:clickable="true"
+        android:contentDescription="@string/market" />
 </RelativeLayout>
