@@ -672,7 +672,7 @@ public final class Launcher extends Activity
                     if (mFirstTime) {
                         mFirstTime = false;
                     } else {
-                        workspace.post(mBuildLayersRunnable);
+                        workspace.postDelayed(mBuildLayersRunnable, 500);
                         observer.removeOnPreDrawListener(this);
                     }
                     return true;
