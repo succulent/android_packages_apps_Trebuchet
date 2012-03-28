@@ -252,6 +252,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
     private boolean mShowScrollingIndicator;
     private boolean mFadeScrollingIndicator;
     private boolean mHideTopBar;
+    private boolean mShowWallpaper;
 
     public AppsCustomizePagedView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -268,7 +269,9 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         // Save the default widget preview background
         Resources resources = context.getResources();
         mDefaultWidgetBackground = resources.getDrawable(R.drawable.default_widget_preview_holo);
-        mAppIconSize = resources.getDimensionPixelSize(R.dimen.app_icon_size);
+        boolean smallIcons = PreferencesProvider.Interface.Tablet.getSmallerIcons(context);
+        mAppIconSize = resources.getDimensionPixelSize(smallIcons ?
+                R.dimen.app_icon_size_small : R.dimen.app_icon_size);
         mDragViewMultiplyColor = resources.getColor(R.color.drag_view_multiply_color);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AppsCustomizePagedView, 0, 0);
@@ -302,6 +305,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         mShowScrollingIndicator = PreferencesProvider.Interface.Drawer.Indicator.getShowScrollingIndicator(context);
         mFadeScrollingIndicator = PreferencesProvider.Interface.Drawer.Indicator.getFadeScrollingIndicator(context);
         mHideTopBar = PreferencesProvider.Interface.Drawer.TopBar.getHideTopbar(context);
+        mShowWallpaper = PreferencesProvider.Interface.Drawer.Background.getBackgroundShowWallpaper(context);
 
         if (!mShowScrollingIndicator) {
             disableScrollingIndicator();
@@ -466,7 +470,10 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         mWidgetSpacingLayout.calculateCellCount(width, height, maxCellCountX, maxCellCountY);
         mCellCountX = mWidgetSpacingLayout.getCellCountX();
         mCellCountY = mWidgetSpacingLayout.getCellCountY();
-        if (mHideTopBar) mCellCountY++;
+        if (mHideTopBar && (LauncherApplication.getScreenDensity() == 1f ||
+                LauncherApplication.getScreenDensity() == .75f)) {
+            mCellCountY++;
+        }
         updatePageCounts();
 
         // Force a measure to update recalculate the gaps
@@ -878,6 +885,8 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
                             (FrameLayout) getTabHost().findViewById(R.id.animation_buffer);
                     final AppsCustomizePagedView self =
                             (AppsCustomizePagedView) getTabHost().findViewById(R.id.apps_customize_pane_content);
+
+                    if (mShowWallpaper) animationBuffer.setBackgroundColor(0x00000000);
 
                     // We want the pages to be rendered in exactly the same way as they were when
                     // their parent was mAppsCustomizePane -- so set the scroll on animationBuffer

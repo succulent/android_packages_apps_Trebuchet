@@ -40,10 +40,7 @@ public class LauncherApplication extends Application {
         super.onCreate();
 
         // set sIsScreenXLarge and sScreenDensity *before* creating icon cache
-        final int screenSize = getResources().getConfiguration().screenLayout &
-                Configuration.SCREENLAYOUT_SIZE_MASK;
-        sIsScreenLarge = screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE ||
-            screenSize == Configuration.SCREENLAYOUT_SIZE_XLARGE;
+        sIsScreenLarge = getResources().getConfiguration().smallestScreenWidthDp >= 600;
         sScreenDensity = getResources().getDisplayMetrics().density;
 
         mIconCache = new IconCache(this);
@@ -119,7 +116,7 @@ public class LauncherApplication extends Application {
     }
 
     public static boolean isScreenLarge() {
-        return sIsScreenLarge && (sScreenDensity <= 1f);
+        return sIsScreenLarge;
     }
 
     public static boolean isScreenLandscape(Context context) {

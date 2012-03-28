@@ -48,6 +48,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LayoutAnimationController;
 
 import com.cyanogenmod.trebuchet.FolderIcon.FolderRingAnimator;
+import com.cyanogenmod.trebuchet.preference.PreferencesProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -151,12 +152,18 @@ public class CellLayout extends ViewGroup {
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CellLayout, defStyle, 0);
 
+        boolean smallIcons = PreferencesProvider.Interface.Tablet.getSmallerIcons(context);
+
         mOriginalCellWidth =
-            mCellWidth = a.getDimensionPixelSize(R.styleable.CellLayout_cellWidth, 10);
+                mCellWidth = a.getDimensionPixelSize(smallIcons ?
+                R.styleable.CellLayout_cellWidthSmall : R.styleable.CellLayout_cellWidth, 10);
         mOriginalCellHeight =
-            mCellHeight = a.getDimensionPixelSize(R.styleable.CellLayout_cellHeight, 10);
-        mWidthGap = mOriginalWidthGap = a.getDimensionPixelSize(R.styleable.CellLayout_widthGap, 0);
-        mHeightGap = mOriginalHeightGap = a.getDimensionPixelSize(R.styleable.CellLayout_heightGap, 0);
+                mCellHeight = a.getDimensionPixelSize(smallIcons ?
+                R.styleable.CellLayout_cellHeightSmall : R.styleable.CellLayout_cellHeight, 10);
+        mWidthGap = mOriginalWidthGap = a.getDimensionPixelSize(smallIcons ?
+                R.styleable.CellLayout_widthGapSmall : R.styleable.CellLayout_widthGap, 0);
+        mHeightGap = mOriginalHeightGap = a.getDimensionPixelSize(smallIcons ?
+                R.styleable.CellLayout_heightGapSmall : R.styleable.CellLayout_heightGap, 0);
         mMaxGap = a.getDimensionPixelSize(R.styleable.CellLayout_maxGap, 0);
         mCountX = LauncherModel.getCellCountX();
         mCountY = LauncherModel.getCellCountY();
@@ -258,24 +265,30 @@ public class CellLayout extends ViewGroup {
         addView(mChildren);
     }
 
-    static int widthInPortrait(Resources r, int numCells) {
+    static int widthInPortrait(Context context, Resources r, int numCells) {
         // We use this method from Workspace to figure out how many rows/columns Launcher should
         // have. We ignore the left/right padding on CellLayout because it turns out in our design
         // the padding extends outside the visible screen size, but it looked fine anyway.
-        int cellWidth = r.getDimensionPixelSize(R.dimen.workspace_cell_width);
-        int minGap = Math.min(r.getDimensionPixelSize(R.dimen.workspace_width_gap),
-                r.getDimensionPixelSize(R.dimen.workspace_height_gap));
+        boolean smallIcons = PreferencesProvider.Interface.Tablet.getSmallerIcons(context);
+        int cellWidth = r.getDimensionPixelSize(smallIcons ?
+                R.dimen.workspace_cell_width_small : R.dimen.workspace_cell_width);
+        int minGap = Math.min(r.getDimensionPixelSize(smallIcons ? R.dimen.workspace_width_gap_small
+                : R.dimen.workspace_width_gap), r.getDimensionPixelSize(smallIcons ?
+                R.dimen.workspace_height_gap_small : R.dimen.workspace_height_gap));
 
         return  minGap * (numCells - 1) + cellWidth * numCells;
     }
 
-    static int heightInLandscape(Resources r, int numCells) {
+    static int heightInLandscape(Context context, Resources r, int numCells) {
         // We use this method from Workspace to figure out how many rows/columns Launcher should
         // have. We ignore the left/right padding on CellLayout because it turns out in our design
         // the padding extends outside the visible screen size, but it looked fine anyway.
-        int cellHeight = r.getDimensionPixelSize(R.dimen.workspace_cell_height);
-        int minGap = Math.min(r.getDimensionPixelSize(R.dimen.workspace_width_gap),
-                r.getDimensionPixelSize(R.dimen.workspace_height_gap));
+        boolean smallIcons = PreferencesProvider.Interface.Tablet.getSmallerIcons(context);
+        int cellHeight = r.getDimensionPixelSize(smallIcons ?
+                R.dimen.workspace_cell_height_small : R.dimen.workspace_cell_height);
+        int minGap = Math.min(r.getDimensionPixelSize(smallIcons ? R.dimen.workspace_width_gap_small
+                : R.dimen.workspace_width_gap), r.getDimensionPixelSize(smallIcons ?
+                R.dimen.workspace_height_gap_small : R.dimen.workspace_height_gap));
 
         return minGap * (numCells - 1) + cellHeight * numCells;
     }

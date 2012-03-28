@@ -76,7 +76,7 @@
         layout="@layout/workspace_divider"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginRight="@dimen/button_bar_height"
+        android:layout_marginRight="@dimen/divider_margin"
         android:layout_marginTop="@dimen/qsb_bar_height"
         android:layout_gravity="right" />
 
@@ -85,7 +85,7 @@
         layout="@layout/workspace_divider"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/button_bar_height"
+        android:layout_marginLeft="@dimen/divider_margin"
         android:layout_marginTop="@dimen/qsb_bar_height"
         android:layout_gravity="left" />
 </com.cyanogenmod.trebuchet.DragLayer>

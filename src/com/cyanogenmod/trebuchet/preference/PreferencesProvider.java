@@ -90,7 +90,7 @@ public final class PreferencesProvider {
             }
             public static boolean getResizeAnyWidget(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getBoolean("ui_homescreen_general_resize_any_widget", false);
+                return preferences.getBoolean("ui_homescreen_general_resize_any_widget", true);
             }
             public static boolean getHideIconLabels(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
@@ -181,6 +181,10 @@ public final class PreferencesProvider {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return preferences.getBoolean("ui_tablet_workspace_allapps", true);
             }
+            public static boolean getShowAllAppsButton(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("ui_tablet_all_apps_button", true);
+            }
             public static boolean getCenterAllAppsWorkspace(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return preferences.getBoolean("ui_tablet_workspace_allapps_center", false);
@@ -201,9 +205,9 @@ public final class PreferencesProvider {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return preferences.getBoolean("preferences_interface_tablet_page_outline", true);
             }
-            public static boolean getShowPageControls(Context context) {
+            public static boolean getHidePageControls(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getBoolean("preferences_interface_tablet_page_controls", true);
+                return preferences.getBoolean("ui_tablet_hide_tablet_controls", false);
             }
             public static boolean getShowMarketLeft(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
@@ -212,6 +216,14 @@ public final class PreferencesProvider {
             public static boolean getShowSettingsRight(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return preferences.getBoolean("preferences_interface_icons_settings_right", false);
+            }
+            public static boolean getSmallerIcons(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("ui_tablet_smaller_icons", false);
+            }
+            public static boolean getShowDockIconLabels(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("ui_tablet_show_dock_icon_labels", false);
             }
         }
 

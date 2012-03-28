@@ -54,8 +54,8 @@
     <dimen name="toolbar_button_vertical_padding">0dip</dimen>
     <dimen name="toolbar_button_horizontal_padding">12dip</dimen>
     <!-- External toolbar icon size (for bounds) -->
-    <dimen name="toolbar_external_icon_width">36dp</dimen>
-    <dimen name="toolbar_external_icon_height">36dp</dimen>
+    <dimen name="toolbar_external_icon_width">32dp</dimen>
+    <dimen name="toolbar_external_icon_height">32dp</dimen>
 
 <!-- AllApps/Customize/AppsCustomize -->
     <integer name="apps_customize_maxCellCountX">-1</integer>

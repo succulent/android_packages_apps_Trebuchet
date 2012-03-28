@@ -30,6 +30,8 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.widget.FrameLayout;
 
+import com.cyanogenmod.trebuchet.preference.PreferencesProvider;
+
 public class Cling extends FrameLayout {
 
     static final String WORKSPACE_CLING_DISMISSED_KEY = "cling.workspace.dismissed";
@@ -86,12 +88,14 @@ public class Cling extends FrameLayout {
             mLauncher = l;
             mPositionData = positionData;
             mDismissed = false;
+            boolean smallIcons = PreferencesProvider.Interface.Tablet.getSmallerIcons(getContext());
 
             Resources r = getContext().getResources();
             mPunchThroughGraphic = r.getDrawable(R.drawable.cling);
             mPunchThroughGraphicCenterRadius =
                 r.getDimensionPixelSize(R.dimen.clingPunchThroughGraphicCenterRadius);
-            mAppIconSize = r.getDimensionPixelSize(R.dimen.app_icon_size);
+            mAppIconSize = r.getDimensionPixelSize(smallIcons ?
+                    R.dimen.app_icon_size_small : R.dimen.app_icon_size);
             mRevealRadius = mAppIconSize * 1f;
             mButtonBarHeight = r.getDimensionPixelSize(R.dimen.button_bar_height);
 

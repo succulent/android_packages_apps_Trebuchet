@@ -46,6 +46,7 @@ public class Hotseat extends FrameLayout {
     private int mPadding;
     private boolean mTopPadding;
     private boolean mShowHotseat;
+    private boolean mSmallerIcons;
 
     // These animators are used to fade the children's outlines
     private ObjectAnimator mChildrenOutlineFadeInAnimation;
@@ -76,6 +77,7 @@ public class Hotseat extends FrameLayout {
                 PreferencesProvider.Interface.Homescreen.getShowAllAppsHotseat(context);
         mShowHotseat =
                 PreferencesProvider.Interface.Homescreen.getShowHotseat(context);
+        mSmallerIcons = PreferencesProvider.Interface.Tablet.getSmallerIcons(context);
 
         // Padding at the top or the bottom depending on the location of the search drop target bar
         int searchCorner = PreferencesProvider.Interface.Tablet.getSearchBarCorner(context);
@@ -84,7 +86,12 @@ public class Hotseat extends FrameLayout {
         mTopPadding = (showSearch && (searchCorner == 0 || searchCorner == 3)) || (!showSearch &&
                 (appsCorner == 0 || appsCorner == 3));
         mPadding = getResources().getDimensionPixelSize(R.dimen.qsb_bar_height);
-
+        if (mSmallerIcons && !mTopPadding) {
+            mPadding = mPadding - getResources().getDimensionPixelSize(R.dimen.hotseat_height_gap);
+        } else if (mSmallerIcons) {
+            mPadding = mPadding -
+                    getResources().getDimensionPixelSize(R.dimen.hotseat_width_gap);
+        }
         mContext = context;
     }
 
@@ -155,13 +162,12 @@ public class Hotseat extends FrameLayout {
         LayoutInflater inflater = LayoutInflater.from(context);
         BubbleTextView allAppsButton = (BubbleTextView)
                 inflater.inflate(R.layout.application, mContent, false);
+        boolean largeIcon = !PreferencesProvider.Interface.Tablet.getSmallerIcons(context) &&
+                mIsScreenLarge;
         allAppsButton.setCompoundDrawablesWithIntrinsicBounds(null,
-                context.getResources().getDrawable(mIsScreenLarge ?
-                R.drawable.all_apps_button_icon_large :
+                context.getResources().getDrawable(largeIcon ?
+                R.drawable.ic_home_all_apps_holo_dark_large :
                 R.drawable.all_apps_button_icon), null, null);
-        if (mIsLandscape && mIsScreenLarge) {
-            allAppsButton.setPadding(0, 10, 0, 0);
-        }
         allAppsButton.setContentDescription(context.getString(R.string.all_apps_button_label));
         allAppsButton.setOnTouchListener(new View.OnTouchListener() {
             @Override

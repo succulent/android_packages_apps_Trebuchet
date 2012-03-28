@@ -270,6 +270,8 @@ public class Workspace extends PagedView
     private boolean mShowDockDividerTwo;
     private TransitionEffect mTransitionEffect;
     private boolean mShowOutlinesWhenScrolling;
+    private boolean mSmallerIcons;
+    private boolean mShowDockIconLabels;
 
     /**
      * Used to inflate the Workspace from XML.
@@ -319,12 +321,12 @@ public class Workspace extends PagedView
             final float smallestScreenDim = res.getConfiguration().smallestScreenWidthDp;
 
             cellCountX = 1;
-            while (CellLayout.widthInPortrait(res, cellCountX + 1) <= smallestScreenDim) {
+            while (CellLayout.widthInPortrait(context, res, cellCountX + 1) <= smallestScreenDim) {
                 cellCountX++;
             }
 
             cellCountY = 1;
-            while (actionBarHeight + CellLayout.heightInLandscape(res, cellCountY + 1)
+            while (actionBarHeight + CellLayout.heightInLandscape(context, res, cellCountY + 1)
                 <= smallestScreenDim - systemBarHeight) {
                 cellCountY++;
             }
@@ -377,6 +379,8 @@ public class Workspace extends PagedView
         mShowDockDivider = PreferencesProvider.Interface.Homescreen.Indicator.getShowDockDivider(context);
         mShowDockDividerTwo = PreferencesProvider.Interface.Homescreen.Indicator.getShowDockDividerTwo(context);
         mShowOutlinesWhenScrolling = PreferencesProvider.Interface.Tablet.getShowPageOutlines(context);
+        mSmallerIcons = PreferencesProvider.Interface.Tablet.getSmallerIcons(context);
+        mShowDockIconLabels = PreferencesProvider.Interface.Tablet.getShowDockIconLabels(context);
 
         mLauncher = (Launcher) context;
         initWorkspace();
@@ -603,8 +607,10 @@ public class Workspace extends PagedView
                 if (child instanceof FolderIcon) {
                     ((FolderIcon) child).setTextVisible(false);
                 } else if (child instanceof BubbleTextView) {
-                    ((BubbleTextView) child).setTextVisible(false);
+                    ((BubbleTextView) child).setTextVisible(mShowDockIconLabels);
                 }
+            } else if (child instanceof BubbleTextView) {
+                ((BubbleTextView) child).setTextVisible(mShowDockIconLabels);
             }
 
             if (screen < 0) {
@@ -624,7 +630,11 @@ public class Workspace extends PagedView
                 // Hide titles in the hotseat
                 if (child instanceof FolderIcon) {
                     ((FolderIcon) child).setTextVisible(false);
+                } else if (child instanceof BubbleTextView) {
+                    ((BubbleTextView) child).setTextVisible(mShowDockIconLabels);
                 }
+            } else if (child instanceof BubbleTextView) {
+                ((BubbleTextView) child).setTextVisible(mShowDockIconLabels);
             }
 
             if (screen < 0) {
@@ -2267,7 +2277,8 @@ public class Workspace extends PagedView
     private Bitmap createExternalDragOutline(Canvas canvas, int padding) {
         Resources r = getResources();
         final int outlineColor = r.getColor(android.R.color.holo_blue_light);
-        final int iconWidth = r.getDimensionPixelSize(R.dimen.workspace_cell_width);
+        final int iconWidth = r.getDimensionPixelSize(mSmallerIcons ?
+                R.dimen.workspace_cell_width_small : R.dimen.workspace_cell_width);
         final int iconHeight = r.getDimensionPixelSize(R.dimen.workspace_cell_height);
         final int rectRadius = r.getDimensionPixelSize(R.dimen.external_drop_icon_rect_radius);
         final int inset = (int) (Math.min(iconWidth, iconHeight) * 0.2f);
@@ -2324,7 +2335,8 @@ public class Workspace extends PagedView
         Point dragVisualizeOffset = null;
         Rect dragRect = null;
         if (child instanceof BubbleTextView || child instanceof PagedViewIcon) {
-            int iconSize = r.getDimensionPixelSize(R.dimen.app_icon_size);
+            int iconSize = r.getDimensionPixelSize(mSmallerIcons ?
+                    R.dimen.app_icon_size_small : R.dimen.app_icon_size);
             int iconPaddingTop = r.getDimensionPixelSize(R.dimen.app_icon_padding_top);
             int top = child.getPaddingTop();
             int left = (bmpWidth - iconSize) / 2;

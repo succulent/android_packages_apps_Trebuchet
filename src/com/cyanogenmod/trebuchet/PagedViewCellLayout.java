@@ -24,6 +24,8 @@ import android.view.View;
 import android.view.ViewDebug;
 import android.view.ViewGroup;
 
+import com.cyanogenmod.trebuchet.preference.PreferencesProvider;
+
 /**
  * An abstraction of the original CellLayout which supports laying out items
  * which span multiple cells into a grid-like layout.  Also supports dimming
@@ -60,10 +62,13 @@ public class PagedViewCellLayout extends ViewGroup implements Page {
 
         // setup default cell parameters
         Resources resources = context.getResources();
+        boolean smallIcons = PreferencesProvider.Interface.Tablet.getSmallerIcons(context);
         mOriginalCellWidth = mCellWidth =
-            resources.getDimensionPixelSize(R.dimen.apps_customize_cell_width);
+            resources.getDimensionPixelSize(smallIcons ? R.dimen.apps_customize_cell_width_small :
+            R.dimen.apps_customize_cell_width);
         mOriginalCellHeight = mCellHeight =
-            resources.getDimensionPixelSize(R.dimen.apps_customize_cell_height);
+            resources.getDimensionPixelSize(smallIcons ? R.dimen.apps_customize_cell_height_small :
+            R.dimen.apps_customize_cell_height);
         mCellCountX = LauncherModel.getCellCountX();
         mCellCountY = LauncherModel.getCellCountY();
         mOriginalWidthGap = mOriginalHeightGap = mWidthGap = mHeightGap = -1;

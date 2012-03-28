@@ -33,6 +33,8 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PaintDrawable;
 import android.util.DisplayMetrics;
 
+import com.cyanogenmod.trebuchet.preference.PreferencesProvider;
+
 /**
  * Various utilities shared amongst the Launcher's classes.
  */
@@ -196,8 +198,10 @@ final class Utilities {
         final Resources resources = context.getResources();
         final DisplayMetrics metrics = resources.getDisplayMetrics();
         final float density = metrics.density;
+        boolean smallIcons = PreferencesProvider.Interface.Tablet.getSmallerIcons(context);
 
-        sIconWidth = sIconHeight = (int) resources.getDimension(R.dimen.app_icon_size);
+        sIconWidth = sIconHeight = (int) resources.getDimension(smallIcons ?
+                R.dimen.app_icon_size_small : R.dimen.app_icon_size);
         sIconTextureWidth = sIconTextureHeight = sIconWidth;
 
         sBlurPaint.setMaskFilter(new BlurMaskFilter(5 * density, BlurMaskFilter.Blur.NORMAL));

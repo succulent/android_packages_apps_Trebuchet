@@ -57,6 +57,7 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
     private int mBarHeight;
     private boolean mDeferOnDragEnd = false;
     private int mSearchCorner;
+    private int mAppsCorner;
     private boolean mShowSettingsButton;
     private boolean mShowMarketLeft;
 
@@ -73,6 +74,7 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
 
         mShowQSBSearchBar = PreferencesProvider.Interface.Homescreen.getShowSearchBar(context);
         mSearchCorner = PreferencesProvider.Interface.Tablet.getSearchBarCorner(context);
+        mAppsCorner = PreferencesProvider.Interface.Tablet.getAllAppsBarCorner(context);
         mShowSettingsButton = PreferencesProvider.Interface.Icons.getShowSettingsButton(context);
         mShowMarketLeft = PreferencesProvider.Interface.Tablet.getShowMarketLeft(context);
     }
@@ -170,6 +172,10 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
             mQSBSearchBar.setVisibility(View.GONE);
         }
 
+
+        boolean searchTop = (mShowQSBSearchBar && (mSearchCorner == 0 || mSearchCorner == 3)) ||
+                (!mShowQSBSearchBar && (mAppsCorner == 0 || mAppsCorner == 3));
+
         // Create the various fade animations
         mDropTargetBar.setAlpha(0f);
         ObjectAnimator fadeInAlphaAnim = ObjectAnimator.ofFloat(mDropTargetBar, "alpha", 1f);
@@ -177,7 +183,7 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
         mDropTargetBarFadeInAnim = new AnimatorSet();
         AnimatorSet.Builder fadeInAnimators = mDropTargetBarFadeInAnim.play(fadeInAlphaAnim);
         if (enableDropDownDropTargets) {
-            mDropTargetBar.setTranslationY(-mBarHeight);
+            mDropTargetBar.setTranslationY(searchTop ? -mBarHeight : mBarHeight);
             fadeInAnimators.with(ObjectAnimator.ofFloat(mDropTargetBar, "translationY", 0f));
         }
         mDropTargetBarFadeInAnim.setDuration(sTransitionInDuration);
@@ -193,7 +199,7 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
         AnimatorSet.Builder fadeOutAnimators = mDropTargetBarFadeOutAnim.play(fadeOutAlphaAnim);
         if (enableDropDownDropTargets) {
             fadeOutAnimators.with(ObjectAnimator.ofFloat(mDropTargetBar, "translationY",
-                    -mBarHeight));
+                    searchTop ? -mBarHeight : mBarHeight));
         }
         mDropTargetBarFadeOutAnim.setDuration(sTransitionOutDuration);
         mDropTargetBarFadeOutAnim.addListener(new AnimatorListenerAdapter() {

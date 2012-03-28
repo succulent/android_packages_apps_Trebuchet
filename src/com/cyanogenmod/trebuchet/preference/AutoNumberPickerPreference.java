@@ -23,23 +23,22 @@ import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import com.cyanogenmod.trebuchet.R;
 
-/*
- * @author Danesh
- * @author nebkat
- */
-
-public class NumberPickerPreference extends DialogPreference {
+public class AutoNumberPickerPreference extends DialogPreference implements
+            View.OnClickListener {
     private int mMin, mMax, mDefault;
 
     private String mMaxExternalKey, mMinExternalKey;
 
     private NumberPicker mNumberPicker;
+    private CheckBox mCheckBox;
 
-    public NumberPickerPreference(Context context, AttributeSet attrs) {
+    public AutoNumberPickerPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         TypedArray dialogType = context.obtainStyledAttributes(attrs,
                 com.android.internal.R.styleable.DialogPreference, 0, 0);
@@ -73,9 +72,9 @@ public class NumberPickerPreference extends DialogPreference {
 
         LayoutInflater inflater =
                 (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.number_picker_dialog, null);
+        View view = inflater.inflate(R.layout.auto_number_picker_dialog, null);
 
-        mNumberPicker = (NumberPicker) view.findViewById(R.id.number_picker);
+        mNumberPicker = (NumberPicker) view.findViewById(R.id.auto_number_picker);
 
         if (mNumberPicker == null) {
             throw new RuntimeException("mNumberPicker is null!");
@@ -85,7 +84,7 @@ public class NumberPickerPreference extends DialogPreference {
         mNumberPicker.setWrapSelectorWheel(false);
         mNumberPicker.setMaxValue(max);
         mNumberPicker.setMinValue(min);
-        mNumberPicker.setValue(getPersistedInt(mDefault));
+        mNumberPicker.setValue(getPersistedInt(mDefault == 0 ? min : mDefault));
 
         // No keyboard popup
         EditText textInput = (EditText) mNumberPicker.findViewById(com.android.internal.R.id.numberpicker_input);
@@ -95,15 +94,30 @@ public class NumberPickerPreference extends DialogPreference {
             textInput.setFocusableInTouchMode(false);
         }
 
+        mCheckBox = (CheckBox) view.findViewById(R.id.auto_check_box);
+        mCheckBox.setChecked(getPersistedInt(mDefault) < mMin ? true : mNumberPicker.getValue() == mDefault);
+        mCheckBox.setOnClickListener(this);
+        if (mCheckBox.isChecked()) mNumberPicker.setEnabled(false);
+
         return view;
     }
 
     @Override
     protected void onDialogClosed(boolean positiveResult) {
         if (positiveResult) {
-            persistInt(mNumberPicker.getValue());
+            persistInt(mCheckBox.isChecked() ? mDefault : mNumberPicker.getValue());
         }
-        this.setSummary(Integer.toString(getIntValue()));
+        this.setSummary(mCheckBox.isChecked() ? "Automatic" : Integer.toString(mNumberPicker.getValue()));
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (mCheckBox.isChecked()) {
+            mNumberPicker.setValue(mDefault);
+            mNumberPicker.setEnabled(false);
+        } else {
+            mNumberPicker.setEnabled(true);
+        }
     }
 
     public void setMaxValue(int max) {

@@ -21,12 +21,16 @@
     <com.cyanogenmod.trebuchet.CellLayout
         android:id="@+id/layout"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/hotseat_cell_width"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
 
         launcher:cellWidth="@dimen/hotseat_cell_width"
         launcher:cellHeight="@dimen/hotseat_cell_height"
         launcher:widthGap="@dimen/hotseat_width_gap"
         launcher:heightGap="@dimen/hotseat_height_gap"
+        launcher:cellWidthSmall="@dimen/hotseat_cell_width_small"
+        launcher:cellHeightSmall="@dimen/hotseat_cell_height_small"
+        launcher:widthGapSmall="@dimen/hotseat_width_gap_small"
+        launcher:heightGapSmall="@dimen/hotseat_height_gap_small"
         launcher:maxGap="@dimen/workspace_max_gap" />
 </com.cyanogenmod.trebuchet.Hotseat>
