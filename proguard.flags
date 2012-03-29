@@ -56,3 +56,8 @@
   public void setHorizontalWallpaperOffset(float);
   public float getHorizontalWallpaperOffset();
 }
+
+-keep class com.cyanogenmod.trebuchet.Hotseat {
+  public float getChildrenOutlineAlpha();
+  public void setChildrenOutlineAlpha(float);
+}
