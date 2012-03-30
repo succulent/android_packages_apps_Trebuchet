@@ -29,7 +29,7 @@
 
     <!-- the area at the edge of the screen that makes the workspace go left
          or right while you're dragging. -->
-    <dimen name="scroll_zone">100dip</dimen>
+    <dimen name="scroll_zone">40dip</dimen>
 
     <dimen name="apps_customize_pageLayoutWidthGap">36dp</dimen>
     <dimen name="apps_customize_pageLayoutHeightGap">8dp</dimen>
@@ -46,4 +46,13 @@
     <!-- The offset for the text in the cling -->
     <dimen name="cling_text_block_offset_x">140dp</dimen>
     <dimen name="cling_text_block_offset_y">80dp</dimen>
+
+    <dimen name="hotseat_cell_width">92dp</dimen>
+    <dimen name="hotseat_cell_height">78dp</dimen>
+    <dimen name="hotseat_cell_width_small">78dp</dimen>
+    <dimen name="hotseat_cell_height_small">78dp</dimen>
+    <dimen name="hotseat_width_gap">40dp</dimen>
+    <dimen name="hotseat_height_gap">20dp</dimen>
+    <dimen name="hotseat_width_gap_small">20dp</dimen>
+    <dimen name="hotseat_height_gap_small">0dp</dimen>
 </resources>

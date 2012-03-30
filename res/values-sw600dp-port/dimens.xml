@@ -24,7 +24,7 @@
 <!-- Workspace -->
     <!-- the area at the edge of the screen that makes the workspace go left
          or right while you're dragging. -->
-    <dimen name="scroll_zone">40dp</dimen>
+    <dimen name="scroll_zone">50dp</dimen>
 
     <dimen name="workspace_left_padding">15dip</dimen>
     <dimen name="workspace_right_padding">15dip</dimen>

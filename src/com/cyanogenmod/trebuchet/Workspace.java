@@ -3629,6 +3629,8 @@ public class Workspace extends PagedView
         if (mLauncher.getHotseat() != null) {
             Rect r = new Rect();
             mLauncher.getHotseat().getHitRect(r);
+            // Offset for dragging over the hot seat in landscape
+            if (LauncherApplication.isScreenLandscape(mContext)) r.offset(-10, 0);
             if (r.contains(x, y)) {
                 return false;
             }
@@ -3636,6 +3638,8 @@ public class Workspace extends PagedView
         if (mLauncher.getHotseatTwo() != null) {
             Rect r = new Rect();
             mLauncher.getHotseatTwo().getHitRect(r);
+            // Offset for dragging over the hot seat in landscape
+            if (LauncherApplication.isScreenLandscape(mContext)) r.offset(10,0);
             if (r.contains(x, y)) {
                 return false;
             }

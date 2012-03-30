@@ -94,7 +94,7 @@
     <dimen name="folder_preview_padding">4dp</dimen>
 
     <dimen name="hotseat_cell_width">78dp</dimen>
-    <dimen name="hotseat_cell_height">78dp</dimen>
+    <dimen name="hotseat_cell_height">92dp</dimen>
     <dimen name="hotseat_cell_width_small">78dp</dimen>
     <dimen name="hotseat_cell_height_small">78dp</dimen>
     <dimen name="hotseat_width_gap">40dp</dimen>
@@ -104,9 +104,10 @@
     <dimen name="workspace_max_gap">16dp</dimen>
     <dimen name="button_bar_height_plus_padding">80dp</dimen>
     <dimen name="button_bar_height">80dip</dimen>
-    <dimen name="button_bar_height_bottom_padding">8dp</dimen>
-    <dimen name="button_bar_height_top_padding">8dp</dimen>
-    <dimen name="button_bar_horizontal_padding">5dp</dimen>
-    <dimen name="button_bar_plus_qsb_bar_height">136dip</dimen>
-    <dimen name="divider_margin">85dip</dimen>
+    <dimen name="button_bar_height_bottom_padding">20dp</dimen>
+    <dimen name="button_bar_height_top_padding">11dp</dimen>
+    <dimen name="button_bar_height_left_padding">2dp</dimen>
+    <dimen name="button_bar_horizontal_padding">40dp</dimen>
+    <dimen name="button_bar_plus_qsb_bar_height">155dip</dimen>
+    <dimen name="divider_margin">135dip</dimen>
 </resources>

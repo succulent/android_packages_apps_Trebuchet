@@ -154,47 +154,49 @@ public class Hotseat extends FrameLayout {
         if (!mShowHotseat) this.setVisibility(View.INVISIBLE);
     }
 
-    void resetLayout() {
+    void resetLayout(boolean isPrimary) {
         mContent.removeAllViewsInLayout();
 
-        // Add the Apps button
-        Context context = getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
-        BubbleTextView allAppsButton = (BubbleTextView)
-                inflater.inflate(R.layout.application, mContent, false);
-        boolean largeIcon = !PreferencesProvider.Interface.Tablet.getSmallerIcons(context) &&
-                mIsScreenLarge;
-        allAppsButton.setCompoundDrawablesWithIntrinsicBounds(null,
-                context.getResources().getDrawable(largeIcon ?
-                R.drawable.ic_home_all_apps_holo_dark_large :
-                R.drawable.all_apps_button_icon), null, null);
-        allAppsButton.setContentDescription(context.getString(R.string.all_apps_button_label));
-        allAppsButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (mLauncher != null &&
-                    (event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_DOWN) {
-                    mLauncher.onTouchDownAllAppsButton(v);
+        if (mShowAllAppsHotseat && isPrimary) {
+            // Add the Apps button
+            Context context = getContext();
+            LayoutInflater inflater = LayoutInflater.from(context);
+            BubbleTextView allAppsButton = (BubbleTextView)
+                    inflater.inflate(R.layout.application, mContent, false);
+            boolean largeIcon = !PreferencesProvider.Interface.Tablet.getSmallerIcons(context) &&
+                    mIsScreenLarge;
+            allAppsButton.setCompoundDrawablesWithIntrinsicBounds(null,
+                    context.getResources().getDrawable(largeIcon ?
+                    R.drawable.ic_home_all_apps_holo_dark_large :
+                    R.drawable.all_apps_button_icon), null, null);
+            allAppsButton.setContentDescription(context.getString(R.string.all_apps_button_label));
+            allAppsButton.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (mLauncher != null &&
+                        (event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_DOWN) {
+                        mLauncher.onTouchDownAllAppsButton(v);
+                    }
+                    return false;
                 }
-                return false;
-            }
-        });
+            });
 
-        allAppsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(android.view.View v) {
-                if (mLauncher != null) {
-                    mLauncher.onClickAllAppsButton(v);
+            allAppsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(android.view.View v) {
+                    if (mLauncher != null) {
+                        mLauncher.onClickAllAppsButton(v);
+                    }
                 }
-            }
-        });
+            });
 
-        // Note: We do this to ensure that the hotseat is always laid out in the orientation of
-        // the hotseat in order regardless of which orientation they were added
-        int x = getCellXFromOrder(sAllAppsButtonRank);
-        int y = getCellYFromOrder(sAllAppsButtonRank);
-        mContent.addViewToCellLayout(allAppsButton, -1, 0, new CellLayout.LayoutParams(x,y,1,1),
-                true);
+            // Note: We do this to ensure that the hotseat is always laid out in the orientation of
+            // the hotseat in order regardless of which orientation they were added
+            int x = getCellXFromOrder(sAllAppsButtonRank);
+            int y = getCellYFromOrder(sAllAppsButtonRank);
+            mContent.addViewToCellLayout(allAppsButton, -1, 0, new CellLayout.LayoutParams(x,y,1,1),
+                    true);
+        }
     }
 
     // Show outline when dragging a drop target

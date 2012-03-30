@@ -285,7 +285,6 @@ public final class Launcher extends Activity
     private boolean mShowHotseat;
     private boolean mShowAllAppsWorkspace;
     private boolean mShowAllAppsButton;
-    private boolean mShowAllAppsHotseat;
     private boolean mShowHotseatButton;
     private boolean mHidePageControls;
     private boolean mCombinedBar;
@@ -341,7 +340,6 @@ public final class Launcher extends Activity
         mShowMarketButton = PreferencesProvider.Interface.Icons.getShowMarketButton(this);
         mShowHotseat = PreferencesProvider.Interface.Homescreen.getShowHotseat(this);
         mShowAllAppsWorkspace = PreferencesProvider.Interface.Tablet.getShowAllAppsWorkspace(this);
-        mShowAllAppsHotseat = PreferencesProvider.Interface.Homescreen.getShowAllAppsHotseat(this);
         mHidePageControls = PreferencesProvider.Interface.Tablet.getHidePageControls(this);
         mShowSettingsRight = PreferencesProvider.Interface.Tablet.getShowSettingsRight(this);
         mCombinedBar = PreferencesProvider.Interface.Tablet.getCombinedBar(this);
@@ -853,11 +851,12 @@ public final class Launcher extends Activity
         mHotseat = (Hotseat) findViewById(R.id.hotseat);
         if (mHotseat != null) {
             mHotseat.setup(this);
-            if (mShowAllAppsHotseat) mHotseat.resetLayout();
+            mHotseat.resetLayout(true);
         }
         mHotseatTwo = (Hotseat) findViewById(R.id.hotseat_two);
         if (mHotseatTwo != null) {
             mHotseatTwo.setup(this);
+            mHotseatTwo.resetLayout(false);
         }
 
         // Setup the workspace
@@ -3597,8 +3596,11 @@ public final class Launcher extends Activity
             layoutParent.removeAllViewsInLayout();
         }
         mWidgetsToAdvance.clear();
-        if (mHotseat != null && mShowAllAppsHotseat) {
-            mHotseat.resetLayout();
+        if (mHotseat != null) {
+            mHotseat.resetLayout(true);
+        }
+        if (mHotseatTwo != null) {
+            mHotseatTwo.resetLayout(false);
         }
     }
 

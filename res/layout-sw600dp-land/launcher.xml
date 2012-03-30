@@ -60,14 +60,14 @@
     <include layout="@layout/hotseat"
         android:id="@+id/hotseat"
         android:layout_marginRight="@dimen/button_bar_horizontal_padding"
-        android:layout_width="@dimen/button_bar_height_plus_padding"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="right" />
 
     <include layout="@layout/hotseat"
         android:id="@+id/hotseat_two"
         android:layout_marginLeft="@dimen/button_bar_horizontal_padding"
-        android:layout_width="@dimen/button_bar_height_plus_padding"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="left" />
 
