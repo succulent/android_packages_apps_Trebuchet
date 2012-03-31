@@ -27,6 +27,10 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
+import android.preference.PreferenceGroup;
+
+import com.cyanogenmod.trebuchet.LauncherApplication;
+
 import com.cyanogenmod.trebuchet.R;
 import com.cyanogenmod.trebuchet.LauncherApplication;
 
@@ -47,14 +51,11 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
     private static final String SEARCH_POSITION = "ui_tablet_search_corner";
     private static final String HOMESCREENS = "ui_homescreen_screens";
     private static final String DEFAULT_HOMESCREEN = "ui_homescreen_default_screen";
-    private static final String PORTRAIT_WIDTH = "ui_width_portrait_apps";
-    private static final String PORTRAIT_HEIGHT = "ui_height_portrait_apps";
-    private static final String LANDSCAPE_WIDTH = "ui_width_landscape_apps";
-    private static final String LANDSCAPE_HEIGHT = "ui_height_landscape_apps";
     private static final String HOMESCREEN_TRANSITION = "ui_homescreen_scrolling_transition_effect";
     private static final String VERTICAL_PADDING = "ui_homescreen_screen_padding_vertical";
     private static final String HORIZONTAL_PADDING = "ui_homescreen_screen_padding_horizontal";
     private static final String DRAWER_TRANSITION = "ui_drawer_scrolling_transition_effect";
+    private static final String HOMESCREEN_GRID = "ui_homescreen_grid";
 
     private CheckBoxPreference mSearchBar;
     private CheckBoxPreference mCombinedBar;
@@ -73,10 +74,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
     private NumberPickerPreference mDefaultHomescreen;
     private NumberPickerPreference mVerticalPadding;
     private NumberPickerPreference mHorizontalPadding;
-    private AutoNumberPickerPreference mLandscapeWidth;
-    private AutoNumberPickerPreference mLandscapeHeight;
-    private AutoNumberPickerPreference mPortraitWidth;
-    private AutoNumberPickerPreference mPortraitHeight;
+    private AutoDoubleNumberPickerPreference mHomescreenGrid;
 
     private Context mContext;
     private SharedPreferences mPrefs;
@@ -116,10 +114,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         mDefaultHomescreen = (NumberPickerPreference) prefSet.findPreference(DEFAULT_HOMESCREEN);
         mVerticalPadding = (NumberPickerPreference) prefSet.findPreference(VERTICAL_PADDING);
         mHorizontalPadding = (NumberPickerPreference) prefSet.findPreference(HORIZONTAL_PADDING);
-        mLandscapeHeight = (AutoNumberPickerPreference) prefSet.findPreference(LANDSCAPE_HEIGHT);
-        mLandscapeWidth = (AutoNumberPickerPreference) prefSet.findPreference(LANDSCAPE_WIDTH);
-        mPortraitHeight = (AutoNumberPickerPreference) prefSet.findPreference(PORTRAIT_HEIGHT);
-        mPortraitWidth = (AutoNumberPickerPreference) prefSet.findPreference(PORTRAIT_WIDTH);
+        mHomescreenGrid = (AutoDoubleNumberPickerPreference) prefSet.findPreference(HOMESCREEN_GRID);
 
         if (mSearchBar.isChecked()) {
             mCombinedBar.setEnabled(false);
@@ -173,28 +168,20 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         int hp = mPrefs.getInt(HOTSEAT_ALLAPPS_POSITION, 3);
         mHotseatAllAppsPosition.setSummary(hp == 0 ? mContext.getString(R.string.preferences_auto_number_picker) :
                 Integer.toString(hp));
-        int lh = mPrefs.getInt(LANDSCAPE_HEIGHT, 5);
-        mLandscapeHeight.setSummary(lh == 0 ? mContext.getString(R.string.preferences_auto_number_picker) :
-                Integer.toString(lh));
-        int lw = mPrefs.getInt(LANDSCAPE_WIDTH, 6);
-        mLandscapeWidth.setSummary(lw == 0 ? mContext.getString(R.string.preferences_auto_number_picker) :
-                Integer.toString(lw));
-        int ph = mPrefs.getInt(PORTRAIT_HEIGHT, 5);
-        mPortraitHeight.setSummary(ph == 0 ? mContext.getString(R.string.preferences_auto_number_picker) :
-                Integer.toString(ph));
-        int pw = mPrefs.getInt(PORTRAIT_WIDTH, 6);
-        mPortraitWidth.setSummary(pw == 0 ? mContext.getString(R.string.preferences_auto_number_picker) :
-                Integer.toString(pw));
+        String hg = mPrefs.getString(HOMESCREEN_GRID, "0|0");
+        mHomescreenGrid.setSummary(hg.equals("0|0") ? mContext.getString(R.string.preferences_auto_number_picker) :
+                hg.replace("|", " x "));
         mHomescreenTransition.setSummary(mPrefs.getString(HOMESCREEN_TRANSITION, ""));
         mDrawerTransition.setSummary(mPrefs.getString(DRAWER_TRANSITION, ""));
 
+         // Remove some preferences on large screens
         if (LauncherApplication.isScreenLarge()) {
-            PreferenceScreen homescreen = (PreferenceScreen) findPreference("ui_homescreen");
-            PreferenceCategory indicator = (PreferenceCategory) findPreference("ui_indicator_category");
-            homescreen.removePreference(indicator);
-            PreferenceScreen drawer = (PreferenceScreen) findPreference("ui_drawer");
-            PreferenceCategory drawerIndicator = (PreferenceCategory) findPreference("ui_drawer_indicator");
-            drawer.removePreference(drawerIndicator);
+            PreferenceGroup homescreen = (PreferenceGroup) findPreference("ui_homescreen");
+            homescreen.removePreference(findPreference("ui_homescreen_padding"));
+            homescreen.removePreference(findPreference("ui_homescreen_indicator"));
+
+            PreferenceGroup drawer = (PreferenceGroup) findPreference("ui_drawer");
+            drawer.removePreference(findPreference("ui_drawer_indicator"));
         }
     }
 

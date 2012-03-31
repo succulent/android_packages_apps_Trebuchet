@@ -55,6 +55,9 @@ public class Hotseat extends FrameLayout {
 
     private Context mContext;
 
+    private static final int DEFAULT_CELL_COUNT_X = 5;
+    private static final int DEFAULT_CELL_COUNT_Y = 1;
+
     public Hotseat(Context context) {
         this(context, null);
     }
@@ -74,9 +77,9 @@ public class Hotseat extends FrameLayout {
             Configuration.ORIENTATION_LANDSCAPE;
         mIsScreenLarge = LauncherApplication.isScreenLarge();
         mShowAllAppsHotseat =
-                PreferencesProvider.Interface.Homescreen.getShowAllAppsHotseat(context);
+                PreferencesProvider.Interface.Dock.getShowAllAppsHotseat(context);
         mShowHotseat =
-                PreferencesProvider.Interface.Homescreen.getShowHotseat(context);
+                PreferencesProvider.Interface.Dock.getShowHotseat(context);
         mSmallerIcons = PreferencesProvider.Interface.Tablet.getSmallerIcons(context);
 
         // Padding at the top or the bottom depending on the location of the search drop target bar
@@ -126,15 +129,15 @@ public class Hotseat extends FrameLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        if (mCellCountX < 0) mCellCountX = LauncherModel.getCellCountX();
-        if (mCellCountY < 0) mCellCountY = LauncherModel.getCellCountY();
+        if (mCellCountX < 0) mCellCountX = DEFAULT_CELL_COUNT_X;
+        if (mCellCountY < 0) mCellCountY = DEFAULT_CELL_COUNT_Y;
 
         // Get cell count from the preferences
-        int prefCount = PreferencesProvider.Interface.Homescreen.getHotseatApps(mContext);
+        int prefCount = PreferencesProvider.Interface.Dock.getHotseatApps(mContext);
 
         // Get position of all apps in hotseat from preferences
         int allAppsRank =
-                PreferencesProvider.Interface.Homescreen.getHotseatAllAppsPosition(mContext);
+                PreferencesProvider.Interface.Dock.getHotseatAllAppsPosition(mContext);
         if (allAppsRank == 0) sAllAppsButtonRank = (int) prefCount / 2;
         else sAllAppsButtonRank = allAppsRank - 1;
 

@@ -40,29 +40,23 @@ public final class PreferencesProvider {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return preferences.getInt("ui_homescreen_default_screen", def + 1) - 1;
             }
-            public static int getLandscapeAppsWidth(Context context) {
+            public static int getCellCountX(Context context, int def) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getInt("ui_width_landscape_apps", 0);
+                String[] values = preferences.getString("ui_homescreen_grid", "0|" + def).split("\\|");
+                try {
+                    return Integer.parseInt(values[1]);
+                } catch (NumberFormatException e) {
+                    return def;
+                }
             }
-            public static int getLandscapeAppsHeight(Context context) {
+            public static int getCellCountY(Context context, int def) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getInt("ui_height_landscape_apps", 0);
-            }
-            public static int getPortraitAppsWidth(Context context) {
-                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getInt("ui_width_portrait_apps", 0);
-            }
-            public static int getPortraitAppsHeight(Context context) {
-                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getInt("ui_height_portrait_apps", 0);
-            }
-            public static int getHotseatApps(Context context) {
-                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getInt("ui_hotseat_apps", 5);
-            }
-            public static int getHotseatAllAppsPosition(Context context) {
-                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getInt("ui_hotseat_all_apps", 0);
+                String[] values = preferences.getString("ui_homescreen_grid", def + "|0").split("\\|");;
+                try {
+                    return Integer.parseInt(values[0]);
+                } catch (NumberFormatException e) {
+                    return def;
+                }
             }
             public static int getScreenPaddingVertical(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
@@ -77,16 +71,6 @@ public final class PreferencesProvider {
             public static boolean getShowSearchBar(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return preferences.getBoolean("ui_homescreen_general_search", true);
-            }
-            public static boolean getShowAllAppsHotseat(Context context) {
-                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getBoolean("ui_homescreen_general_show_hotseat_allapps",
-                        !LauncherApplication.isScreenLarge());
-            }
-            public static boolean getShowHotseat(Context context) {
-                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getBoolean("ui_homescreen_general_show_hotseat",
-                        !LauncherApplication.isScreenLarge());
             }
             public static boolean getResizeAnyWidget(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
@@ -173,7 +157,24 @@ public final class PreferencesProvider {
         }
 
         public static class Dock {
-
+            public static boolean getShowHotseat(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("ui_homescreen_general_show_hotseat",
+                        !LauncherApplication.isScreenLarge());
+            }
+            public static int getHotseatApps(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getInt("ui_hotseat_apps", 5);
+            }
+            public static boolean getShowAllAppsHotseat(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("ui_homescreen_general_show_hotseat_allapps",
+                        !LauncherApplication.isScreenLarge());
+            }
+            public static int getHotseatAllAppsPosition(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getInt("ui_hotseat_all_apps", 0);
+            }
         }
 
         public static class Tablet {

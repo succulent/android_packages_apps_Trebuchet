@@ -338,7 +338,7 @@ public final class Launcher extends Activity
         mSearchCorner = PreferencesProvider.Interface.Tablet.getSearchBarCorner(this);
         mShowHotseatButton = PreferencesProvider.Interface.Icons.getHotseatButton(this);
         mShowMarketButton = PreferencesProvider.Interface.Icons.getShowMarketButton(this);
-        mShowHotseat = PreferencesProvider.Interface.Homescreen.getShowHotseat(this);
+        mShowHotseat = PreferencesProvider.Interface.Dock.getShowHotseat(this);
         mShowAllAppsWorkspace = PreferencesProvider.Interface.Tablet.getShowAllAppsWorkspace(this);
         mHidePageControls = PreferencesProvider.Interface.Tablet.getHidePageControls(this);
         mShowSettingsRight = PreferencesProvider.Interface.Tablet.getShowSettingsRight(this);
@@ -670,6 +670,11 @@ public final class Launcher extends Activity
                     if (mFirstTime) {
                         mFirstTime = false;
                     } else {
+                        // We delay the layer building a bit in order to give
+                        // other message processing a time to run.  In particular
+                        // this avoids a delay in hiding the IME if it was
+                        // currently shown, because doing that may involve
+                        // some communication back with the app.
                         workspace.postDelayed(mBuildLayersRunnable, 500);
                         observer.removeOnPreDrawListener(this);
                     }
