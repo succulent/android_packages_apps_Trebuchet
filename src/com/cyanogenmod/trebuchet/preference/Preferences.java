@@ -129,10 +129,12 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
             mDockLabels.setChecked(false);
             if (LauncherApplication.getScreenDensity() == 1f) {
                 mHotseatPositions.setMaxValue(5);
+                mHotseatAllAppsPosition.setMaxValue(5);
             }
         } else {
             if (LauncherApplication.getScreenDensity() == 1f) {
                 mHotseatPositions.setMaxValue(6);
+                mHotseatAllAppsPosition.setMaxValue(6);
             }
         }
 
@@ -251,10 +253,12 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
                 mDockLabels.setChecked(false);
                 if (LauncherApplication.getScreenDensity() == 1f) {
                     mHotseatPositions.setMaxValue(5);
+                    mHotseatAllAppsPosition.setMaxValue(5);
                 }
             } else {
                 if (LauncherApplication.getScreenDensity() == 1f) {
                     mHotseatPositions.setMaxValue(6);
+                    mHotseatAllAppsPosition.setMaxValue(6);
                 }
             }
             return true;

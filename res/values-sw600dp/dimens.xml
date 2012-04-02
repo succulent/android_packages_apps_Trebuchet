@@ -110,4 +110,5 @@
     <dimen name="button_bar_horizontal_padding">40dp</dimen>
     <dimen name="button_bar_plus_qsb_bar_height">155dip</dimen>
     <dimen name="divider_margin">135dip</dimen>
+    <dimen name="divider_margin_sm">118dip</dimen>
 </resources>

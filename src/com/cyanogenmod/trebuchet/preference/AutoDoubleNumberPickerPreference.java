@@ -176,8 +176,10 @@ public class AutoDoubleNumberPickerPreference extends DialogPreference implement
             persistString(mCheckBox.isChecked() ? "0|0" : mNumberPicker1.getValue() + "|" +
                     mNumberPicker2.getValue());
         }
-        this.setSummary(mCheckBox.isChecked() ? "Automatic" : Integer.toString(mNumberPicker1
-                .getValue()) + " x " + Integer.toString(mNumberPicker2.getValue()));
+        if (positiveResult) {
+            this.setSummary(mCheckBox.isChecked() ? "Automatic" : Integer.toString(mNumberPicker1
+                    .getValue()) + " x " + Integer.toString(mNumberPicker2.getValue()));
+        }
     }
 
     @Override

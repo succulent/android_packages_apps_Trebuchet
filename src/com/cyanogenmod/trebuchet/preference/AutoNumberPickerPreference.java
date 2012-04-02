@@ -107,7 +107,10 @@ public class AutoNumberPickerPreference extends DialogPreference implements
         if (positiveResult) {
             persistInt(mCheckBox.isChecked() ? mDefault : mNumberPicker.getValue());
         }
-        this.setSummary(mCheckBox.isChecked() ? "Automatic" : Integer.toString(mNumberPicker.getValue()));
+        if (positiveResult) {
+            this.setSummary(mCheckBox.isChecked() ? "Automatic" :
+                    Integer.toString(mNumberPicker.getValue()));
+        }
     }
 
     @Override

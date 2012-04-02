@@ -103,7 +103,7 @@ public class NumberPickerPreference extends DialogPreference {
         if (positiveResult) {
             persistInt(mNumberPicker.getValue());
         }
-        this.setSummary(Integer.toString(mNumberPicker.getValue()));
+        if (positiveResult) this.setSummary(Integer.toString(mNumberPicker.getValue()));
     }
 
     public void setMaxValue(int max) {

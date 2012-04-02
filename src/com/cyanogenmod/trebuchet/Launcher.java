@@ -288,6 +288,7 @@ public final class Launcher extends Activity
     private boolean mShowHotseatButton;
     private boolean mHidePageControls;
     private boolean mCombinedBar;
+    private boolean mSmallerIcons;
 
     private Runnable mBuildLayersRunnable = new Runnable() {
         public void run() {
@@ -344,6 +345,7 @@ public final class Launcher extends Activity
         mShowSettingsRight = PreferencesProvider.Interface.Tablet.getShowSettingsRight(this);
         mCombinedBar = PreferencesProvider.Interface.Tablet.getCombinedBar(this);
         mShowAllAppsButton = PreferencesProvider.Interface.Tablet.getShowAllAppsButton(this);
+        mSmallerIcons = PreferencesProvider.Interface.Tablet.getSmallerIcons(this);
 
         // Combine all apps and search bar and hide search bar if they are on the same corner
         if ((mAllAppsCorner == mSearchCorner) && mShowSearchBar &&
@@ -892,7 +894,8 @@ public final class Launcher extends Activity
             FrameLayout.LayoutParams dividerMargins = new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.MATCH_PARENT);
             dividerMargins.setMargins(0, 0,
-                    getResources().getDimensionPixelSize(R.dimen.divider_margin),
+                    mSmallerIcons ? getResources().getDimensionPixelSize(R.dimen.divider_margin_sm)
+                    : getResources().getDimensionPixelSize(R.dimen.divider_margin),
                     getResources().getDimensionPixelSize(R.dimen.qsb_bar_height));
             dividerMargins.gravity = Gravity.RIGHT;
             mDockDivider.setLayoutParams(dividerMargins);
@@ -902,7 +905,8 @@ public final class Launcher extends Activity
                 LauncherApplication.isScreenLandscape(getApplicationContext())) {
             FrameLayout.LayoutParams dividerTwoMargins = new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.MATCH_PARENT);
-            dividerTwoMargins.setMargins(
+            dividerTwoMargins.setMargins(mSmallerIcons ?
+                    getResources().getDimensionPixelSize(R.dimen.divider_margin_sm) :
                     getResources().getDimensionPixelSize(R.dimen.divider_margin), 0, 0,
                     getResources().getDimensionPixelSize(R.dimen.qsb_bar_height));
             dividerTwoMargins.gravity = Gravity.LEFT;
@@ -2114,7 +2118,7 @@ public final class Launcher extends Activity
      */
     public void onClickAppMarketButton(View v) {
         if (mAppMarketIntent != null) {
-            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            if (v != null) v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
             startActivitySafely(mAppMarketIntent, "app market");
         }
     }
