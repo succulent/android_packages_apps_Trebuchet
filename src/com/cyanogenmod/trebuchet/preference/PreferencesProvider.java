@@ -204,7 +204,7 @@ public final class PreferencesProvider {
             }
             public static boolean getShowPageOutlines(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getBoolean("preferences_interface_tablet_page_outline", true);
+                return preferences.getBoolean("ui_homescreen_page_outline", true);
             }
             public static boolean getHidePageControls(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
@@ -220,7 +220,8 @@ public final class PreferencesProvider {
             }
             public static boolean getSmallerIcons(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getBoolean("ui_tablet_smaller_icons", false);
+                return LauncherApplication.isScreenLarge() ?
+                        preferences.getBoolean("ui_tablet_smaller_icons", false) : false;
             }
             public static boolean getShowDockIconLabels(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);

@@ -67,7 +67,8 @@
                     launcher:max="10"
                     launcher:min="0" />
             </PreferenceCategory>
-            <PreferenceCategory android:title="@string/preferences_interface_homescreen_scrolling_category">
+            <PreferenceCategory android:title="@string/preferences_interface_homescreen_scrolling_category"
+                android:key="ui_homescreen_scrolling">
                 <ListPreference android:key="ui_homescreen_scrolling_transition_effect"
                     android:title="@string/preferences_interface_homescreen_scrolling_transition_effect_title"
                     android:summary="@string/preferences_interface_homescreen_scrolling_transition_effect_summary"
@@ -80,7 +81,7 @@
                 <CheckBoxPreference android:key="ui_homescreen_scrolling_scroll_wallpaper"
                     android:title="@string/preferences_interface_homescreen_scrolling_scroll_wallpaper_title"
                     android:defaultValue="true" />
-                <CheckBoxPreference android:key="preferences_interface_tablet_page_outline"
+                <CheckBoxPreference android:key="ui_homescreen_page_outline"
                     android:title="@string/preferences_interface_tablet_page_outline_title"
                     android:defaultValue="true" />
             </PreferenceCategory>
@@ -175,7 +176,8 @@
             android:title="@string/preferences_interface_icons_title">
                 <CheckBoxPreference android:key="ui_homescreen_general_hide_icon_labels"
                     android:title="@string/preferences_interface_homescreen_general_hide_icon_labels_summary" />
-                <PreferenceCategory android:title="@string/preferences_interface_tablet_icons_title">
+                <PreferenceCategory android:title="@string/preferences_interface_tablet_icons_title"
+                    android:key="ui_icons_small">
                     <CheckBoxPreference android:key="ui_tablet_smaller_icons"
                         android:title="@string/preferences_interface_tablet_icons_title"
                         android:defaultValue="false" />

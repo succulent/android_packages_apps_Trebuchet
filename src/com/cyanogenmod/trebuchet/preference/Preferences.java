@@ -130,11 +130,25 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
             if (LauncherApplication.getScreenDensity() == 1f) {
                 mHotseatPositions.setMaxValue(5);
                 mHotseatAllAppsPosition.setMaxValue(5);
+                mHomescreenGrid.setMax1(5);
+                mHomescreenGrid.setMax2(6);
+            } else if (LauncherApplication.getScreenDensity() == 0.75f) {
+                mHotseatPositions.setMaxValue(7);
+                mHotseatAllAppsPosition.setMaxValue(7);
+                mHomescreenGrid.setMax1(7);
+                mHomescreenGrid.setMax2(8);
             }
         } else {
             if (LauncherApplication.getScreenDensity() == 1f) {
                 mHotseatPositions.setMaxValue(6);
                 mHotseatAllAppsPosition.setMaxValue(6);
+                mHomescreenGrid.setMax1(6);
+                mHomescreenGrid.setMax2(8);
+            } else if (LauncherApplication.getScreenDensity() == 0.75f) {
+                mHotseatPositions.setMaxValue(9);
+                mHotseatAllAppsPosition.setMaxValue(9);
+                mHomescreenGrid.setMax1(9);
+                mHomescreenGrid.setMax2(11);
             }
         }
 
@@ -181,9 +195,16 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
             PreferenceGroup homescreen = (PreferenceGroup) findPreference("ui_homescreen");
             homescreen.removePreference(findPreference("ui_homescreen_padding"));
             homescreen.removePreference(findPreference("ui_homescreen_indicator"));
-
             PreferenceGroup drawer = (PreferenceGroup) findPreference("ui_drawer");
             drawer.removePreference(findPreference("ui_drawer_indicator"));
+        } else {
+            PreferenceCategory scrolling = (PreferenceCategory) findPreference("ui_homescreen_scrolling");
+            scrolling.removePreference(findPreference("ui_homescreen_page_outline"));
+            prefSet.removePreference(findPreference("ui_tablet"));
+            PreferenceGroup dock = (PreferenceGroup) findPreference("ui_dock");
+            dock.removePreference(findPreference("ui_homescreen_tablet_dock_divider_two"));
+            PreferenceGroup icons = (PreferenceGroup) findPreference("ui_icons");
+            icons.removePreference(findPreference("ui_icons_small"));
         }
     }
 
