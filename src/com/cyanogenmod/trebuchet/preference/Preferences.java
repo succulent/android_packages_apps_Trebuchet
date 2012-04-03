@@ -254,6 +254,14 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
                 if (LauncherApplication.getScreenDensity() == 1f) {
                     mHotseatPositions.setMaxValue(5);
                     mHotseatAllAppsPosition.setMaxValue(5);
+                    if (mPrefs.getInt(HOTSEAT_POSITIONS, 5) == 6) {
+                        mPrefs.edit().putInt(HOTSEAT_POSITIONS, 5).commit();
+                        mHotseatPositions.setSummary("5");
+                    }
+                    if (mPrefs.getInt(HOTSEAT_ALLAPPS_POSITION, 5) == 6) {
+                        mPrefs.edit().putInt(HOTSEAT_ALLAPPS_POSITION, 5).commit();
+                        mHotseatAllAppsPosition.setSummary("5");
+                    }
                 }
             } else {
                 if (LauncherApplication.getScreenDensity() == 1f) {
