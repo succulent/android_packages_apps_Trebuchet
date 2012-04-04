@@ -244,6 +244,29 @@ public final class PreferencesProvider {
             }
         }
 
+        public static class Gestures {
+            public static int getHomescreenDoubleTap(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return Integer.parseInt(preferences.getString("ui_homescreen_doubletap", "0"));
+            }
+            public static int getHomescreenSwipeUp(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return Integer.parseInt(preferences.getString("ui_homescreen_swipe_up", "0"));
+            }
+            public static int getHomescreenSwipeDown(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return Integer.parseInt(preferences.getString("ui_homescreen_swipe_down", "0"));
+            }
+            public static int getDrawerSwipeUp(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return Integer.parseInt(preferences.getString("ui_drawer_swipe_up", "0"));
+            }
+            public static int getDrawerSwipeDown(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return Integer.parseInt(preferences.getString("ui_drawer_swipe_down", "0"));
+            }
+        }
+
         public static class General {
             public static boolean getAutoRotate(Context context, boolean def) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);

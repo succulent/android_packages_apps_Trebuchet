@@ -38,8 +38,13 @@ public class AutoNumberPickerPreference extends DialogPreference implements
     private NumberPicker mNumberPicker;
     private CheckBox mCheckBox;
 
+    private Context mContext;
+
     public AutoNumberPickerPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        mContext = context;
+
         TypedArray dialogType = context.obtainStyledAttributes(attrs,
                 com.android.internal.R.styleable.DialogPreference, 0, 0);
         TypedArray numberPickerType = context.obtainStyledAttributes(attrs,
@@ -108,7 +113,8 @@ public class AutoNumberPickerPreference extends DialogPreference implements
             persistInt(mCheckBox.isChecked() ? mDefault : mNumberPicker.getValue());
         }
         if (positiveResult) {
-            this.setSummary(mCheckBox.isChecked() ? "Automatic" :
+            this.setSummary(mCheckBox.isChecked() ?
+                    mContext.getString(R.string.preferences_auto_number_picker) :
                     Integer.toString(mNumberPicker.getValue()));
         }
     }

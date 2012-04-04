@@ -109,6 +109,7 @@ import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -216,7 +217,7 @@ public final class Launcher extends Activity
 
     private SearchDropTargetBar mSearchDropTargetBar;
     private AppsCustomizeTabHost mAppsCustomizeTabHost;
-    private AppsCustomizeView mAppsCustomizeContent;
+    private AppsCustomizePagedView mAppsCustomizeContent;
     private boolean mAutoAdvanceRunning = false;
 
     private Bundle mSavedState;
@@ -289,6 +290,14 @@ public final class Launcher extends Activity
     private boolean mHidePageControls;
     private boolean mCombinedBar;
     private boolean mSmallerIcons;
+    private int mHomescreenDoubleTap;
+    private int mHomescreenSwipeUp;
+    private int mHomescreenSwipeDown;
+    private int mDrawerSwipeUp;
+    private int mDrawerSwipeDown;
+    private boolean mStatusBarDisabled = false;
+
+    private StatusBarManager mStatusBarManager;
 
     private Runnable mBuildLayersRunnable = new Runnable() {
         public void run() {
@@ -346,6 +355,11 @@ public final class Launcher extends Activity
         mCombinedBar = PreferencesProvider.Interface.Tablet.getCombinedBar(this);
         mShowAllAppsButton = PreferencesProvider.Interface.Tablet.getShowAllAppsButton(this);
         mSmallerIcons = PreferencesProvider.Interface.Tablet.getSmallerIcons(this);
+        mHomescreenDoubleTap = PreferencesProvider.Interface.Gestures.getHomescreenDoubleTap(this);
+        mHomescreenSwipeUp = PreferencesProvider.Interface.Gestures.getHomescreenSwipeUp(this);
+        mHomescreenSwipeDown = PreferencesProvider.Interface.Gestures.getHomescreenSwipeDown(this);
+        mDrawerSwipeUp = PreferencesProvider.Interface.Gestures.getDrawerSwipeUp(this);
+        mDrawerSwipeDown = PreferencesProvider.Interface.Gestures.getDrawerSwipeDown(this);
 
         // Combine all apps and search bar and hide search bar if they are on the same corner
         if ((mAllAppsCorner == mSearchCorner) && mShowSearchBar &&
@@ -860,6 +874,7 @@ public final class Launcher extends Activity
             mHotseat.setup(this);
             mHotseat.resetLayout(true);
         }
+
         mHotseatTwo = (Hotseat) findViewById(R.id.hotseat_two);
         if (mHotseatTwo != null) {
             mHotseatTwo.setup(this);
@@ -871,6 +886,27 @@ public final class Launcher extends Activity
         mWorkspace.setOnLongClickListener(this);
         mWorkspace.setup(dragController);
         dragController.addDragListener(mWorkspace);
+        if (mHomescreenDoubleTap != 0) {
+            mWorkspace.setOnDoubleTapCallback(new Runnable() {
+                public void run() {
+                    performGesture(mHomescreenDoubleTap, true);
+                }
+            });
+        }
+        if (mHomescreenSwipeUp != 0) {
+            mWorkspace.setOnSwipeUpCallback(new Runnable() {
+                public void run() {
+                    performGesture(mHomescreenSwipeUp, true);
+                }
+            });
+        }
+        if (mHomescreenSwipeDown != 0) {
+            mWorkspace.setOnSwipeDownCallback(new Runnable() {
+                public void run() {
+                    performGesture(mHomescreenSwipeDown, true);
+                }
+            });
+        }
 
         // Get the search/delete bar
         mSearchDropTargetBar = (SearchDropTargetBar) mDragLayer.findViewById(R.id.qsb_bar);
@@ -918,9 +954,23 @@ public final class Launcher extends Activity
         mAppsCustomizeTabHost = (AppsCustomizeTabHost)
                 findViewById(R.id.apps_customize_pane);
         if (mShowWallpaper) mAppsCustomizeTabHost.setBackgroundColor(0x00000000);
-        mAppsCustomizeContent = (AppsCustomizeView)
+        mAppsCustomizeContent = (AppsCustomizePagedView)
                 mAppsCustomizeTabHost.findViewById(R.id.apps_customize_pane_content);
         mAppsCustomizeContent.setup(this, dragController);
+        if (mDrawerSwipeUp != 0) {
+            mAppsCustomizeContent.setOnSwipeUpCallback(new Runnable() {
+                public void run() {
+                    performGesture(mDrawerSwipeUp, false);
+                }
+            });
+        }
+        if (mDrawerSwipeDown != 0) {
+            mAppsCustomizeContent.setOnSwipeDownCallback(new Runnable() {
+                public void run() {
+                    performGesture(mDrawerSwipeDown, false);
+                }
+            });
+        }
 
         // Setup the all apps bar
         mAllAppsBar = (RelativeLayout) findViewById(R.id.all_apps_bar);
@@ -2065,7 +2115,7 @@ public final class Launcher extends Activity
      * @param v The view that was clicked.
      */
     public void onClickSearchButton(View v) {
-        v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+        if (v != null) v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 
         onSearchRequested();
     }
@@ -2076,7 +2126,7 @@ public final class Launcher extends Activity
      * @param v The view that was clicked.
      */
     public void onClickVoiceButton(View v) {
-        v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+        if (v != null) v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 
         Intent intent = new Intent(RecognizerIntent.ACTION_WEB_SEARCH);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
@@ -2089,7 +2139,7 @@ public final class Launcher extends Activity
      * @param v The view that was clicked.
      */
     public void onClickSettingsButton(View v) {
-        v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+        if (v != null) v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 
         startActivity(new Intent(Settings.ACTION_SETTINGS)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -2102,7 +2152,7 @@ public final class Launcher extends Activity
      * @param v The view that was clicked.
      */
     public void onClickAllAppsButton(View v) {
-        v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+        if (v != null) v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
         showAllApps(true);
     }
 
@@ -2129,7 +2179,7 @@ public final class Launcher extends Activity
      * @param v The view that was clicked.
      */
     public void onClickHotseatButton(View v) {
-        v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+        if (v != null) v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
         if (mHotseat.getVisibility() == View.VISIBLE) {
             hideHotseat(true);
             hideDockDivider(true);
@@ -4021,6 +4071,50 @@ public final class Launcher extends Activity
                     editor.commit();
         }
         return preferencesChanged;
+    }
+
+    public void performGesture(int action, boolean homescreen) {
+        switch (action) {
+            case 0:
+                break;
+            case 1:
+                if (!homescreen) {
+                    showWorkspace(true);
+                } else {
+                    onClickAllAppsButton(null);
+                }
+                break;
+            case 2:
+                onClickHotseatButton(null);
+                break;
+            case 3:
+                if (mStatusBarManager == null) {
+                    mStatusBarManager = (StatusBarManager)
+                            getApplicationContext().getSystemService(Context.STATUS_BAR_SERVICE);
+                }
+                if (!mStatusBarDisabled) {
+                    mStatusBarManager.disable(0x10000000);
+                    mStatusBarDisabled = true;
+                } else {
+                    mStatusBarManager.disable(0x00000000);
+                    mStatusBarDisabled = false;
+                }
+                break;
+            case 4:
+                try {
+                    Object service  = getSystemService("statusbar");
+                    Class<?> statusbarManager = Class.forName("android.app.StatusBarManager");
+                    Method expand = statusbarManager.getMethod("expand");
+                    expand.invoke(service);
+                } catch (Exception e) {
+                }
+                break;
+            case 5:
+                Intent preferences = new Intent().setClass(this, Preferences.class);
+                preferences.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(preferences);
+                break;
+        }
     }
 
     /**

@@ -52,8 +52,13 @@ public class AutoDoubleNumberPickerPreference extends DialogPreference implement
 
     private CheckBox mCheckBox;
 
+    private Context mContext;
+
     public AutoDoubleNumberPickerPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        mContext = context;
+
         TypedArray dialogType = context.obtainStyledAttributes(attrs,
                 com.android.internal.R.styleable.DialogPreference, 0, 0);
         TypedArray doubleNumberPickerType = context.obtainStyledAttributes(attrs,
@@ -177,8 +182,10 @@ public class AutoDoubleNumberPickerPreference extends DialogPreference implement
                     mNumberPicker2.getValue());
         }
         if (positiveResult) {
-            this.setSummary(mCheckBox.isChecked() ? "Automatic" : Integer.toString(mNumberPicker1
-                    .getValue()) + " x " + Integer.toString(mNumberPicker2.getValue()));
+            this.setSummary(mCheckBox.isChecked() ?
+                    mContext.getString(R.string.preferences_auto_number_picker) :
+                    Integer.toString(mNumberPicker1.getValue()) + " x " +
+                    Integer.toString(mNumberPicker2.getValue()));
         }
     }
 

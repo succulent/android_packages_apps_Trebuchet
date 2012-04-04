@@ -393,6 +393,10 @@ s -->
     <string name="preferences_interface_tablet_icons_summary">Increase grid size with smaller app icons and cells</string>
     <string name="preferences_interface_tablet_dock_icon_labels_title">Show dock icon labels</string>
     <string name="preferences_interface_tablet_dock_icon_labels_summary">Show dock icon labels when using smaller app icons</string>
+    <string name="preferences_interface_tablet_button_top_left">Top left</string>
+    <string name="preferences_interface_tablet_button_top_right">Top left</string>
+    <string name="preferences_interface_tablet_button_bottom_left">Bottom left</string>
+    <string name="preferences_interface_tablet_button_bottom_right">Bottom right</string>
 
     <!-- Icons -->
     <string name="preferences_interface_icons_title">Icons</string>
@@ -402,6 +406,21 @@ s -->
     <string name="preferences_interface_icons_market_summary">Show the Google Play button in the all apps bar</string>
     <string name="preferences_interface_icons_settings_title">Settings button</string>
     <string name="preferences_interface_icons_settings_summary">Show the settings button in the search bar</string>
+
+    <!-- Gestures -->
+    <string name="preferences_interface_gestures_title">Gestures</string>
+    <string name="preferences_interface_gestures_homescreen_category">Homescreen gestures</string>
+    <string name="preferences_interface_gestures_drawer_category">Drawer gestures</string>
+    <string name="preferences_interface_gestures_double_tap_title">Double tap</string>
+    <string name="preferences_interface_gestures_swipe_up_title">Swipe up</string>
+    <string name="preferences_interface_gestures_swipe_down_title">Swipe down</string>
+    <string name="preferences_interface_gestures_no_action">No action</string>
+    <string name="preferences_interface_gestures_open_drawer">Open drawer</string>
+    <string name="preferences_interface_gestures_close_drawer">Close drawer</string>
+    <string name="preferences_interface_gestures_toggle_dock">Toggle dock visibility</string>
+    <string name="preferences_interface_gestures_toggle_status_bar">Toggle status bar visibility</string>
+    <string name="preferences_interface_gestures_expand_status_bar">Expand status bar notifications</string>
+    <string name="preferences_interface_gestures_preferences">Launch preferences</string>
 
     <!-- General -->
     <string name="preferences_interface_general_title">General</string>

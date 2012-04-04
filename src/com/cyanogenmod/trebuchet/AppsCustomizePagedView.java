@@ -41,9 +41,11 @@ import android.graphics.Rect;
 import android.graphics.TableMaskFilter;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.os.Process;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -254,6 +256,12 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
     private boolean mHideTopBar;
     private boolean mShowWallpaper;
 
+    private final GestureDetector mGestureDetector;
+    private Runnable mSwipeUpCallback = null;
+    private Runnable mSwipeDownCallback = null;
+    private final Handler mHandler = new Handler();
+
+
     public AppsCustomizePagedView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mLayoutInflater = LayoutInflater.from(context);
@@ -310,6 +318,27 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         if (!mShowScrollingIndicator) {
             disableScrollingIndicator();
         }
+
+        mGestureDetector = new GestureDetector(context,
+                new GestureDetector.SimpleOnGestureListener() {
+                    @Override
+                    public boolean onFling(MotionEvent e1, MotionEvent e2, float vX, float vY) {
+                        if (Math.abs(vY) > Math.abs(vX)) {
+                            if (vY < 0) {
+                                if (mSwipeUpCallback != null) {
+                                    mHandler.post(mSwipeUpCallback);
+                                    return true;
+                                }
+                            } else {
+                                if (mSwipeDownCallback != null) {
+                                    mHandler.post(mSwipeDownCallback);
+                                    return true;
+                                }
+                            }
+                        }
+                        return false;
+                    }
+        });
     }
 
     @Override
@@ -328,6 +357,29 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
             // Dismiss AppsCustomize if we tap
             mLauncher.showWorkspace(true);
         }
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        if (mSwipeUpCallback != null || mSwipeDownCallback != null) {
+            boolean handled = mGestureDetector.onTouchEvent(event);
+            switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                case MotionEvent.ACTION_OUTSIDE:
+                case MotionEvent.ACTION_CANCEL:
+                case MotionEvent.ACTION_UP:
+                    return handled;
+                case MotionEvent.ACTION_MOVE:
+            }
+        }
+        return super.onInterceptTouchEvent(event);
+    }
+
+    public void setOnSwipeUpCallback(Runnable callback) {
+        mSwipeUpCallback = callback;
+    }
+
+    public void setOnSwipeDownCallback(Runnable callback) {
+        mSwipeDownCallback = callback;
     }
 
     /** Returns the item index of the center item on this page so that we can restore to this

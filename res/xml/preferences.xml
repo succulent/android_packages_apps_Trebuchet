@@ -255,4 +255,40 @@
                     android:defaultValue="false" />
             </PreferenceCategory>
         </PreferenceScreen>
+
+        <!-- Gestures -->
+        <PreferenceScreen android:key="ui_gestures"
+            android:title="@string/preferences_interface_gestures_title">
+            <PreferenceCategory android:key="ui_homescreen_gestures"
+                android:title="@string/preferences_interface_gestures_homescreen_category">
+                <ListPreference android:key="ui_homescreen_doubletap"
+                    android:title="@string/preferences_interface_gestures_double_tap_title"
+                    android:entries="@array/preferences_interface_gestures_homescreen_double_tap_entries"
+                    android:entryValues="@array/preferences_interface_gestures_homescreen_double_tap_values"
+                    android:defaultValue="0" />
+                <ListPreference android:key="ui_homescreen_swipe_up"
+                    android:title="@string/preferences_interface_gestures_swipe_up_title"
+                    android:entries="@array/preferences_interface_gestures_homescreen_entries"
+                    android:entryValues="@array/preferences_interface_gestures_homescreen_values"
+                    android:defaultValue="0" />
+                <ListPreference android:key="ui_homescreen_swipe_down"
+                    android:title="@string/preferences_interface_gestures_swipe_down_title"
+                    android:entries="@array/preferences_interface_gestures_homescreen_entries"
+                    android:entryValues="@array/preferences_interface_gestures_homescreen_values"
+                    android:defaultValue="0" />
+            </PreferenceCategory>
+            <PreferenceCategory android:key="ui_drawer_gestures"
+                android:title="@string/preferences_interface_gestures_drawer_category">
+                <ListPreference android:key="ui_drawer_swipe_up"
+                    android:title="@string/preferences_interface_gestures_swipe_up_title"
+                    android:entries="@array/preferences_interface_gestures_drawer_entries"
+                    android:entryValues="@array/preferences_interface_gestures_drawer_values"
+                    android:defaultValue="0" />
+                <ListPreference android:key="ui_drawer_swipe_down"
+                    android:title="@string/preferences_interface_gestures_swipe_down_title"
+                    android:entries="@array/preferences_interface_gestures_drawer_entries"
+                    android:entryValues="@array/preferences_interface_gestures_drawer_values"
+                    android:defaultValue="0" />
+            </PreferenceCategory>
+        </PreferenceScreen>
 </PreferenceScreen>

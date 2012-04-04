@@ -56,6 +56,11 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
     private static final String HORIZONTAL_PADDING = "ui_homescreen_screen_padding_horizontal";
     private static final String DRAWER_TRANSITION = "ui_drawer_scrolling_transition_effect";
     private static final String HOMESCREEN_GRID = "ui_homescreen_grid";
+    private static final String HOMESCREEN_DOUBLETAP = "ui_homescreen_doubletap";
+    private static final String HOMESCREEN_SWIPEUP = "ui_homescreen_swipe_up";
+    private static final String HOMESCREEN_SWIPEDOWN = "ui_homescreen_swipe_down";
+    private static final String DRAWER_SWIPEUP = "ui_drawer_swipe_up";
+    private static final String DRAWER_SWIPEDOWN = "ui_drawer_swipe_down";
 
     private CheckBoxPreference mSearchBar;
     private CheckBoxPreference mCombinedBar;
@@ -69,6 +74,11 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
     private ListPreference mSearchPosition;
     private ListPreference mHomescreenTransition;
     private ListPreference mDrawerTransition;
+    private ListPreference mHomescreenDoubleTap;
+    private ListPreference mHomescreenSwipeUp;
+    private ListPreference mHomescreenSwipeDown;
+    private ListPreference mDrawerSwipeDown;
+    private ListPreference mDrawerSwipeUp;
     private NumberPickerPreference mHotseatPositions;
     private NumberPickerPreference mHomescreens;
     private NumberPickerPreference mDefaultHomescreen;
@@ -110,6 +120,16 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         mHomescreenTransition.setOnPreferenceChangeListener(this);
         mDrawerTransition = (ListPreference) prefSet.findPreference(DRAWER_TRANSITION);
         mDrawerTransition.setOnPreferenceChangeListener(this);
+        mHomescreenDoubleTap = (ListPreference) prefSet.findPreference(HOMESCREEN_DOUBLETAP);
+        mHomescreenDoubleTap.setOnPreferenceChangeListener(this);
+        mHomescreenSwipeDown = (ListPreference) prefSet.findPreference(HOMESCREEN_SWIPEDOWN);
+        mHomescreenSwipeDown.setOnPreferenceChangeListener(this);
+        mHomescreenSwipeUp = (ListPreference) prefSet.findPreference(HOMESCREEN_SWIPEUP);
+        mHomescreenSwipeUp.setOnPreferenceChangeListener(this);
+        mDrawerSwipeDown = (ListPreference) prefSet.findPreference(DRAWER_SWIPEDOWN);
+        mDrawerSwipeDown.setOnPreferenceChangeListener(this);
+        mDrawerSwipeUp = (ListPreference) prefSet.findPreference(DRAWER_SWIPEUP);
+        mDrawerSwipeUp.setOnPreferenceChangeListener(this);
         mHomescreens = (NumberPickerPreference) prefSet.findPreference(HOMESCREENS);
         mDefaultHomescreen = (NumberPickerPreference) prefSet.findPreference(DEFAULT_HOMESCREEN);
         mVerticalPadding = (NumberPickerPreference) prefSet.findPreference(VERTICAL_PADDING);
@@ -174,6 +194,11 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 
         mAllAppsPosition.setSummary(mAllAppsPosition.getEntry());
         mSearchPosition.setSummary(mSearchPosition.getEntry());
+        mHomescreenDoubleTap.setSummary(mHomescreenDoubleTap.getEntry());
+        mHomescreenSwipeDown.setSummary(mHomescreenSwipeDown.getEntry());
+        mHomescreenSwipeUp.setSummary(mHomescreenSwipeUp.getEntry());
+        mDrawerSwipeDown.setSummary(mDrawerSwipeDown.getEntry());
+        mDrawerSwipeUp.setSummary(mDrawerSwipeUp.getEntry());
 
         mHomescreens.setSummary(Integer.toString(mPrefs.getInt(HOMESCREENS, 5)));
         mDefaultHomescreen.setSummary(Integer.toString(mPrefs.getInt(DEFAULT_HOMESCREEN, 3)));
@@ -242,6 +267,37 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
             return true;
         } else if (preference == mDrawerTransition) {
             mDrawerTransition.setSummary((String) newValue);
+            return true;
+        } else if (preference == mHomescreenDoubleTap) {
+            CharSequence doubleTapIndex[] = mHomescreenDoubleTap.getEntries();
+            int doubleTapValue = Integer.parseInt((String) newValue);
+            if (doubleTapValue > 3) doubleTapValue = doubleTapValue - 2;
+            CharSequence doubleTapSummary = doubleTapIndex[doubleTapValue];
+            mHomescreenDoubleTap.setSummary(doubleTapSummary);
+            return true;
+        } else if (preference == mHomescreenSwipeDown) {
+            CharSequence homeSwipeDownIndex[] = mHomescreenSwipeDown.getEntries();
+            CharSequence homeSDSummary = homeSwipeDownIndex[Integer.parseInt((String) newValue)];
+            mHomescreenSwipeDown.setSummary(homeSDSummary);
+            return true;
+        } else if (preference == mHomescreenSwipeUp) {
+            CharSequence homeSwipeUpIndex[] = mHomescreenSwipeUp.getEntries();
+            CharSequence homeSUSummary = homeSwipeUpIndex[Integer.parseInt((String) newValue)];
+            mHomescreenSwipeUp.setSummary(homeSUSummary);
+            return true;
+        } else if (preference == mDrawerSwipeDown) {
+            CharSequence drawerSwipeDownIndex[] = mDrawerSwipeDown.getEntries();
+            int swipeDownValue = Integer.parseInt((String) newValue);
+            if (swipeDownValue > 2) swipeDownValue--;
+            CharSequence drawerSDSummary = drawerSwipeDownIndex[swipeDownValue];
+            mDrawerSwipeDown.setSummary(drawerSDSummary);
+            return true;
+        } else if (preference == mDrawerSwipeUp) {
+            CharSequence drawerSwipeUpIndex[] = mDrawerSwipeUp.getEntries();
+            int swipeUpValue = Integer.parseInt((String) newValue);
+            if (swipeUpValue > 2) swipeUpValue--;
+            CharSequence drawerSUSummary = drawerSwipeUpIndex[swipeUpValue];
+            mDrawerSwipeUp.setSummary(drawerSUSummary);
             return true;
         }
         return false;

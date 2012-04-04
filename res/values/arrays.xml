@@ -65,10 +65,10 @@
         <item>Stack</item>
     </string-array>
     <string-array name="preferences_interface_button_corner_entries">
-        <item>Upper right</item>
-        <item>Lower right</item>
-        <item>Lower left</item>
-        <item>Upper left </item>
+        <item>@string/preferences_interface_tablet_button_top_right</item>
+        <item>@string/preferences_interface_tablet_button_bottom_right</item>
+        <item>@string/preferences_interface_tablet_button_bottom_left</item>
+        <item>@string/preferences_interface_tablet_button_top_left</item>
     </string-array>
     <string-array name="preferences_interface_button_corner_values">
         <item>0</item>
@@ -77,19 +77,61 @@
         <item>3</item>
     </string-array>
     <string-array name="preferences_interface_search_button_top_entries">
-        <item>Upper right</item>
-        <item>Upper left </item>
+        <item>@string/preferences_interface_tablet_button_top_right</item>
+        <item>@string/preferences_interface_tablet_button_top_left</item>
     </string-array>
     <string-array name="preferences_interface_search_button_top_values">
         <item>0</item>
         <item>3</item>
     </string-array>
     <string-array name="preferences_interface_search_button_bottom_entries">
-        <item>Lower right</item>
-        <item>Lower left</item>
+        <item>@string/preferences_interface_tablet_button_bottom_right</item>
+        <item>@string/preferences_interface_tablet_button_bottom_left</item>
     </string-array>
     <string-array name="preferences_interface_search_button_bottom_values">
         <item>1</item>
         <item>2</item>
+    </string-array>
+    <string-array name="preferences_interface_gestures_homescreen_entries">
+        <item>@string/preferences_interface_gestures_no_action</item>
+        <item>@string/preferences_interface_gestures_open_drawer</item>
+        <item>@string/preferences_interface_gestures_toggle_dock</item>
+        <item>@string/preferences_interface_gestures_toggle_status_bar</item>
+        <item>@string/preferences_interface_gestures_expand_status_bar</item>
+        <item>@string/preferences_interface_gestures_preferences</item>
+    </string-array>
+    <string-array name="preferences_interface_gestures_homescreen_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+    <string-array name="preferences_interface_gestures_homescreen_double_tap_entries">
+        <item>@string/preferences_interface_gestures_no_action</item>
+        <item>@string/preferences_interface_gestures_open_drawer</item>
+        <item>@string/preferences_interface_gestures_expand_status_bar</item>
+        <item>@string/preferences_interface_gestures_preferences</item>
+    </string-array>
+    <string-array name="preferences_interface_gestures_homescreen_double_tap_values">
+        <item>0</item>
+        <item>1</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+    <string-array name="preferences_interface_gestures_drawer_entries">
+        <item>@string/preferences_interface_gestures_no_action</item>
+        <item>@string/preferences_interface_gestures_close_drawer</item>
+        <item>@string/preferences_interface_gestures_toggle_status_bar</item>
+        <item>@string/preferences_interface_gestures_expand_status_bar</item>
+        <item>@string/preferences_interface_gestures_preferences</item>
+    </string-array>
+    <string-array name="preferences_interface_gestures_drawer_values">
+        <item>0</item>
+        <item>1</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
     </string-array>
 </resources>
