@@ -199,6 +199,8 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         mHomescreenSwipeUp.setSummary(mHomescreenSwipeUp.getEntry());
         mDrawerSwipeDown.setSummary(mDrawerSwipeDown.getEntry());
         mDrawerSwipeUp.setSummary(mDrawerSwipeUp.getEntry());
+        mHomescreenTransition.setSummary(mHomescreenTransition.getEntry());
+        mDrawerTransition.setSummary(mDrawerTransition.getEntry());
 
         mHomescreens.setSummary(Integer.toString(mPrefs.getInt(HOMESCREENS, 5)));
         mDefaultHomescreen.setSummary(Integer.toString(mPrefs.getInt(DEFAULT_HOMESCREEN, 3)));
@@ -212,8 +214,6 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         String hg = mPrefs.getString(HOMESCREEN_GRID, "0|0");
         mHomescreenGrid.setSummary(hg.equals("0|0") ? mContext.getString(R.string.preferences_auto_number_picker) :
                 hg.replace("|", " x "));
-        mHomescreenTransition.setSummary(mPrefs.getString(HOMESCREEN_TRANSITION, ""));
-        mDrawerTransition.setSummary(mPrefs.getString(DRAWER_TRANSITION, ""));
 
          // Remove some preferences on large screens
         if (LauncherApplication.isScreenLarge()) {
@@ -263,10 +263,16 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
             mAllAppsPosition.setSummary(allAppsSummary);
             return true;
         } else if (preference == mHomescreenTransition) {
-            mHomescreenTransition.setSummary((String) newValue);
+            CharSequence homeTransitionIndex[] = mHomescreenTransition.getEntries();
+            int homeTransitionValue = mHomescreenTransition.findIndexOfValue((String) newValue);
+            CharSequence homeTransitionSummary = homeTransitionIndex[homeTransitionValue];
+            mHomescreenTransition.setSummary(homeTransitionSummary);
             return true;
         } else if (preference == mDrawerTransition) {
-            mDrawerTransition.setSummary((String) newValue);
+            CharSequence drawerTransitionIndex[] = mDrawerTransition.getEntries();
+            int drawerTransitionValue = mDrawerTransition.findIndexOfValue((String) newValue);
+            CharSequence drawerTransitionSummary = drawerTransitionIndex[drawerTransitionValue];
+            mDrawerTransition.setSummary(drawerTransitionSummary);
             return true;
         } else if (preference == mHomescreenDoubleTap) {
             CharSequence doubleTapIndex[] = mHomescreenDoubleTap.getEntries();
