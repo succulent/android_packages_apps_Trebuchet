@@ -428,4 +428,14 @@ s -->
 
     <string name="preferences_auto_number_picker">Automatic</string>
 
+    <string name="preferences_transition_effect_standard">Standard</string>
+    <string name="preferences_transition_effect_tablet">Tablet</string>
+    <string name="preferences_transition_effect_zoom_in">Zoom in</string>
+    <string name="preferences_transition_effect_zoom_out">Zoom out</string>
+    <string name="preferences_transition_effect_rotate_up">Rotate up</string>
+    <string name="preferences_transition_effect_rotate_down">Rotate down</string>
+    <string name="preferences_transition_effect_cube_in">Cube in</string>
+    <string name="preferences_transition_effect_cube_out">Cube out</string>
+    <string name="preferences_transition_effect_stack">Stack</string>
+
 </resources>
