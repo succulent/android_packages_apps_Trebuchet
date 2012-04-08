@@ -1163,8 +1163,10 @@ public final class Launcher extends Activity
                         getResources().getDimensionPixelSize(R.dimen.qsb_bar_height));
                 searchParams.gravity = Gravity.BOTTOM;
                 mSearchDropTargetBar.setLayoutParams(searchParams);
-                mWorkspace.setPadding(0, 0, 0, getResources().getDimensionPixelSize(
-                        R.dimen.workspace_content_large_only_top_margin));
+                if (LauncherApplication.isScreenLandscape(getApplicationContext())) {
+                    mWorkspace.setPadding(0, 0, 0, getResources().getDimensionPixelSize(
+                            R.dimen.workspace_content_large_only_top_margin));
+                }
             }
         }
     }
