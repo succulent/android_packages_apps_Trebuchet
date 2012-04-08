@@ -394,7 +394,7 @@ s -->
     <string name="preferences_interface_tablet_dock_icon_labels_title">Show dock icon labels</string>
     <string name="preferences_interface_tablet_dock_icon_labels_summary">Show dock icon labels when using smaller app icons</string>
     <string name="preferences_interface_tablet_button_top_left">Top left</string>
-    <string name="preferences_interface_tablet_button_top_right">Top left</string>
+    <string name="preferences_interface_tablet_button_top_right">Top right</string>
     <string name="preferences_interface_tablet_button_bottom_left">Bottom left</string>
     <string name="preferences_interface_tablet_button_bottom_right">Bottom right</string>
 
