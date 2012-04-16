@@ -58,8 +58,7 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
     private boolean mDeferOnDragEnd = false;
     private int mSearchCorner;
     private int mAppsCorner;
-    private boolean mShowSettingsButton;
-    private boolean mShowMarketLeft;
+    private boolean mShowButtonDividers;
 
     private Launcher mLauncher;
 
@@ -75,8 +74,7 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
         mShowQSBSearchBar = PreferencesProvider.Interface.Homescreen.getShowSearchBar(context);
         mSearchCorner = PreferencesProvider.Interface.Tablet.getSearchBarCorner(context);
         mAppsCorner = PreferencesProvider.Interface.Tablet.getAllAppsBarCorner(context);
-        mShowSettingsButton = PreferencesProvider.Interface.Icons.getShowSettingsButton(context);
-        mShowMarketLeft = PreferencesProvider.Interface.Tablet.getShowMarketLeft(context);
+        mShowButtonDividers = PreferencesProvider.Interface.Tablet.getButtonDividers(context);
     }
 
     public void setup(Launcher launcher, DragController dragController) {
@@ -97,10 +95,7 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
 
         // Get the individual components
         mQSBSearchBar = findViewById(R.id.qsb_search_bar);
-        View searchDividerTwo = findViewById(R.id.search_divider_two);
-        View settingsButton = findViewById(R.id.settings_button);
-        View searchDividerThree = findViewById(R.id.search_divider_three);
-        View marketButton = findViewById(R.id.search_market_button);
+        View searchDivider = findViewById(R.id.search_divider);
         boolean searchRight = mSearchCorner < 2;
         if (searchRight) {
             ImageView searchButton = (ImageView) findViewById(R.id.search_button);
@@ -111,7 +106,6 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
                     RelativeLayout.ALIGN_PARENT_TOP : RelativeLayout.ALIGN_PARENT_BOTTOM);
             searchButton.setLayoutParams(params);
 
-            View searchDivider = findViewById(R.id.search_divider);
             RelativeLayout.LayoutParams dividerParams = new RelativeLayout.LayoutParams(RelativeLayout
                     .LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT);
             dividerParams.addRule(RelativeLayout.LEFT_OF, searchButton.getId());
@@ -122,40 +116,9 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
                     .LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             voiceParams.addRule(RelativeLayout.LEFT_OF, searchDivider.getId());
             voiceButton.setLayoutParams(voiceParams);
-
-            if (mShowSettingsButton) {
-                RelativeLayout.LayoutParams dividerTwoParams = new RelativeLayout.LayoutParams(RelativeLayout
-                        .LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-                dividerTwoParams.addRule(RelativeLayout.LEFT_OF, voiceButton.getId());
-                searchDividerTwo.setLayoutParams(dividerTwoParams);
-
-                RelativeLayout.LayoutParams settingsParams = new RelativeLayout.LayoutParams(RelativeLayout
-                        .LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                settingsParams.addRule(RelativeLayout.LEFT_OF, searchDividerTwo.getId());
-                settingsButton.setLayoutParams(settingsParams);
-            }
-
-            if (mShowMarketLeft) {
-                RelativeLayout.LayoutParams dividerThreeParams = new RelativeLayout.LayoutParams(RelativeLayout
-                        .LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-                dividerThreeParams.addRule(RelativeLayout.LEFT_OF, settingsButton.getId());
-                searchDividerThree.setLayoutParams(dividerThreeParams);
-
-                RelativeLayout.LayoutParams marketParams = new RelativeLayout.LayoutParams(RelativeLayout
-                        .LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                marketParams.addRule(RelativeLayout.LEFT_OF, searchDividerThree.getId());
-                marketButton.setLayoutParams(marketParams);
-            }
         }
 
-        if (mShowSettingsButton) {
-            if (searchDividerTwo != null) searchDividerTwo.setVisibility(View.VISIBLE);
-            if (settingsButton != null) settingsButton.setVisibility(View.VISIBLE);
-        }
-        if (mShowMarketLeft) {
-            if (searchDividerThree != null) searchDividerThree.setVisibility(View.VISIBLE);
-            if (marketButton != null) marketButton.setVisibility(View.VISIBLE);
-        }
+        searchDivider.setVisibility(mShowButtonDividers ? View.VISIBLE : View.INVISIBLE);
 
         mDropTargetBar = findViewById(R.id.drag_target_bar);
         mInfoDropTarget = (ButtonDropTarget) mDropTargetBar.findViewById(R.id.info_target_text);

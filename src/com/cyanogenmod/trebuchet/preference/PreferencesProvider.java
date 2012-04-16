@@ -182,10 +182,6 @@ public final class PreferencesProvider {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return preferences.getBoolean("ui_tablet_workspace_allapps", true);
             }
-            public static boolean getShowAllAppsButton(Context context) {
-                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getBoolean("ui_tablet_all_apps_button", true);
-            }
             public static boolean getCenterAllAppsWorkspace(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return preferences.getBoolean("ui_tablet_workspace_allapps_center", false);
@@ -210,14 +206,6 @@ public final class PreferencesProvider {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return preferences.getBoolean("ui_tablet_hide_tablet_controls", false);
             }
-            public static boolean getShowMarketLeft(Context context) {
-                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getBoolean("preferences_interface_icons_market_left", false);
-            }
-            public static boolean getShowSettingsRight(Context context) {
-                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getBoolean("preferences_interface_icons_settings_right", false);
-            }
             public static boolean getSmallerIcons(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return LauncherApplication.isScreenLarge() ?
@@ -227,21 +215,45 @@ public final class PreferencesProvider {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return preferences.getBoolean("ui_tablet_show_dock_icon_labels", false);
             }
+            public static int getActionButtonOne(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return Integer.parseInt(preferences.getString("ui_tablet_custom_button_one", "1"));
+            }
+            public static int getActionButtonTwo(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return Integer.parseInt(preferences.getString("ui_tablet_custom_button_two", "0"));
+            }
+            public static int getActionButtonThree(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return Integer.parseInt(preferences.getString("ui_tablet_custom_button_three", "0"));
+            }
+            public static int getActionButtonFour(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return Integer.parseInt(preferences.getString("ui_tablet_custom_button_four", "0"));
+            }
+            public static int getActionButtonFive(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return Integer.parseInt(preferences.getString("ui_tablet_custom_button_five", "0"));
+            }
+            public static int getActionButtonSix(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return Integer.parseInt(preferences.getString("ui_tablet_custom_button_six", "0"));
+            }
+            public static int getActionButtonSeven(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return Integer.parseInt(preferences.getString("ui_tablet_custom_button_seven", "0"));
+            }
+            public static int getActionButtonEight(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return Integer.parseInt(preferences.getString("ui_tablet_custom_button_eight", "0"));
+            }
+            public static boolean getButtonDividers(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("ui_tablet_button_dividers", true);
+            }
         }
 
         public static class Icons {
-            public static boolean getHotseatButton(Context context) {
-                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getBoolean("preferences_interface_icons_hotseat", false);
-            }
-            public static boolean getShowMarketButton(Context context) {
-                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getBoolean("preferences_interface_icons_market", false);
-            }
-            public static boolean getShowSettingsButton(Context context) {
-                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getBoolean("preferences_interface_icons_settings", false);
-            }
         }
 
         public static class Gestures {

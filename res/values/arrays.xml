@@ -99,6 +99,9 @@
         <item>@string/preferences_interface_gestures_toggle_status_bar</item>
         <item>@string/preferences_interface_gestures_expand_status_bar</item>
         <item>@string/preferences_interface_gestures_preferences</item>
+        <item>@string/preferences_interface_gestures_launch_application</item>
+        <item>@string/preferences_interface_gestures_toggle_tablet_controls</item>
+        <item>@string/preferences_interface_gestures_rocket_launcher</item>
     </string-array>
     <string-array name="preferences_interface_gestures_homescreen_values">
         <item>0</item>
@@ -107,18 +110,25 @@
         <item>3</item>
         <item>4</item>
         <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
     </string-array>
     <string-array name="preferences_interface_gestures_homescreen_double_tap_entries">
         <item>@string/preferences_interface_gestures_no_action</item>
         <item>@string/preferences_interface_gestures_open_drawer</item>
         <item>@string/preferences_interface_gestures_expand_status_bar</item>
         <item>@string/preferences_interface_gestures_preferences</item>
+        <item>@string/preferences_interface_gestures_launch_application</item>
+        <item>@string/preferences_interface_gestures_rocket_launcher</item>
     </string-array>
     <string-array name="preferences_interface_gestures_homescreen_double_tap_values">
         <item>0</item>
         <item>1</item>
         <item>4</item>
         <item>5</item>
+        <item>6</item>
+        <item>8</item>
     </string-array>
     <string-array name="preferences_interface_gestures_drawer_entries">
         <item>@string/preferences_interface_gestures_no_action</item>
@@ -126,6 +136,8 @@
         <item>@string/preferences_interface_gestures_toggle_status_bar</item>
         <item>@string/preferences_interface_gestures_expand_status_bar</item>
         <item>@string/preferences_interface_gestures_preferences</item>
+        <item>@string/preferences_interface_gestures_launch_application</item>
+        <item>@string/preferences_interface_gestures_rocket_launcher</item>
     </string-array>
     <string-array name="preferences_interface_gestures_drawer_values">
         <item>0</item>
@@ -133,5 +145,19 @@
         <item>3</item>
         <item>4</item>
         <item>5</item>
+        <item>6</item>
+        <item>8</item>
+    </string-array>
+    <string-array name="preferences_interface_apps_bar_entries">
+        <item>@string/preferences_interface_gestures_no_action</item>
+        <item>@string/preferences_interface_gestures_open_drawer</item>
+        <item>@string/preferences_interface_gestures_toggle_dock</item>
+        <item>@string/preferences_interface_gestures_launch_application</item>
+    </string-array>
+    <string-array name="preferences_interface_apps_bar_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
     </string-array>
 </resources>

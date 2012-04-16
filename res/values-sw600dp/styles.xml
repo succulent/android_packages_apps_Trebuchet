@@ -132,7 +132,7 @@
         <item name="android:layout_height">match_parent</item>
     </style>
     <style name="SearchButton">
-        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_gravity">center</item>
         <item name="android:paddingTop">@dimen/toolbar_button_vertical_padding</item>
         <item name="android:paddingBottom">@dimen/toolbar_button_vertical_padding</item>
         <item name="android:paddingLeft">@dimen/toolbar_button_horizontal_padding</item>

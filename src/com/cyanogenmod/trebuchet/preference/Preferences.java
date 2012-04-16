@@ -18,6 +18,7 @@ package com.cyanogenmod.trebuchet.preference;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -61,6 +62,15 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
     private static final String HOMESCREEN_SWIPEDOWN = "ui_homescreen_swipe_down";
     private static final String DRAWER_SWIPEUP = "ui_drawer_swipe_up";
     private static final String DRAWER_SWIPEDOWN = "ui_drawer_swipe_down";
+    private static final String HDT_APPLICATION = "hdt_application";
+    private static final String CUSTOM_BUTTON_ONE = "ui_tablet_custom_button_one";
+    private static final String CUSTOM_BUTTON_TWO = "ui_tablet_custom_button_two";
+    private static final String CUSTOM_BUTTON_THREE = "ui_tablet_custom_button_three";
+    private static final String CUSTOM_BUTTON_FOUR = "ui_tablet_custom_button_four";
+    private static final String CUSTOM_BUTTON_FIVE = "ui_tablet_custom_button_five";
+    private static final String CUSTOM_BUTTON_SIX = "ui_tablet_custom_button_six";
+    private static final String CUSTOM_BUTTON_SEVEN = "ui_tablet_custom_button_seven";
+    private static final String CUSTOM_BUTTON_EIGHT = "ui_tablet_custom_button_eight";
 
     private CheckBoxPreference mSearchBar;
     private CheckBoxPreference mCombinedBar;
@@ -79,6 +89,14 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
     private ListPreference mHomescreenSwipeDown;
     private ListPreference mDrawerSwipeDown;
     private ListPreference mDrawerSwipeUp;
+    private ListPreference mCustomButtonOne;
+    private ListPreference mCustomButtonTwo;
+    private ListPreference mCustomButtonThree;
+    private ListPreference mCustomButtonFour;
+    private ListPreference mCustomButtonFive;
+    private ListPreference mCustomButtonSix;
+    private ListPreference mCustomButtonSeven;
+    private ListPreference mCustomButtonEight;
     private NumberPickerPreference mHotseatPositions;
     private NumberPickerPreference mHomescreens;
     private NumberPickerPreference mDefaultHomescreen;
@@ -130,6 +148,22 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         mDrawerSwipeDown.setOnPreferenceChangeListener(this);
         mDrawerSwipeUp = (ListPreference) prefSet.findPreference(DRAWER_SWIPEUP);
         mDrawerSwipeUp.setOnPreferenceChangeListener(this);
+        mCustomButtonOne = (ListPreference) prefSet.findPreference(CUSTOM_BUTTON_ONE);
+        mCustomButtonOne.setOnPreferenceChangeListener(this);
+        mCustomButtonTwo = (ListPreference) prefSet.findPreference(CUSTOM_BUTTON_TWO);
+        mCustomButtonTwo.setOnPreferenceChangeListener(this);
+        mCustomButtonThree = (ListPreference) prefSet.findPreference(CUSTOM_BUTTON_THREE);
+        mCustomButtonThree.setOnPreferenceChangeListener(this);
+        mCustomButtonFour = (ListPreference) prefSet.findPreference(CUSTOM_BUTTON_FOUR);
+        mCustomButtonFour.setOnPreferenceChangeListener(this);
+        mCustomButtonFive = (ListPreference) prefSet.findPreference(CUSTOM_BUTTON_FIVE);
+        mCustomButtonFive.setOnPreferenceChangeListener(this);
+        mCustomButtonSix = (ListPreference) prefSet.findPreference(CUSTOM_BUTTON_SIX);
+        mCustomButtonSix.setOnPreferenceChangeListener(this);
+        mCustomButtonSeven = (ListPreference) prefSet.findPreference(CUSTOM_BUTTON_SEVEN);
+        mCustomButtonSeven.setOnPreferenceChangeListener(this);
+        mCustomButtonEight = (ListPreference) prefSet.findPreference(CUSTOM_BUTTON_EIGHT);
+        mCustomButtonEight.setOnPreferenceChangeListener(this);
         mHomescreens = (NumberPickerPreference) prefSet.findPreference(HOMESCREENS);
         mDefaultHomescreen = (NumberPickerPreference) prefSet.findPreference(DEFAULT_HOMESCREEN);
         mVerticalPadding = (NumberPickerPreference) prefSet.findPreference(VERTICAL_PADDING);
@@ -139,6 +173,17 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         if (mSearchBar.isChecked()) {
             mCombinedBar.setEnabled(false);
             mCenterAllApps.setEnabled(false);
+            mCustomButtonSeven.setEnabled(false);
+            mCustomButtonSeven.setValueIndex(0);
+            mCustomButtonEight.setEnabled(false);
+            mCustomButtonEight.setValueIndex(0);
+        }
+
+        if (mCombinedBar.isChecked()) {
+            mCustomButtonSeven.setEnabled(false);
+            mCustomButtonSeven.setValueIndex(0);
+            mCustomButtonEight.setEnabled(false);
+            mCustomButtonEight.setValueIndex(0);
         }
 
         if (mHideDrawerTab.isChecked()) {
@@ -195,12 +240,111 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         mAllAppsPosition.setSummary(mAllAppsPosition.getEntry());
         mSearchPosition.setSummary(mSearchPosition.getEntry());
         mHomescreenDoubleTap.setSummary(mHomescreenDoubleTap.getEntry());
+        if (mHomescreenDoubleTap.getValue().equals("6")) {
+            try {
+                mHomescreenDoubleTap.setIcon(this.getPackageManager().getActivityIcon(
+                        Intent.parseUri(mPrefs.getString("hdt_application", ""), 0)));
+            } catch (Exception e) {
+            }
+        }
         mHomescreenSwipeDown.setSummary(mHomescreenSwipeDown.getEntry());
+        if (mHomescreenSwipeDown.getValue().equals("6")) {
+            try {
+                mHomescreenSwipeDown.setIcon(this.getPackageManager().getActivityIcon(
+                        Intent.parseUri(mPrefs.getString("hsd_application", ""), 0)));
+            } catch (Exception e) {
+            }
+        }
         mHomescreenSwipeUp.setSummary(mHomescreenSwipeUp.getEntry());
+        if (mHomescreenSwipeUp.getValue().equals("6")) {
+            try {
+                mHomescreenSwipeUp.setIcon(this.getPackageManager().getActivityIcon(
+                        Intent.parseUri(mPrefs.getString("hsu_application", ""), 0)));
+            } catch (Exception e) {
+            }
+        }
         mDrawerSwipeDown.setSummary(mDrawerSwipeDown.getEntry());
+        if (mDrawerSwipeDown.getValue().equals("6")) {
+            try {
+                mDrawerSwipeDown.setIcon(this.getPackageManager().getActivityIcon(
+                        Intent.parseUri(mPrefs.getString("dsd_application", ""), 0)));
+            } catch (Exception e) {
+            }
+        }
         mDrawerSwipeUp.setSummary(mDrawerSwipeUp.getEntry());
+        if (mDrawerSwipeUp.getValue().equals("6")) {
+            try {
+                mDrawerSwipeUp.setIcon(this.getPackageManager().getActivityIcon(
+                        Intent.parseUri(mPrefs.getString("dsu_application", ""), 0)));
+            } catch (Exception e) {
+            }
+        }
         mHomescreenTransition.setSummary(mHomescreenTransition.getEntry());
         mDrawerTransition.setSummary(mDrawerTransition.getEntry());
+        mCustomButtonOne.setSummary(mCustomButtonOne.getEntry());
+        if (mCustomButtonOne.getValue().equals("3")) {
+            try {
+                mCustomButtonOne.setIcon(this.getPackageManager().getActivityIcon(
+                        Intent.parseUri(mPrefs.getString("custom_application_one", ""), 0)));
+            } catch (Exception e) {
+            }
+        }
+        mCustomButtonTwo.setSummary(mCustomButtonTwo.getEntry());
+        if (mCustomButtonTwo.getValue().equals("3")) {
+            try {
+                mCustomButtonTwo.setIcon(this.getPackageManager().getActivityIcon(
+                        Intent.parseUri(mPrefs.getString("custom_application_two", ""), 0)));
+            } catch (Exception e) {
+            }
+        }
+        mCustomButtonThree.setSummary(mCustomButtonThree.getEntry());
+        if (mCustomButtonThree.getValue().equals("3")) {
+            try {
+                mCustomButtonThree.setIcon(this.getPackageManager().getActivityIcon(
+                        Intent.parseUri(mPrefs.getString("custom_application_three", ""), 0)));
+            } catch (Exception e) {
+            }
+        }
+        mCustomButtonFour.setSummary(mCustomButtonFour.getEntry());
+        if (mCustomButtonFour.getValue().equals("3")) {
+            try {
+                mCustomButtonFour.setIcon(this.getPackageManager().getActivityIcon(
+                        Intent.parseUri(mPrefs.getString("custom_application_four", ""), 0)));
+            } catch (Exception e) {
+            }
+        }
+        mCustomButtonFive.setSummary(mCustomButtonFive.getEntry());
+        if (mCustomButtonFive.getValue().equals("3")) {
+            try {
+                mCustomButtonFive.setIcon(this.getPackageManager().getActivityIcon(
+                        Intent.parseUri(mPrefs.getString("custom_application_five", ""), 0)));
+            } catch (Exception e) {
+            }
+        }
+        mCustomButtonSix.setSummary(mCustomButtonSix.getEntry());
+        if (mCustomButtonSix.getValue().equals("3")) {
+            try {
+                mCustomButtonSix.setIcon(this.getPackageManager().getActivityIcon(
+                        Intent.parseUri(mPrefs.getString("custom_application_six", ""), 0)));
+            } catch (Exception e) {
+            }
+        }
+        mCustomButtonSeven.setSummary(mCustomButtonSeven.getEntry());
+        if (mCustomButtonSeven.getValue().equals("3")) {
+            try {
+                mCustomButtonSeven.setIcon(this.getPackageManager().getActivityIcon(
+                        Intent.parseUri(mPrefs.getString("custom_application_seven", ""), 0)));
+            } catch (Exception e) {
+            }
+        }
+        mCustomButtonEight.setSummary(mCustomButtonEight.getEntry());
+        if (mCustomButtonEight.getValue().equals("3")) {
+            try {
+                mCustomButtonEight.setIcon(this.getPackageManager().getActivityIcon(
+                        Intent.parseUri(mPrefs.getString("custom_application_eight", ""), 0)));
+            } catch (Exception e) {
+            }
+        }
 
         mHomescreens.setSummary(Integer.toString(mPrefs.getInt(HOMESCREENS, 5)));
         mDefaultHomescreen.setSummary(Integer.toString(mPrefs.getInt(DEFAULT_HOMESCREEN, 3)));
@@ -259,7 +403,12 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
             return true;
         } else if (preference == mAllAppsPosition) {
             CharSequence allAppsIndex[] = mAllAppsPosition.getEntries();
-            CharSequence allAppsSummary = allAppsIndex[Integer.parseInt((String) newValue)];
+            int allAppsValue = Integer.parseInt((String) newValue);
+            if (allAppsIndex.length < 3) {
+                if (allAppsValue == 3) allAppsValue = allAppsValue - 2;
+                else if (allAppsValue == 1 || allAppsValue == 2) allAppsValue--;
+            }
+            CharSequence allAppsSummary = allAppsIndex[allAppsValue];
             mAllAppsPosition.setSummary(allAppsSummary);
             return true;
         } else if (preference == mHomescreenTransition) {
@@ -277,33 +426,208 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         } else if (preference == mHomescreenDoubleTap) {
             CharSequence doubleTapIndex[] = mHomescreenDoubleTap.getEntries();
             int doubleTapValue = Integer.parseInt((String) newValue);
+            if (doubleTapValue == 6) {
+                // Pick an application
+                Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                Intent pickIntent = new Intent(Intent.ACTION_PICK_ACTIVITY);
+                pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
+                startActivityForResult(pickIntent, 0);
+            } else {
+                mHomescreenDoubleTap.setIcon(null);
+            }
             if (doubleTapValue > 3) doubleTapValue = doubleTapValue - 2;
+            if (doubleTapValue == 6) doubleTapValue--;
             CharSequence doubleTapSummary = doubleTapIndex[doubleTapValue];
             mHomescreenDoubleTap.setSummary(doubleTapSummary);
             return true;
         } else if (preference == mHomescreenSwipeDown) {
             CharSequence homeSwipeDownIndex[] = mHomescreenSwipeDown.getEntries();
+            int hSDValue = Integer.parseInt((String) newValue);
+            if (hSDValue == 6) {
+                // Pick an application
+                Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                Intent pickIntent = new Intent(Intent.ACTION_PICK_ACTIVITY);
+                pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
+                startActivityForResult(pickIntent, 2);
+            } else {
+                mHomescreenSwipeDown.setIcon(null);
+            }
             CharSequence homeSDSummary = homeSwipeDownIndex[Integer.parseInt((String) newValue)];
             mHomescreenSwipeDown.setSummary(homeSDSummary);
             return true;
         } else if (preference == mHomescreenSwipeUp) {
             CharSequence homeSwipeUpIndex[] = mHomescreenSwipeUp.getEntries();
+            int hSUValue = Integer.parseInt((String) newValue);
+            if (hSUValue == 6) {
+                // Pick an application
+                Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                Intent pickIntent = new Intent(Intent.ACTION_PICK_ACTIVITY);
+                pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
+                startActivityForResult(pickIntent, 1);
+            } else {
+                mHomescreenSwipeUp.setIcon(null);
+            }
             CharSequence homeSUSummary = homeSwipeUpIndex[Integer.parseInt((String) newValue)];
             mHomescreenSwipeUp.setSummary(homeSUSummary);
             return true;
         } else if (preference == mDrawerSwipeDown) {
             CharSequence drawerSwipeDownIndex[] = mDrawerSwipeDown.getEntries();
             int swipeDownValue = Integer.parseInt((String) newValue);
+            if (swipeDownValue == 6) {
+                // Pick an application
+                Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                Intent pickIntent = new Intent(Intent.ACTION_PICK_ACTIVITY);
+                pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
+                startActivityForResult(pickIntent, 4);
+            } else {
+                mDrawerSwipeDown.setIcon(null);
+            }
             if (swipeDownValue > 2) swipeDownValue--;
+            if (swipeDownValue == 7) swipeDownValue--;
             CharSequence drawerSDSummary = drawerSwipeDownIndex[swipeDownValue];
             mDrawerSwipeDown.setSummary(drawerSDSummary);
             return true;
         } else if (preference == mDrawerSwipeUp) {
             CharSequence drawerSwipeUpIndex[] = mDrawerSwipeUp.getEntries();
             int swipeUpValue = Integer.parseInt((String) newValue);
+            if (swipeUpValue == 6) {
+                // Pick an application
+                Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                Intent pickIntent = new Intent(Intent.ACTION_PICK_ACTIVITY);
+                pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
+                startActivityForResult(pickIntent, 3);
+            } else {
+                mDrawerSwipeUp.setIcon(null);
+            }
             if (swipeUpValue > 2) swipeUpValue--;
+            if (swipeUpValue == 7) swipeUpValue--;
             CharSequence drawerSUSummary = drawerSwipeUpIndex[swipeUpValue];
             mDrawerSwipeUp.setSummary(drawerSUSummary);
+            return true;
+        } else if (preference == mCustomButtonOne) {
+            CharSequence customOneIndex[] = mCustomButtonOne.getEntries();
+            int customOneValue = Integer.parseInt((String) newValue);
+            if (customOneValue == 3) {
+                // Pick an application
+                Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                Intent pickIntent = new Intent(Intent.ACTION_PICK_ACTIVITY);
+                pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
+                startActivityForResult(pickIntent, 5);
+            }
+            CharSequence customOneSummary = customOneIndex[customOneValue];
+            mCustomButtonOne.setSummary(customOneSummary);
+            if (customOneValue != 3) mCustomButtonOne.setIcon(null);
+            return true;
+        } else if (preference == mCustomButtonTwo) {
+            CharSequence customTwoIndex[] = mCustomButtonTwo.getEntries();
+            int customTwoValue = Integer.parseInt((String) newValue);
+            if (customTwoValue == 3) {
+                // Pick an application
+                Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                Intent pickIntent = new Intent(Intent.ACTION_PICK_ACTIVITY);
+                pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
+                startActivityForResult(pickIntent, 6);
+            }
+            CharSequence customTwoSummary = customTwoIndex[customTwoValue];
+            mCustomButtonTwo.setSummary(customTwoSummary);
+            if (customTwoValue != 3) mCustomButtonTwo.setIcon(null);
+            return true;
+        } else if (preference == mCustomButtonThree) {
+            CharSequence customThreeIndex[] = mCustomButtonThree.getEntries();
+            int customThreeValue = Integer.parseInt((String) newValue);
+            if (customThreeValue == 3) {
+                // Pick an application
+                Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                Intent pickIntent = new Intent(Intent.ACTION_PICK_ACTIVITY);
+                pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
+                startActivityForResult(pickIntent, 7);
+            }
+            CharSequence customThreeSummary = customThreeIndex[customThreeValue];
+            mCustomButtonThree.setSummary(customThreeSummary);
+            if (customThreeValue != 3) mCustomButtonThree.setIcon(null);
+            return true;
+        } else if (preference == mCustomButtonFour) {
+            CharSequence customFourIndex[] = mCustomButtonFour.getEntries();
+            int customFourValue = Integer.parseInt((String) newValue);
+            if (customFourValue == 3) {
+                // Pick an application
+                Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                Intent pickIntent = new Intent(Intent.ACTION_PICK_ACTIVITY);
+                pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
+                startActivityForResult(pickIntent, 8);
+            }
+            CharSequence customFourSummary = customFourIndex[customFourValue];
+            mCustomButtonFour.setSummary(customFourSummary);
+            if (customFourValue != 3) mCustomButtonFour.setIcon(null);
+            return true;
+        } else if (preference == mCustomButtonFive) {
+            CharSequence customFiveIndex[] = mCustomButtonFive.getEntries();
+            int customFiveValue = Integer.parseInt((String) newValue);
+            if (customFiveValue == 3) {
+                // Pick an application
+                Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                Intent pickIntent = new Intent(Intent.ACTION_PICK_ACTIVITY);
+                pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
+                startActivityForResult(pickIntent, 9);
+            }
+            CharSequence customFiveSummary = customFiveIndex[customFiveValue];
+            mCustomButtonFive.setSummary(customFiveSummary);
+            if (customFiveValue != 3) mCustomButtonFive.setIcon(null);
+            return true;
+        } else if (preference == mCustomButtonSix) {
+            CharSequence customSixIndex[] = mCustomButtonSix.getEntries();
+            int customSixValue = Integer.parseInt((String) newValue);
+            if (customSixValue == 3) {
+                // Pick an application
+                Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                Intent pickIntent = new Intent(Intent.ACTION_PICK_ACTIVITY);
+                pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
+                startActivityForResult(pickIntent, 10);
+            }
+            CharSequence customSixSummary = customSixIndex[customSixValue];
+            mCustomButtonSix.setSummary(customSixSummary);
+            if (customSixValue != 3) mCustomButtonSix.setIcon(null);
+            return true;
+        } else if (preference == mCustomButtonSeven) {
+            CharSequence customSevenIndex[] = mCustomButtonSeven.getEntries();
+            int customSevenValue = Integer.parseInt((String) newValue);
+            if (customSevenValue == 3) {
+                // Pick an application
+                Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                Intent pickIntent = new Intent(Intent.ACTION_PICK_ACTIVITY);
+                pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
+                startActivityForResult(pickIntent, 11);
+            }
+            CharSequence customSevenSummary = customSevenIndex[customSevenValue];
+            mCustomButtonSeven.setSummary(customSevenSummary);
+            if (customSevenValue != 3) mCustomButtonSeven.setIcon(null);
+            return true;
+        } else if (preference == mCustomButtonEight) {
+            CharSequence customEightIndex[] = mCustomButtonEight.getEntries();
+            int customEightValue = Integer.parseInt((String) newValue);
+            if (customEightValue == 3) {
+                // Pick an application
+                Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                Intent pickIntent = new Intent(Intent.ACTION_PICK_ACTIVITY);
+                pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
+                startActivityForResult(pickIntent, 12);
+            }
+            CharSequence customEightSummary = customEightIndex[customEightValue];
+            mCustomButtonEight.setSummary(customEightSummary);
+            if (customEightValue != 3) mCustomButtonEight.setIcon(null);
             return true;
         }
         return false;
@@ -324,6 +648,22 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
             } else {
                 mAllAppsPosition.setEntries(R.array.preferences_interface_button_corner_entries);
                 mAllAppsPosition.setEntryValues(R.array.preferences_interface_button_corner_values);
+            }
+            mCustomButtonSeven.setEnabled(!value && !mCombinedBar.isChecked());
+            mCustomButtonEight.setEnabled(!value && !mCombinedBar.isChecked());
+            if (value) {
+                mCustomButtonSeven.setValueIndex(0);
+                mCustomButtonEight.setValueIndex(0);
+                mCombinedBar.setChecked(false);
+            }
+            return true;
+        } else if (preference == mCombinedBar) {
+            value = mCombinedBar.isChecked();
+            mCustomButtonSeven.setEnabled(!value && !mSearchBar.isChecked());
+            mCustomButtonEight.setEnabled(!value && !mSearchBar.isChecked());
+            if (value) {
+                mCustomButtonSeven.setValueIndex(0);
+                mCustomButtonEight.setValueIndex(0);
             }
             return true;
         } else if (preference == mHideDrawerTab) {
@@ -355,5 +695,89 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
             return true;
         }
         return false;
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data != null) {
+            if (requestCode == 0) {
+                mPrefs.edit().putString("hdt_application", data.toUri(0)).commit();
+                try {
+                    mHomescreenDoubleTap.setIcon(this.getPackageManager().getActivityIcon(data));
+                } catch (Exception e) {
+                }
+            } else if (requestCode == 1) {
+                mPrefs.edit().putString("hsu_application", data.toUri(0)).commit();
+                try {
+                    mHomescreenSwipeUp.setIcon(this.getPackageManager().getActivityIcon(data));
+                } catch (Exception e) {
+                }
+            } else if (requestCode == 2) {
+                mPrefs.edit().putString("hsd_application", data.toUri(0)).commit();
+                try {
+                    mHomescreenSwipeDown.setIcon(this.getPackageManager().getActivityIcon(data));
+                } catch (Exception e) {
+                }
+            } else if (requestCode == 3) {
+                mPrefs.edit().putString("dsu_application", data.toUri(0)).commit();
+                try {
+                    mDrawerSwipeUp.setIcon(this.getPackageManager().getActivityIcon(data));
+                } catch (Exception e) {
+                }
+            } else if (requestCode == 4) {
+                mPrefs.edit().putString("dsd_application", data.toUri(0)).commit();
+                try {
+                    mDrawerSwipeDown.setIcon(this.getPackageManager().getActivityIcon(data));
+                } catch (Exception e) {
+                }
+            } else if (requestCode == 5) {
+                mPrefs.edit().putString("custom_application_one", data.toUri(0)).commit();
+                try {
+                    mCustomButtonOne.setIcon(this.getPackageManager().getActivityIcon(data));
+                } catch (Exception e) {
+                }
+            } else if (requestCode == 6) {
+                mPrefs.edit().putString("custom_application_two", data.toUri(0)).commit();
+                try {
+                    mCustomButtonTwo.setIcon(this.getPackageManager().getActivityIcon(data));
+                } catch (Exception e) {
+                }
+            } else if (requestCode == 7) {
+                mPrefs.edit().putString("custom_application_three", data.toUri(0)).commit();
+                try {
+                    mCustomButtonThree.setIcon(this.getPackageManager().getActivityIcon(data));
+                } catch (Exception e) {
+                }
+            } else if (requestCode == 8) {
+                mPrefs.edit().putString("custom_application_four", data.toUri(0)).commit();
+                try {
+                    mCustomButtonFour.setIcon(this.getPackageManager().getActivityIcon(data));
+                } catch (Exception e) {
+                }
+            } else if (requestCode == 9) {
+                mPrefs.edit().putString("custom_application_five", data.toUri(0)).commit();
+                try {
+                    mCustomButtonFive.setIcon(this.getPackageManager().getActivityIcon(data));
+                } catch (Exception e) {
+                }
+            } else if (requestCode == 10) {
+                mPrefs.edit().putString("custom_application_six", data.toUri(0)).commit();
+                try {
+                    mCustomButtonSix.setIcon(this.getPackageManager().getActivityIcon(data));
+                } catch (Exception e) {
+                }
+            } else if (requestCode == 11) {
+                mPrefs.edit().putString("custom_application_seven", data.toUri(0)).commit();
+                try {
+                    mCustomButtonSeven.setIcon(this.getPackageManager().getActivityIcon(data));
+                } catch (Exception e) {
+                }
+            } else if (requestCode == 12) {
+                mPrefs.edit().putString("custom_application_eight", data.toUri(0)).commit();
+                try {
+                    mCustomButtonEight.setIcon(this.getPackageManager().getActivityIcon(data));
+                } catch (Exception e) {
+                }
+            }
+        }
     }
 }

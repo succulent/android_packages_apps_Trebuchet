@@ -212,8 +212,6 @@ public final class Launcher extends Activity
     private Hotseat mHotseat;
     private Hotseat mHotseatTwo;
     private RelativeLayout mAllAppsBar;
-    private View mAllAppsButton;
-    private ImageView mHotseatButton;
 
     private SearchDropTargetBar mSearchDropTargetBar;
     private AppsCustomizeTabHost mAppsCustomizeTabHost;
@@ -281,20 +279,25 @@ public final class Launcher extends Activity
     private boolean mAllAppsTop;
     private boolean mAllAppsLeft;
     private boolean mSearchTop;
-    private boolean mShowMarketButton;
-    private boolean mShowSettingsRight;
     private boolean mShowHotseat;
-    private boolean mShowAllAppsWorkspace;
-    private boolean mShowAllAppsButton;
-    private boolean mShowHotseatButton;
+    private boolean mShowAllAppsBar;
     private boolean mHidePageControls;
     private boolean mCombinedBar;
     private boolean mSmallerIcons;
+    private boolean mShowButtonDividers;
     private int mHomescreenDoubleTap;
     private int mHomescreenSwipeUp;
     private int mHomescreenSwipeDown;
     private int mDrawerSwipeUp;
     private int mDrawerSwipeDown;
+    private int mActionButtonOne;
+    private int mActionButtonTwo;
+    private int mActionButtonThree;
+    private int mActionButtonFour;
+    private int mActionButtonFive;
+    private int mActionButtonSix;
+    private int mActionButtonSeven;
+    private int mActionButtonEight;
     private boolean mStatusBarDisabled = false;
 
     private StatusBarManager mStatusBarManager;
@@ -346,20 +349,25 @@ public final class Launcher extends Activity
         mCenterAllApps = PreferencesProvider.Interface.Tablet.getCenterAllAppsWorkspace(this);
         mAllAppsCorner = PreferencesProvider.Interface.Tablet.getAllAppsBarCorner(this);
         mSearchCorner = PreferencesProvider.Interface.Tablet.getSearchBarCorner(this);
-        mShowHotseatButton = PreferencesProvider.Interface.Icons.getHotseatButton(this);
-        mShowMarketButton = PreferencesProvider.Interface.Icons.getShowMarketButton(this);
         mShowHotseat = PreferencesProvider.Interface.Dock.getShowHotseat(this);
-        mShowAllAppsWorkspace = PreferencesProvider.Interface.Tablet.getShowAllAppsWorkspace(this);
+        mShowAllAppsBar = PreferencesProvider.Interface.Tablet.getShowAllAppsWorkspace(this);
         mHidePageControls = PreferencesProvider.Interface.Tablet.getHidePageControls(this);
-        mShowSettingsRight = PreferencesProvider.Interface.Tablet.getShowSettingsRight(this);
         mCombinedBar = PreferencesProvider.Interface.Tablet.getCombinedBar(this);
-        mShowAllAppsButton = PreferencesProvider.Interface.Tablet.getShowAllAppsButton(this);
         mSmallerIcons = PreferencesProvider.Interface.Tablet.getSmallerIcons(this);
+        mShowButtonDividers = PreferencesProvider.Interface.Tablet.getButtonDividers(this);
         mHomescreenDoubleTap = PreferencesProvider.Interface.Gestures.getHomescreenDoubleTap(this);
         mHomescreenSwipeUp = PreferencesProvider.Interface.Gestures.getHomescreenSwipeUp(this);
         mHomescreenSwipeDown = PreferencesProvider.Interface.Gestures.getHomescreenSwipeDown(this);
         mDrawerSwipeUp = PreferencesProvider.Interface.Gestures.getDrawerSwipeUp(this);
         mDrawerSwipeDown = PreferencesProvider.Interface.Gestures.getDrawerSwipeDown(this);
+        mActionButtonOne = PreferencesProvider.Interface.Tablet.getActionButtonOne(this);
+        mActionButtonTwo = PreferencesProvider.Interface.Tablet.getActionButtonTwo(this);
+        mActionButtonThree = PreferencesProvider.Interface.Tablet.getActionButtonThree(this);
+        mActionButtonFour = PreferencesProvider.Interface.Tablet.getActionButtonFour(this);
+        mActionButtonFive = PreferencesProvider.Interface.Tablet.getActionButtonFive(this);
+        mActionButtonSix = PreferencesProvider.Interface.Tablet.getActionButtonSix(this);
+        mActionButtonSeven = PreferencesProvider.Interface.Tablet.getActionButtonSeven(this);
+        mActionButtonEight = PreferencesProvider.Interface.Tablet.getActionButtonEight(this);
 
         // Combine all apps and search bar and hide search bar if they are on the same corner
         if ((mAllAppsCorner == mSearchCorner) && mShowSearchBar &&
@@ -889,21 +897,21 @@ public final class Launcher extends Activity
         if (mHomescreenDoubleTap != 0) {
             mWorkspace.setOnDoubleTapCallback(new Runnable() {
                 public void run() {
-                    performGesture(mHomescreenDoubleTap, true);
+                    performGesture(mHomescreenDoubleTap, 0);
                 }
             });
         }
         if (mHomescreenSwipeUp != 0) {
             mWorkspace.setOnSwipeUpCallback(new Runnable() {
                 public void run() {
-                    performGesture(mHomescreenSwipeUp, true);
+                    performGesture(mHomescreenSwipeUp, 1);
                 }
             });
         }
         if (mHomescreenSwipeDown != 0) {
             mWorkspace.setOnSwipeDownCallback(new Runnable() {
                 public void run() {
-                    performGesture(mHomescreenSwipeDown, true);
+                    performGesture(mHomescreenSwipeDown, 2);
                 }
             });
         }
@@ -960,166 +968,364 @@ public final class Launcher extends Activity
         if (mDrawerSwipeUp != 0) {
             mAppsCustomizeContent.setOnSwipeUpCallback(new Runnable() {
                 public void run() {
-                    performGesture(mDrawerSwipeUp, false);
+                    performGesture(mDrawerSwipeUp, 3);
                 }
             });
         }
         if (mDrawerSwipeDown != 0) {
             mAppsCustomizeContent.setOnSwipeDownCallback(new Runnable() {
                 public void run() {
-                    performGesture(mDrawerSwipeDown, false);
+                    performGesture(mDrawerSwipeDown, 4);
                 }
             });
         }
 
         // Setup the all apps bar
         mAllAppsBar = (RelativeLayout) findViewById(R.id.all_apps_bar);
-        mAllAppsButton = findViewById(R.id.all_apps_button);
-        View marketButton = findViewById(R.id.workspace_market_button);
-        View settingsButton = findViewById(R.id.workspace_settings_button);
-        mHotseatButton = (ImageView) findViewById(R.id.workspace_hotseat_button);
-        View searchButton = findViewById(R.id.workspace_search_button);
-        View voiceButton = findViewById(R.id.workspace_voice_button);
+        ImageView customButtonOne = (ImageView) findViewById(R.id.workspace_custom_button_one);
+        ImageView customButtonTwo = (ImageView) findViewById(R.id.workspace_custom_button_two);
+        ImageView customButtonThree = (ImageView) findViewById(R.id.workspace_custom_button_three);
+        ImageView customButtonFour = (ImageView) findViewById(R.id.workspace_custom_button_four);
+        ImageView customButtonFive = (ImageView) findViewById(R.id.workspace_custom_button_five);
+        ImageView customButtonSix = (ImageView) findViewById(R.id.workspace_custom_button_six);
+        ImageView customButtonSeven = (ImageView) findViewById(R.id.workspace_custom_button_seven);
+        ImageView customButtonEight = (ImageView) findViewById(R.id.workspace_custom_button_eight);
         View buttonDivider = findViewById(R.id.button_divider_all_apps);
         View buttonDividerTwo = findViewById(R.id.button_divider_all_apps_two);
         View buttonDividerThree = findViewById(R.id.button_divider_all_apps_three);
         View buttonDividerFour = findViewById(R.id.button_divider_all_apps_four);
         View buttonDividerFive = findViewById(R.id.button_divider_all_apps_five);
+        View buttonDividerSix = findViewById(R.id.button_divider_all_apps_six);
+        View buttonDividerSeven = findViewById(R.id.button_divider_all_apps_seven);
 
-        if (mAllAppsBar != null && mShowAllAppsWorkspace) {
-            if (mShowAllAppsButton) {
-                RelativeLayout.LayoutParams allAppsParams = new RelativeLayout.LayoutParams(
+        SharedPreferences prefs =
+                getSharedPreferences(PreferencesProvider.PREFERENCES_KEY, Context.MODE_PRIVATE);
+
+        if (mAllAppsBar != null && mShowAllAppsBar) {
+            if (mActionButtonOne != 0) {
+                String customUriOne = prefs.getString("custom_application_one", "");
+                RelativeLayout.LayoutParams buttonOneParams = new RelativeLayout.LayoutParams(
                         RelativeLayout.LayoutParams.WRAP_CONTENT,
                         RelativeLayout.LayoutParams.WRAP_CONTENT);
-                allAppsParams.addRule(!mAllAppsLeft ? RelativeLayout.ALIGN_PARENT_RIGHT :
+                buttonOneParams.addRule(!mAllAppsLeft ? RelativeLayout.ALIGN_PARENT_RIGHT :
                         RelativeLayout.ALIGN_PARENT_LEFT);
-                mAllAppsButton.setLayoutParams(allAppsParams);
-                mAllAppsButton.setVisibility(View.VISIBLE);
+                if (mActionButtonOne == 1) {
+                    customButtonOne.setImageResource(R.drawable.ic_home_all_apps_holo_dark);
+                    customButtonOne.setPadding(10, 4, 10, 4);
+                } else if (mActionButtonOne == 2) {
+                    if (mAllAppsTop) {
+                        customButtonOne.setImageResource(mShowHotseat ?
+                                R.drawable.hotseat_btn : R.drawable.hotseat_close_btn);
+                    } else {
+                        customButtonOne.setImageResource(mShowHotseat ?
+                                R.drawable.hotseat_close_btn : R.drawable.hotseat_btn);
+                    }
+                } else {
+                    try {
+                        customButtonOne.setImageDrawable(this.getPackageManager().getActivityIcon(
+                                Intent.parseUri(customUriOne, 0)));
+                    } catch (Exception e) {
+                    }
+                }
+                customButtonOne.setLayoutParams(buttonOneParams);
+                customButtonOne.setVisibility(View.VISIBLE);
             }
 
-            if (mShowHotseatButton) {
+            if (mActionButtonTwo != 0) {
+                String customUriTwo = prefs.getString("custom_application_two", "");
                 RelativeLayout.LayoutParams dividerParams = new RelativeLayout.LayoutParams(
                         RelativeLayout.LayoutParams.WRAP_CONTENT,
                         RelativeLayout.LayoutParams.WRAP_CONTENT);
                 dividerParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
-                        RelativeLayout.RIGHT_OF, mAllAppsButton.getId());
+                        RelativeLayout.RIGHT_OF, customButtonOne.getId());
                 dividerParams.addRule(RelativeLayout.CENTER_VERTICAL);
                 buttonDivider.setLayoutParams(dividerParams);
-                if (mShowAllAppsButton) buttonDivider.setVisibility(View.VISIBLE);
+                if (mActionButtonOne != 0) {
+                    buttonDivider.setVisibility(mShowButtonDividers ? View.VISIBLE :
+                            View.INVISIBLE);
+                }
 
-                RelativeLayout.LayoutParams hotseatParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams buttonTwoParams = new RelativeLayout.LayoutParams(
                         RelativeLayout.LayoutParams.WRAP_CONTENT,
                         RelativeLayout.LayoutParams.WRAP_CONTENT);
-                if (!mShowAllAppsButton) {
-                    hotseatParams.addRule(!mAllAppsLeft ? RelativeLayout.ALIGN_PARENT_RIGHT :
-                            RelativeLayout.ALIGN_PARENT_LEFT);
+                buttonTwoParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
+                        RelativeLayout.RIGHT_OF, buttonDivider.getId());
+                if (mActionButtonTwo == 1) {
+                    customButtonTwo.setImageResource(R.drawable.ic_home_all_apps_holo_dark);
+                    customButtonTwo.setPadding(10, 4, 10, 4);
+                } else if (mActionButtonTwo == 2) {
+                    if (mAllAppsTop) {
+                        customButtonTwo.setImageResource(mShowHotseat ?
+                                R.drawable.hotseat_btn : R.drawable.hotseat_close_btn);
+                    } else {
+                        customButtonTwo.setImageResource(mShowHotseat ?
+                                R.drawable.hotseat_close_btn : R.drawable.hotseat_btn);
+                    }
                 } else {
-                    hotseatParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
-                            RelativeLayout.RIGHT_OF, buttonDivider.getId());
+                    try {
+                        customButtonTwo.setImageDrawable(this.getPackageManager().getActivityIcon(
+                                Intent.parseUri(customUriTwo, 0)));
+                    } catch (Exception e) {
+                    }
                 }
-                mHotseatButton.setLayoutParams(hotseatParams);
-                if (mAllAppsTop) {
-                    mHotseatButton.setImageResource(mShowHotseat ?
-                            R.drawable.hotseat_btn : R.drawable.hotseat_close_btn);
-                } else {
-                    mHotseatButton.setImageResource(mShowHotseat ?
-                            R.drawable.hotseat_close_btn : R.drawable.hotseat_btn);
-                }
-                mHotseatButton.setVisibility(View.VISIBLE);
+                customButtonTwo.setLayoutParams(buttonTwoParams);
+                customButtonTwo.setVisibility(View.VISIBLE);
             }
 
-            if (mShowMarketButton) {
+            if (mActionButtonThree != 0) {
+                String customUriThree = prefs.getString("custom_application_three", "");
                 RelativeLayout.LayoutParams dividerTwoParams = new RelativeLayout.LayoutParams(
                         RelativeLayout.LayoutParams.WRAP_CONTENT,
                         RelativeLayout.LayoutParams.WRAP_CONTENT);
                 dividerTwoParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
-                        RelativeLayout.RIGHT_OF, mShowHotseatButton ? mHotseatButton.getId() : 
-                        mAllAppsButton.getId());
+                        RelativeLayout.RIGHT_OF, customButtonTwo.getId());
                 dividerTwoParams.addRule(RelativeLayout.CENTER_VERTICAL);
                 buttonDividerTwo.setLayoutParams(dividerTwoParams);
-                if (mShowAllAppsButton || mShowHotseatButton) buttonDividerTwo.setVisibility(View.VISIBLE);
+                if (mActionButtonTwo != 0 || mActionButtonOne != 0) {
+                    buttonDividerTwo.setVisibility(mShowButtonDividers ? View.VISIBLE :
+                            View.INVISIBLE);
+                }
 
-                RelativeLayout.LayoutParams marketParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams buttonThreeParams = new RelativeLayout.LayoutParams(
                         RelativeLayout.LayoutParams.WRAP_CONTENT,
                         RelativeLayout.LayoutParams.WRAP_CONTENT);
-                if (!mShowAllAppsButton && !mShowHotseatButton) {
-                    marketParams.addRule(!mAllAppsLeft ? RelativeLayout.ALIGN_PARENT_RIGHT :
-                            RelativeLayout.ALIGN_PARENT_LEFT);
+                buttonThreeParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
+                        RelativeLayout.RIGHT_OF, buttonDividerTwo.getId());
+                if (mActionButtonThree == 1) {
+                    customButtonThree.setImageResource(R.drawable.ic_home_all_apps_holo_dark);
+                    customButtonThree.setPadding(10, 4, 10, 4);
+                } else if (mActionButtonThree == 2) {
+                    if (mAllAppsTop) {
+                        customButtonThree.setImageResource(mShowHotseat ?
+                                R.drawable.hotseat_btn : R.drawable.hotseat_close_btn);
+                    } else {
+                        customButtonThree.setImageResource(mShowHotseat ?
+                                R.drawable.hotseat_close_btn : R.drawable.hotseat_btn);
+                    }
                 } else {
-                    marketParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
-                            RelativeLayout.RIGHT_OF, buttonDividerTwo.getId());
+                    try {
+                        customButtonThree.setImageDrawable(this.getPackageManager().getActivityIcon(
+                                Intent.parseUri(customUriThree, 0)));
+                    } catch (Exception e) {
+                    }
                 }
-                marketButton.setLayoutParams(marketParams);
-                marketButton.setVisibility(View.VISIBLE);
+                customButtonThree.setLayoutParams(buttonThreeParams);
+                customButtonThree.setVisibility(View.VISIBLE);
             }
 
-            if (mShowSettingsRight) {
+            if (mActionButtonFour != 0) {
+                String customUriFour = prefs.getString("custom_application_four", "");
                 RelativeLayout.LayoutParams dividerThreeParams = new RelativeLayout.LayoutParams(
                         RelativeLayout.LayoutParams.WRAP_CONTENT,
                         RelativeLayout.LayoutParams.WRAP_CONTENT);
                 dividerThreeParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
-                            RelativeLayout.RIGHT_OF, mShowMarketButton ? marketButton.getId() :
-                            (mShowHotseatButton ? mHotseatButton.getId() : mAllAppsButton.getId()));
+                        RelativeLayout.RIGHT_OF, customButtonThree.getId());
                 dividerThreeParams.addRule(RelativeLayout.CENTER_VERTICAL);
                 buttonDividerThree.setLayoutParams(dividerThreeParams);
-                if (mShowAllAppsButton || mShowHotseatButton || mShowMarketButton) buttonDividerThree.setVisibility(View.VISIBLE);
+                if (mActionButtonThree != 0 || mActionButtonTwo != 0 || mActionButtonOne != 0) {
+                    buttonDividerThree.setVisibility(mShowButtonDividers ? View.VISIBLE :
+                            View.INVISIBLE);
+                }
 
-                RelativeLayout.LayoutParams settingsParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams buttonFourParams = new RelativeLayout.LayoutParams(
                         RelativeLayout.LayoutParams.WRAP_CONTENT,
                         RelativeLayout.LayoutParams.WRAP_CONTENT);
-                if (!mShowAllAppsButton && !mShowHotseatButton && !mShowMarketButton) {
-                    settingsParams.addRule(!mAllAppsLeft ? RelativeLayout.ALIGN_PARENT_RIGHT :
-                            RelativeLayout.ALIGN_PARENT_LEFT);
+                buttonFourParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
+                        RelativeLayout.RIGHT_OF, buttonDividerThree.getId());
+                if (mActionButtonFour == 1) {
+                    customButtonFour.setImageResource(R.drawable.ic_home_all_apps_holo_dark);
+                    customButtonFour.setPadding(10, 4, 10, 4);
+                } else if (mActionButtonFour == 2) {
+                    if (mAllAppsTop) {
+                        customButtonFour.setImageResource(mShowHotseat ?
+                                R.drawable.hotseat_btn : R.drawable.hotseat_close_btn);
+                    } else {
+                        customButtonFour.setImageResource(mShowHotseat ?
+                                R.drawable.hotseat_close_btn : R.drawable.hotseat_btn);
+                    }
                 } else {
-                    settingsParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
-                            RelativeLayout.RIGHT_OF, buttonDividerThree.getId());
+                    try {
+                        customButtonFour.setImageDrawable(this.getPackageManager().getActivityIcon(
+                                Intent.parseUri(customUriFour, 0)));
+                    } catch (Exception e) {
+                    }
                 }
-                settingsButton.setLayoutParams(settingsParams);
-                settingsButton.setVisibility(View.VISIBLE);
+                customButtonFour.setLayoutParams(buttonFourParams);
+                customButtonFour.setVisibility(View.VISIBLE);
             }
 
-            // Setup combined bar
-            if (mCombinedBar && !mShowSearchBar) {
+            if (mActionButtonFive != 0) {
+                String customUriFive = prefs.getString("custom_application_five", "");
                 RelativeLayout.LayoutParams dividerFourParams = new RelativeLayout.LayoutParams(
                         RelativeLayout.LayoutParams.WRAP_CONTENT,
                         RelativeLayout.LayoutParams.WRAP_CONTENT);
                 dividerFourParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
-                        RelativeLayout.RIGHT_OF, mShowSettingsRight ? settingsButton.getId() :
-                        (mShowMarketButton ? marketButton.getId() :
-                        (mShowHotseatButton ? mHotseatButton.getId() : mAllAppsButton.getId())));
+                        RelativeLayout.RIGHT_OF, customButtonFour.getId());
                 dividerFourParams.addRule(RelativeLayout.CENTER_VERTICAL);
                 buttonDividerFour.setLayoutParams(dividerFourParams);
-                if (mShowAllAppsButton || mShowHotseatButton || mShowMarketButton || mShowSettingsRight) buttonDividerFour.setVisibility(View.VISIBLE);
+                if (mActionButtonFour != 0 || mActionButtonThree != 0 ||
+                        mActionButtonTwo != 0 || mActionButtonOne != 0) {
+                    buttonDividerFour.setVisibility(mShowButtonDividers ? View.VISIBLE :
+                            View.INVISIBLE);
+                }
 
-                RelativeLayout.LayoutParams searchParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams buttonFiveParams = new RelativeLayout.LayoutParams(
                         RelativeLayout.LayoutParams.WRAP_CONTENT,
                         RelativeLayout.LayoutParams.WRAP_CONTENT);
-                if (!mShowAllAppsButton && !mShowHotseatButton && !mShowMarketButton && !mShowSettingsRight) {
-                    searchParams.addRule(!mAllAppsLeft ? RelativeLayout.ALIGN_PARENT_RIGHT :
-                            RelativeLayout.ALIGN_PARENT_LEFT);
+                buttonFiveParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
+                        RelativeLayout.RIGHT_OF, buttonDividerFour.getId());
+                if (mActionButtonFive == 1) {
+                    customButtonFive.setImageResource(R.drawable.ic_home_all_apps_holo_dark);
+                    customButtonFive.setPadding(10, 4, 10, 4);
+                } else if (mActionButtonFive == 2) {
+                    if (mAllAppsTop) {
+                        customButtonFive.setImageResource(mShowHotseat ?
+                                R.drawable.hotseat_btn : R.drawable.hotseat_close_btn);
+                    } else {
+                        customButtonFive.setImageResource(mShowHotseat ?
+                                R.drawable.hotseat_close_btn : R.drawable.hotseat_btn);
+                    }
                 } else {
-                    searchParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
-                            RelativeLayout.RIGHT_OF, buttonDividerFour.getId());
+                    try {
+                        customButtonFive.setImageDrawable(this.getPackageManager().getActivityIcon(
+                                Intent.parseUri(customUriFive, 0)));
+                    } catch (Exception e) {
+                    }
                 }
-                searchButton.setLayoutParams(searchParams);
-                searchButton.setVisibility(View.VISIBLE);
+                customButtonFive.setLayoutParams(buttonFiveParams);
+                customButtonFive.setVisibility(View.VISIBLE);
+            }
 
+            if (mActionButtonSix != 0) {
+                String customUriSix = prefs.getString("custom_application_six", "");
                 RelativeLayout.LayoutParams dividerFiveParams = new RelativeLayout.LayoutParams(
                         RelativeLayout.LayoutParams.WRAP_CONTENT,
                         RelativeLayout.LayoutParams.WRAP_CONTENT);
                 dividerFiveParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
-                        RelativeLayout.RIGHT_OF, searchButton.getId());
+                        RelativeLayout.RIGHT_OF, customButtonFive.getId());
                 dividerFiveParams.addRule(RelativeLayout.CENTER_VERTICAL);
                 buttonDividerFive.setLayoutParams(dividerFiveParams);
-                buttonDividerFive.setVisibility(View.VISIBLE);
+                if (mActionButtonFive != 0 || mActionButtonFour != 0 || mActionButtonThree != 0 ||
+                        mActionButtonTwo != 0 || mActionButtonOne != 0) {
+                    buttonDividerFive.setVisibility(mShowButtonDividers ? View.VISIBLE :
+                            View.INVISIBLE);
+                }
 
-                RelativeLayout.LayoutParams voiceParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams buttonSixParams = new RelativeLayout.LayoutParams(
                         RelativeLayout.LayoutParams.WRAP_CONTENT,
                         RelativeLayout.LayoutParams.WRAP_CONTENT);
-                voiceParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
+                buttonSixParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
                         RelativeLayout.RIGHT_OF, buttonDividerFive.getId());
-                voiceButton.setLayoutParams(voiceParams);
-                voiceButton.setVisibility(View.VISIBLE);
+                if (mActionButtonSix == 1) {
+                    customButtonSix.setImageResource(R.drawable.ic_home_all_apps_holo_dark);
+                    customButtonSix.setPadding(10, 4, 10, 4);
+                } else if (mActionButtonSix == 2) {
+                    if (mAllAppsTop) {
+                        customButtonSix.setImageResource(mShowHotseat ?
+                                R.drawable.hotseat_btn : R.drawable.hotseat_close_btn);
+                    } else {
+                        customButtonSix.setImageResource(mShowHotseat ?
+                                R.drawable.hotseat_close_btn : R.drawable.hotseat_btn);
+                    }
+                } else {
+                    try {
+                        customButtonSix.setImageDrawable(this.getPackageManager().getActivityIcon(
+                                Intent.parseUri(customUriSix, 0)));
+                    } catch (Exception e) {
+                    }
+                }
+                customButtonSix.setLayoutParams(buttonSixParams);
+                customButtonSix.setVisibility(View.VISIBLE);
+            }
+
+            if (mActionButtonSeven != 0 || mCombinedBar) {
+                String customUriSeven = prefs.getString("custom_application_seven", "");
+                RelativeLayout.LayoutParams dividerSixParams = new RelativeLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.WRAP_CONTENT,
+                        RelativeLayout.LayoutParams.WRAP_CONTENT);
+                dividerSixParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
+                        RelativeLayout.RIGHT_OF, customButtonSix.getId());
+                dividerSixParams.addRule(RelativeLayout.CENTER_VERTICAL);
+                buttonDividerSix.setLayoutParams(dividerSixParams);
+                if (mActionButtonSix != 0 || mActionButtonFive != 0 ||
+                        mActionButtonFour != 0 || mActionButtonThree != 0 ||
+                        mActionButtonTwo != 0 || mActionButtonOne != 0) {
+                    buttonDividerSix.setVisibility(mShowButtonDividers ? View.VISIBLE :
+                            View.INVISIBLE);
+                }
+
+                RelativeLayout.LayoutParams buttonSevenParams = new RelativeLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.WRAP_CONTENT,
+                        RelativeLayout.LayoutParams.WRAP_CONTENT);
+                buttonSevenParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
+                        RelativeLayout.RIGHT_OF, buttonDividerSix.getId());
+                if (mCombinedBar) mActionButtonSeven = 4;
+                if (mActionButtonSeven == 1) {
+                    customButtonSeven.setImageResource(R.drawable.ic_home_all_apps_holo_dark);
+                    customButtonSeven.setPadding(10, 4, 10, 4);
+                } else if (mActionButtonSeven == 2) {
+                    if (mAllAppsTop) {
+                        customButtonSeven.setImageResource(mShowHotseat ?
+                                R.drawable.hotseat_btn : R.drawable.hotseat_close_btn);
+                    } else {
+                        customButtonSeven.setImageResource(mShowHotseat ?
+                                R.drawable.hotseat_close_btn : R.drawable.hotseat_btn);
+                    }
+                } else if (mActionButtonSeven == 3) {
+                    try {
+                        customButtonSeven.setImageDrawable(this.getPackageManager().getActivityIcon(
+                                Intent.parseUri(customUriSeven, 0)));
+                    } catch (Exception e) {
+                    }
+                }
+                customButtonSeven.setLayoutParams(buttonSevenParams);
+                customButtonSeven.setVisibility(View.VISIBLE);
+            }
+
+            if (mActionButtonEight != 0 || mCombinedBar) {
+                String customUriEight = prefs.getString("custom_application_eight", "");
+                RelativeLayout.LayoutParams dividerSevenParams = new RelativeLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.WRAP_CONTENT,
+                        RelativeLayout.LayoutParams.WRAP_CONTENT);
+                dividerSevenParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
+                        RelativeLayout.RIGHT_OF, customButtonSeven.getId());
+                dividerSevenParams.addRule(RelativeLayout.CENTER_VERTICAL);
+                buttonDividerSeven.setLayoutParams(dividerSevenParams);
+                if (mActionButtonSeven != 0 || mActionButtonSix != 0 || mActionButtonFive != 0 ||
+                        mActionButtonFour != 0 || mActionButtonThree != 0 ||
+                        mActionButtonTwo != 0 || mActionButtonOne != 0) {
+                    buttonDividerSeven.setVisibility(mShowButtonDividers ? View.VISIBLE :
+                            View.INVISIBLE);
+                }
+
+                RelativeLayout.LayoutParams buttonEightParams = new RelativeLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.WRAP_CONTENT,
+                        RelativeLayout.LayoutParams.WRAP_CONTENT);
+                buttonEightParams.addRule(!mAllAppsLeft ? RelativeLayout.LEFT_OF :
+                        RelativeLayout.RIGHT_OF, buttonDividerSeven.getId());
+                if (mCombinedBar) mActionButtonEight = 5;
+                if (mActionButtonEight == 1) {
+                    customButtonEight.setImageResource(R.drawable.ic_home_all_apps_holo_dark);
+                    customButtonEight.setPadding(10, 4, 10, 4);
+                } else if (mActionButtonEight == 2) {
+                    if (mAllAppsTop) {
+                        customButtonEight.setImageResource(mShowHotseat ?
+                                R.drawable.hotseat_btn : R.drawable.hotseat_close_btn);
+                    } else {
+                        customButtonEight.setImageResource(mShowHotseat ?
+                                R.drawable.hotseat_close_btn : R.drawable.hotseat_btn);
+                    }
+                } else if (mActionButtonEight == 3) {
+                    try {
+                        customButtonEight.setImageDrawable(this.getPackageManager().getActivityIcon(
+                                Intent.parseUri(customUriEight, 0)));
+                    } catch (Exception e) {
+                    }
+                } else if (mActionButtonEight == 5) {
+                    customButtonEight.setImageResource(R.drawable.ic_home_voice_search_holo);
+                }
+                customButtonEight.setLayoutParams(buttonEightParams);
+                customButtonEight.setVisibility(View.VISIBLE);
             }
 
             // Set gravity of all apps bar to bottom
@@ -1135,16 +1341,6 @@ public final class Launcher extends Activity
             if (!mShowSearchBar && mCenterAllApps) {
                 mAllAppsBar.setGravity(Gravity.CENTER);
             }
-
-            mAllAppsButton.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    if ((event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_DOWN) {
-                        onTouchDownAllAppsButton(v);
-                    }
-                    return false;
-                }
-            });
         }
 
         // Setup the drag controller (drop targets have to be added in reverse order in priority)
@@ -2093,14 +2289,6 @@ public final class Launcher extends Activity
                 FolderIcon fi = (FolderIcon) v;
                 handleFolderClick(fi);
             }
-        } else if (v == mAllAppsButton) {
-            if (mState == State.APPS_CUSTOMIZE) {
-                showWorkspace(true);
-            } else {
-                onClickAllAppsButton(v);
-            }
-        } else if (v == mHotseatButton) {
-                onClickHotseatButton(v);
         }
     }
 
@@ -2133,18 +2321,6 @@ public final class Launcher extends Activity
         Intent intent = new Intent(RecognizerIntent.ACTION_WEB_SEARCH);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         startActivity(intent);
-    }
-
-     /**
-     * Event handler for the settings button
-     *
-     * @param v The view that was clicked.
-     */
-    public void onClickSettingsButton(View v) {
-        if (v != null) v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-
-        startActivity(new Intent(Settings.ACTION_SETTINGS)
-                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
     /**
@@ -2180,7 +2356,7 @@ public final class Launcher extends Activity
      *
      * @param v The view that was clicked.
      */
-    public void onClickHotseatButton(View v) {
+    public void onClickHotseatButton(ImageView v) {
         if (v != null) v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
         if (mHotseat.getVisibility() == View.VISIBLE) {
             hideHotseat(true);
@@ -2192,10 +2368,10 @@ public final class Launcher extends Activity
             showDockDivider(true);
         }
         if (mAllAppsTop) {
-            mHotseatButton.setImageResource(mShowHotseat ? R.drawable.hotseat_btn :
+            v.setImageResource(mShowHotseat ? R.drawable.hotseat_btn :
                 R.drawable.hotseat_close_btn);
         } else {
-            mHotseatButton.setImageResource(mShowHotseat ? R.drawable.hotseat_close_btn :
+            v.setImageResource(mShowHotseat ? R.drawable.hotseat_close_btn :
                 R.drawable.hotseat_btn);
         }
 
@@ -2210,6 +2386,122 @@ public final class Launcher extends Activity
         onCreateOptionsMenu(menu);
         onPrepareOptionsMenu(menu);
         popupMenu.show();
+    }
+
+    /**
+     * Event handler for the custom button
+     *
+     * @param v The view that was clicked.
+     */
+    public void onClickCustomButton(View v) {
+        if (v != null) v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+        SharedPreferences prefs =
+                getSharedPreferences(PreferencesProvider.PREFERENCES_KEY, Context.MODE_PRIVATE);
+        String shortcutUri = new String();
+        if (v.getId() == R.id.workspace_custom_button_one) {
+            if (mActionButtonOne == 1) {
+                onClickAllAppsButton(v);
+            } else if (mActionButtonOne == 2) {
+                onClickHotseatButton((ImageView) v);
+            } else if (mActionButtonOne == 3) {
+                shortcutUri = prefs.getString("custom_application_one", "");
+            } else if (mActionButtonOne == 4) {
+                onClickSearchButton(v);
+            } else if (mActionButtonOne == 5) {
+                onClickVoiceButton(v);
+            }
+        } else if (v.getId() == R.id.workspace_custom_button_two) {
+            if (mActionButtonTwo == 1) {
+                onClickAllAppsButton(v);
+            } else if (mActionButtonTwo == 2) {
+                onClickHotseatButton((ImageView) v);
+            } else if (mActionButtonTwo == 3) {
+                shortcutUri = prefs.getString("custom_application_two", "");
+            } else if (mActionButtonTwo == 4) {
+                onClickSearchButton(v);
+            } else if (mActionButtonTwo == 5) {
+                onClickVoiceButton(v);
+            }
+        } else if (v.getId() == R.id.workspace_custom_button_three) {
+            if (mActionButtonThree == 1) {
+                onClickAllAppsButton(v);
+            } else if (mActionButtonThree == 2) {
+                onClickHotseatButton((ImageView) v);
+            } else if (mActionButtonThree == 3) {
+                shortcutUri = prefs.getString("custom_application_three", "");
+            } else if (mActionButtonThree == 4) {
+                onClickSearchButton(v);
+            } else if (mActionButtonThree == 5) {
+                onClickVoiceButton(v);
+            }
+        } else if (v.getId() == R.id.workspace_custom_button_four) {
+            if (mActionButtonFour == 1) {
+                onClickAllAppsButton(v);
+            } else if (mActionButtonFour == 2) {
+                onClickHotseatButton((ImageView) v);
+            } else if (mActionButtonFour == 3) {
+                shortcutUri = prefs.getString("custom_application_four", "");
+            } else if (mActionButtonFour == 4) {
+                onClickSearchButton(v);
+            } else if (mActionButtonFour == 5) {
+                onClickVoiceButton(v);
+            }
+        } else if (v.getId() == R.id.workspace_custom_button_five) {
+            if (mActionButtonFive == 1) {
+                onClickAllAppsButton(v);
+            } else if (mActionButtonFive == 2) {
+                onClickHotseatButton((ImageView) v);
+            } else if (mActionButtonFive == 3) {
+                shortcutUri = prefs.getString("custom_application_five", "");
+            } else if (mActionButtonFive == 4) {
+                onClickSearchButton(v);
+            } else if (mActionButtonFive == 5) {
+                onClickVoiceButton(v);
+            }
+        } else if (v.getId() == R.id.workspace_custom_button_six) {
+            if (mActionButtonSix == 1) {
+                onClickAllAppsButton(v);
+            } else if (mActionButtonSix == 2) {
+                onClickHotseatButton((ImageView) v);
+            } else if (mActionButtonSix == 3) {
+                shortcutUri = prefs.getString("custom_application_six", "");
+            } else if (mActionButtonSix == 4) {
+                onClickSearchButton(v);
+            } else if (mActionButtonSix == 5) {
+                onClickVoiceButton(v);
+            }
+        } else if (v.getId() == R.id.workspace_custom_button_seven) {
+            if (mActionButtonSeven == 1) {
+                onClickAllAppsButton(v);
+            } else if (mActionButtonSeven == 2) {
+                onClickHotseatButton((ImageView) v);
+            } else if (mActionButtonSeven == 3) {
+                shortcutUri = prefs.getString("custom_application_seven", "");
+            } else if (mActionButtonSeven == 4) {
+                onClickSearchButton(v);
+            } else if (mActionButtonSeven == 5) {
+                onClickVoiceButton(v);
+            }
+        } else if (v.getId() == R.id.workspace_custom_button_eight) {
+            if (mActionButtonEight == 1) {
+                onClickAllAppsButton(v);
+            } else if (mActionButtonEight == 2) {
+                onClickHotseatButton((ImageView) v);
+            } else if (mActionButtonEight == 3) {
+                shortcutUri = prefs.getString("custom_application_eight", "");
+            } else if (mActionButtonEight == 4) {
+                onClickSearchButton(v);
+            } else if (mActionButtonEight == 5) {
+                onClickVoiceButton(v);
+            }
+        }
+        try {
+            Intent launchIntent = Intent.parseUri(shortcutUri, 0);
+            launchIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+            launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(launchIntent);
+        } catch (Exception e) {
+        }
     }
 
     public void onLongClickAppsTab(View v) {
@@ -2974,10 +3266,6 @@ public final class Launcher extends Activity
             mWorkspace.setVisibility(View.VISIBLE);
             hideAppsCustomizeHelper(animated, false);
 
-            // Set focus to the AppsCustomize button
-            if (mAllAppsButton != null) {
-                mAllAppsButton.requestFocus();
-            }
         }
 
         mWorkspace.flashScrollingIndicator(animated);
@@ -3406,7 +3694,9 @@ public final class Launcher extends Activity
             int coi = getCurrentOrientationIndexForGlobalIcons();
             sGlobalSearchIcon[coi] = updateButtonWithIconFromExternalActivity(
                     R.id.search_button, activityName, R.drawable.ic_home_search_normal_holo);
-            if (searchDivider != null) searchDivider.setVisibility(View.VISIBLE);
+            if (searchDivider != null) {
+                searchDivider.setVisibility(mShowButtonDividers ? View.VISIBLE : View.INVISIBLE);
+            }
             if (searchButtonContainer != null) searchButtonContainer.setVisibility(View.VISIBLE);
             searchButton.setVisibility(View.VISIBLE);
             invalidatePressedFocusedStates(searchButtonContainer, searchButton);
@@ -3441,7 +3731,9 @@ public final class Launcher extends Activity
             int coi = getCurrentOrientationIndexForGlobalIcons();
             sVoiceSearchIcon[coi] = updateButtonWithIconFromExternalActivity(
                     R.id.voice_button, activityName, R.drawable.ic_home_voice_search_holo);
-            if (searchDivider != null) searchDivider.setVisibility(View.VISIBLE);
+            if (searchDivider != null) {
+                searchDivider.setVisibility(mShowButtonDividers ? View.VISIBLE : View.INVISIBLE);
+            }
             if (voiceButtonContainer != null) voiceButtonContainer.setVisibility(View.VISIBLE);
             voiceButton.setVisibility(View.VISIBLE);
             invalidatePressedFocusedStates(voiceButtonContainer, voiceButton);
@@ -4075,12 +4367,12 @@ public final class Launcher extends Activity
         return preferencesChanged;
     }
 
-    public void performGesture(int action, boolean homescreen) {
+    public void performGesture(int action, int index) {
         switch (action) {
             case 0:
                 break;
             case 1:
-                if (!homescreen) {
+                if (index > 2) {
                     showWorkspace(true);
                 } else {
                     onClickAllAppsButton(null);
@@ -4115,6 +4407,50 @@ public final class Launcher extends Activity
                 Intent preferences = new Intent().setClass(this, Preferences.class);
                 preferences.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(preferences);
+                break;
+            case 6:
+                SharedPreferences prefs =
+                        getSharedPreferences(PreferencesProvider.PREFERENCES_KEY, Context.MODE_PRIVATE);
+                String shortcutUri = new String();
+                switch (index) {
+                    case 0:
+                        shortcutUri = prefs.getString("hdt_application", "");
+                        break;
+                    case 1:
+                        shortcutUri = prefs.getString("hsu_application", "");
+                        break;
+                    case 2:
+                        shortcutUri = prefs.getString("hsd_application", "");
+                        break;
+                    case 3:
+                        shortcutUri = prefs.getString("dsu_application", "");
+                        break;
+                    case 4:
+                        shortcutUri = prefs.getString("dsd_application", "");
+                        break;
+                }
+                try {
+                    Intent launchIntent = Intent.parseUri(shortcutUri, 0);
+                    launchIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                    launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(launchIntent);
+                } catch (Exception e) {
+                }
+                break;
+            case 7:
+                if (mAllAppsBar.getVisibility() == View.VISIBLE) {
+                    hideAllAppsBar(true);
+                    hideSearchBar(true);
+                } else {
+                    showAllAppsBar(true);
+                    showSearchBar(true);
+                }
+                break;
+            case 8:
+                Intent rocketLauncher = new Intent().setClass(this, RocketLauncher.class);
+                rocketLauncher.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                        Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(rocketLauncher);
                 break;
         }
     }
