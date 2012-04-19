@@ -118,7 +118,9 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
             voiceButton.setLayoutParams(voiceParams);
         }
 
-        searchDivider.setVisibility(mShowButtonDividers ? View.VISIBLE : View.INVISIBLE);
+        if (searchDivider != null) {
+            searchDivider.setVisibility(mShowButtonDividers ? View.VISIBLE : View.INVISIBLE);
+        }
 
         mDropTargetBar = findViewById(R.id.drag_target_bar);
         mInfoDropTarget = (ButtonDropTarget) mDropTargetBar.findViewById(R.id.info_target_text);

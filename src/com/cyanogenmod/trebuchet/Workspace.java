@@ -399,7 +399,8 @@ public class Workspace extends PagedView
                     @Override
                     public boolean onDoubleTapEvent(MotionEvent e) {
                         if (mDoubleTapCallback != null) {
-                            mHandler.post(mDoubleTapCallback);
+                            mHandler.removeCallbacks(mDoubleTapCallback);
+                            mHandler.postDelayed(mDoubleTapCallback, 100);
                             return true;
                         }
                         return false;

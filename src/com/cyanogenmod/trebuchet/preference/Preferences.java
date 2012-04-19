@@ -436,8 +436,8 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
             } else {
                 mHomescreenDoubleTap.setIcon(null);
             }
-            if (doubleTapValue > 3) doubleTapValue = doubleTapValue - 2;
-            if (doubleTapValue == 6) doubleTapValue--;
+            //if (doubleTapValue > 3) doubleTapValue = doubleTapValue - 2;
+            //if (doubleTapValue == 6) doubleTapValue--;
             CharSequence doubleTapSummary = doubleTapIndex[doubleTapValue];
             mHomescreenDoubleTap.setSummary(doubleTapSummary);
             return true;

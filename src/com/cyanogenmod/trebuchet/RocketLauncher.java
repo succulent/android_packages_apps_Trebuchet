@@ -24,6 +24,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.TimeAnimator;
 import android.app.Activity;
+import android.app.StatusBarManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -393,8 +394,6 @@ public class RocketLauncher extends Activity {
         }
     }
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
@@ -417,6 +416,18 @@ public class RocketLauncher extends Activity {
         setContentView(b, new ViewGroup.LayoutParams(longside, longside));
         b.setX((metrics.widthPixels - longside) / 2);
         b.setY((metrics.heightPixels - longside) / 2);
+
+        StatusBarManager statusBarManager = (StatusBarManager)
+                    getApplicationContext().getSystemService(Context.STATUS_BAR_SERVICE);
+        statusBarManager.disable(StatusBarManager.DISABLE_HOME | StatusBarManager.DISABLE_RECENT);
+    }
+
+    @Override
+    protected void onPause() {
+        StatusBarManager statusBarManager = (StatusBarManager)
+                    getApplicationContext().getSystemService(Context.STATUS_BAR_SERVICE);
+        statusBarManager.disable(0x00000000);
+        super.onPause();
     }
 
     @Override
