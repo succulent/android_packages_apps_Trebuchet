@@ -62,6 +62,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
     private static final String HOMESCREEN_SWIPEDOWN = "ui_homescreen_swipe_down";
     private static final String DRAWER_SWIPEUP = "ui_drawer_swipe_up";
     private static final String DRAWER_SWIPEDOWN = "ui_drawer_swipe_down";
+    private static final String APP_BAR_LONGCLICK = "ui_app_bar_long_click";
     private static final String HDT_APPLICATION = "hdt_application";
     private static final String CUSTOM_BUTTON_ONE = "ui_tablet_custom_button_one";
     private static final String CUSTOM_BUTTON_TWO = "ui_tablet_custom_button_two";
@@ -89,6 +90,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
     private ListPreference mHomescreenSwipeDown;
     private ListPreference mDrawerSwipeDown;
     private ListPreference mDrawerSwipeUp;
+    private ListPreference mAppBarLongClick;
     private ListPreference mCustomButtonOne;
     private ListPreference mCustomButtonTwo;
     private ListPreference mCustomButtonThree;
@@ -148,6 +150,8 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         mDrawerSwipeDown.setOnPreferenceChangeListener(this);
         mDrawerSwipeUp = (ListPreference) prefSet.findPreference(DRAWER_SWIPEUP);
         mDrawerSwipeUp.setOnPreferenceChangeListener(this);
+        mAppBarLongClick = (ListPreference) prefSet.findPreference(APP_BAR_LONGCLICK);
+        mAppBarLongClick.setOnPreferenceChangeListener(this);
         mCustomButtonOne = (ListPreference) prefSet.findPreference(CUSTOM_BUTTON_ONE);
         mCustomButtonOne.setOnPreferenceChangeListener(this);
         mCustomButtonTwo = (ListPreference) prefSet.findPreference(CUSTOM_BUTTON_TWO);
@@ -276,6 +280,14 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
             try {
                 mDrawerSwipeUp.setIcon(this.getPackageManager().getActivityIcon(
                         Intent.parseUri(mPrefs.getString("dsu_application", ""), 0)));
+            } catch (Exception e) {
+            }
+        }
+        mAppBarLongClick.setSummary(mAppBarLongClick.getEntry());
+        if (mAppBarLongClick.getValue().equals("6")) {
+            try {
+                mAppBarLongClick.setIcon(this.getPackageManager().getActivityIcon(
+                        Intent.parseUri(mPrefs.getString("app_bar_longclick_application", ""), 0)));
             } catch (Exception e) {
             }
         }
@@ -508,6 +520,21 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
             if (swipeUpValue == 7) swipeUpValue--;
             CharSequence drawerSUSummary = drawerSwipeUpIndex[swipeUpValue];
             mDrawerSwipeUp.setSummary(drawerSUSummary);
+            return true;
+        } else if (preference == mAppBarLongClick) {
+            CharSequence index[] = mAppBarLongClick.getEntries();
+            int value = Integer.parseInt((String) newValue);
+            if (value == 6) {
+                // Pick an application
+                Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                Intent pickIntent = new Intent(Intent.ACTION_PICK_ACTIVITY);
+                pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
+                startActivityForResult(pickIntent, 13);
+            } else {
+                mAppBarLongClick.setIcon(null);
+            }
+            mAppBarLongClick.setSummary(index[value]);
             return true;
         } else if (preference == mCustomButtonOne) {
             CharSequence customOneIndex[] = mCustomButtonOne.getEntries();
@@ -775,6 +802,12 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
                 mPrefs.edit().putString("custom_application_eight", data.toUri(0)).commit();
                 try {
                     mCustomButtonEight.setIcon(this.getPackageManager().getActivityIcon(data));
+                } catch (Exception e) {
+                }
+            } else if (requestCode == 13) {
+                mPrefs.edit().putString("app_bar_longclick_application", data.toUri(0)).commit();
+                try {
+                    mAppBarLongClick.setIcon(this.getPackageManager().getActivityIcon(data));
                 } catch (Exception e) {
                 }
             }

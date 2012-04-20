@@ -290,6 +290,7 @@ public final class Launcher extends Activity
     private int mHomescreenSwipeDown;
     private int mDrawerSwipeUp;
     private int mDrawerSwipeDown;
+    private int mAppBarLongClick;
     private int mActionButtonOne;
     private int mActionButtonTwo;
     private int mActionButtonThree;
@@ -369,6 +370,7 @@ public final class Launcher extends Activity
         mHomescreenSwipeDown = PreferencesProvider.Interface.Gestures.getHomescreenSwipeDown(this);
         mDrawerSwipeUp = PreferencesProvider.Interface.Gestures.getDrawerSwipeUp(this);
         mDrawerSwipeDown = PreferencesProvider.Interface.Gestures.getDrawerSwipeDown(this);
+        mAppBarLongClick = PreferencesProvider.Interface.Gestures.getAppBarLongClick(this);
         mActionButtonOne = PreferencesProvider.Interface.Tablet.getActionButtonOne(this);
         mActionButtonTwo = PreferencesProvider.Interface.Tablet.getActionButtonTwo(this);
         mActionButtonThree = PreferencesProvider.Interface.Tablet.getActionButtonThree(this);
@@ -2790,28 +2792,28 @@ public final class Launcher extends Activity
 
     public boolean onLongClick(View v) {
         if (v == mCustomButtonOne) {
-            performGesture(7, 0);
+            performGesture(mAppBarLongClick, 13);
             return true;
         } else if (v == mCustomButtonTwo) {
-            performGesture(7, 0);
+            performGesture(mAppBarLongClick, 13);
             return true;
         } else if (v == mCustomButtonThree) {
-            performGesture(7, 0);
+            performGesture(mAppBarLongClick, 13);
             return true;
         } else if (v == mCustomButtonFour) {
-            performGesture(7, 0);
+            performGesture(mAppBarLongClick, 13);
             return true;
         } else if (v == mCustomButtonFive) {
-            performGesture(7, 0);
+            performGesture(mAppBarLongClick, 13);
             return true;
         } else if (v == mCustomButtonSix) {
-            performGesture(7, 0);
+            performGesture(mAppBarLongClick, 13);
             return true;
         } else if (v == mCustomButtonSeven) {
-            performGesture(7, 0);
+            performGesture(mAppBarLongClick, 13);
             return true;
         } else if (v == mCustomButtonEight) {
-            performGesture(7, 0);
+            performGesture(mAppBarLongClick, 13);
             return true;
         }
 
@@ -4499,6 +4501,9 @@ public final class Launcher extends Activity
                         break;
                     case 4:
                         shortcutUri = prefs.getString("dsd_application", "");
+                        break;
+                    case 13:
+                        shortcutUri = prefs.getString("app_bar_longclick_application", "");
                         break;
                 }
                 try {

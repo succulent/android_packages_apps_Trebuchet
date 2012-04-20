@@ -368,20 +368,20 @@ s -->
     <string name="preferences_interface_tablet_combined_category">Search bar disabled options</string>
     <string name="preferences_interface_tablet_search_category">Search bar</string>
     <string name="preferences_interface_tablet_paging_category">Workspace page transitions</string>
-    <string name="preferences_interface_tablet_show_workspace_allapps_title">All apps bar</string>
+    <string name="preferences_interface_tablet_show_workspace_allapps_title">Apps bar</string>
     <string name="preferences_interface_tablet_all_apps_button_title">All apps button</string>
     <string name="preferences_interface_tablet_show_workspace_allapps_summary">Show the all apps bar on the workspace</string>
-    <string name="preferences_interface_tablet_center_allapps_title">Center all apps bar</string>
+    <string name="preferences_interface_tablet_center_allapps_title">Center the apps bar</string>
     <string name="preferences_interface_tablet_center_allapps_summary">Center all apps bar horizontally when search bar is disabled</string>
-    <string name="preferences_interface_tablet_workspace_combined_bar_title">Show search buttons in all apps bar</string>
+    <string name="preferences_interface_tablet_workspace_combined_bar_title">Show search buttons in the apps bar</string>
     <string name="preferences_interface_tablet_workspace_combined_bar_summary">Combine search and all apps bar when search bar is disabled</string>
-    <string name="preferences_interface_tablet_all_apps_corner_title">All apps bar position</string>
+    <string name="preferences_interface_tablet_all_apps_corner_title">Apps bar position</string>
     <string name="preferences_interface_tablet_all_apps_corner_summary">Choose the all apps bar corner</string>
     <string name="preferences_interface_tablet_search_corner_title">Search bar position</string>
     <string name="preferences_interface_tablet_search_corner_summary">Choose the search drop bar corner</string>
     <string name="preferences_interface_tablet_page_outline_title">Page outlines</string>
     <string name="preferences_interface_tablet_page_outline_summary">Show page outlines when changing pages</string>
-    <string name="preferences_interface_tablet_page_controls_title">Hide all apps and search bar</string>
+    <string name="preferences_interface_tablet_page_controls_title">Hide app and search bars</string>
     <string name="preferences_interface_tablet_page_controls_summary">Show all apps and search controls when changing pages</string>
     <string name="preferences_interface_icons_market_left_title">Google Play button</string>
     <string name="preferences_interface_icons_market_left_summary">Show the Google Play button in the search bar</string>
@@ -422,9 +422,11 @@ s -->
     <string name="preferences_interface_gestures_toggle_status_bar">Toggle status bar visibility</string>
     <string name="preferences_interface_gestures_expand_status_bar">Expand status bar notifications</string>
     <string name="preferences_interface_gestures_preferences">Launch Trebuchet Settings</string>
-    <string name="preferences_interface_gestures_launch_application">Launch application</string>
+    <string name="preferences_interface_gestures_launch_application">Launch activity</string>
     <string name="preferences_interface_gestures_toggle_tablet_controls">Toggle tablet controls visibility</string>
     <string name="preferences_interface_gestures_rocket_launcher">Rocket Launcher</string>
+    <string name="preferences_interface_gestures_app_bar_category">Apps bar gestures</string>
+    <string name="preferences_interface_gestures_app_bar_long_click">Long click</string>
 
     <!-- General -->
     <string name="preferences_interface_general_title">General</string>
@@ -442,6 +444,7 @@ s -->
     <string name="preferences_transition_effect_cube_out">Cube out</string>
     <string name="preferences_transition_effect_stack">Stack</string>
 
+    <string name="preferences_interface_tablet_buttons_title">Apps bar buttons</string>
     <string name="preferences_interface_tablet_custom_one_title">Button one</string>
     <string name="preferences_interface_tablet_custom_two_title">Button two</string>
     <string name="preferences_interface_tablet_custom_three_title">Button three</string>

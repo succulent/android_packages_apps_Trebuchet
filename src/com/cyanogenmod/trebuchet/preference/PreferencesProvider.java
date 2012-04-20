@@ -277,6 +277,10 @@ public final class PreferencesProvider {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return Integer.parseInt(preferences.getString("ui_drawer_swipe_down", "0"));
             }
+            public static int getAppBarLongClick(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return Integer.parseInt(preferences.getString("ui_app_bar_long_click", "0"));
+            }
         }
 
         public static class General {

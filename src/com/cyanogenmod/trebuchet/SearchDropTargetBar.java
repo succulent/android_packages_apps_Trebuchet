@@ -256,8 +256,8 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
                 mQSBSearchBarFadeInAnim.cancel();
                 mQSBSearchBarFadeOutAnim.start();
             }
-            mLauncher.hideAllAppsBar(true);
         }
+        mLauncher.hideAllAppsBar(true);
     }
 
     public void deferOnDragEnd() {
@@ -275,8 +275,8 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
                     mQSBSearchBarFadeOutAnim.cancel();
                     mQSBSearchBarFadeInAnim.start();
                 }
-                mLauncher.showAllAppsBar(true);
             }
+            mLauncher.showAllAppsBar(true);
         } else {
             mDeferOnDragEnd = false;
         }
