@@ -4446,7 +4446,7 @@ public final class Launcher extends Activity
             case 0:
                 break;
             case 1:
-                if (index > 2) {
+                if (index > 2 && index != 13) {
                     showWorkspace(true);
                 } else {
                     onClickAllAppsButton(null);
