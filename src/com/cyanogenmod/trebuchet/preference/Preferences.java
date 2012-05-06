@@ -386,6 +386,8 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
             dock.removePreference(findPreference("ui_homescreen_tablet_dock_divider_two"));
             PreferenceGroup icons = (PreferenceGroup) findPreference("ui_icons");
             icons.removePreference(findPreference("ui_icons_small"));
+            PreferenceGroup gestures = (PreferenceGroup) findPreference("ui_gestures");
+            gestures.removePreference(findPreference("ui_app_bar_gestures"));
         }
     }
 
