@@ -143,7 +143,7 @@ s -->
     <!-- Verb, menu item used to add an item on the desktop -->
     <string name="menu_add">Add</string>
     <!-- Menu item used to manage installed applications -->
-    <string name="menu_manage_apps">Manage apps</string>
+    <string name="menu_manage_apps">Manage Apps</string>
     <!-- Menu item used to open the default market -->
     <string name="menu_market">Google Play</string>
     <!-- Noun, menu item used to set the desktop's wallpaper -->
@@ -153,7 +153,7 @@ s -->
     <!-- Noun, menu item used to bring down the notifications shade -->
     <string name="menu_notifications">Notifications</string>
     <!-- Noun, menu item used to show the system settings -->
-    <string name="menu_settings">System settings</string>
+    <string name="menu_settings">System Settings</string>
     <!-- Noun, menu item used to show the launcher preferences -->
     <string name="menu_preferences">Trebuchet Settings</string>
     <!-- Noun, menu item used to show help. [CHAR_LIMIT=none] -->
