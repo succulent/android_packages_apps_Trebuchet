@@ -377,7 +377,8 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
             PreferenceGroup homescreen = (PreferenceGroup) findPreference("ui_homescreen");
             homescreen.removePreference(findPreference("ui_homescreen_padding"));
             homescreen.removePreference(findPreference("ui_homescreen_indicator"));
-            homescreen.removePreference(findPreference(PHONE_SEARCH_BAR));
+            PreferenceCategory homescreenGeneral = (PreferenceCategory) findPreference("ui_homescreen_general");
+            homescreenGeneral.removePreference(findPreference(PHONE_SEARCH_BAR));
             PreferenceGroup drawer = (PreferenceGroup) findPreference("ui_drawer");
             drawer.removePreference(findPreference("ui_drawer_indicator"));
         } else {

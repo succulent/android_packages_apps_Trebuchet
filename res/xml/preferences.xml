@@ -20,7 +20,8 @@
         <!-- Homescreen -->
         <PreferenceScreen android:key="ui_homescreen"
             android:title="@string/preferences_interface_homescreen_title">
-            <PreferenceCategory android:title="@string/preferences_interface_homescreen_general_category">
+            <PreferenceCategory android:title="@string/preferences_interface_homescreen_general_category"
+                android:key="ui_homescreen_general">
                 <CheckBoxPreference android:key="ui_general_orientation"
                     android:title="@string/preferences_interface_general_orientation_title"
                     android:defaultValue="@bool/config_defaultAutoRotate" />
@@ -266,7 +267,7 @@
                     android:summary="@string/preferences_interface_tablet_search_corner_summary"
                     android:entries="@array/preferences_interface_button_corner_entries"
                     android:entryValues="@array/preferences_interface_button_corner_values"
-                    android:dependency="ui_homescreen_general_search"
+                    android:dependency="ui_tablet_search"
                     android:defaultValue="3" />
             </PreferenceCategory>
 
