@@ -386,7 +386,7 @@ public final class Launcher extends Activity
             SharedPreferences prefs =
                     getSharedPreferences(PreferencesProvider.PREFERENCES_KEY, Context.MODE_PRIVATE);
             prefs.edit().putBoolean("ui_tablet_workspace_combined_bar", true).commit();
-            prefs.edit().putBoolean("ui_homescreen_general_search", false).commit();
+            prefs.edit().putBoolean("ui_tablet_search", false).commit();
             mCombinedBar = true;
             mShowSearchBar = false;
         }

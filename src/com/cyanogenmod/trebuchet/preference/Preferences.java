@@ -39,7 +39,8 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 
     private static final String TAG = "Launcher.Preferences";
 
-    private static final String SEARCH_BAR = "ui_homescreen_general_search";
+    private static final String PHONE_SEARCH_BAR = "ui_homescreen_general_search";
+    private static final String SEARCH_BAR = "ui_tablet_search";
     private static final String COMBINED_BAR = "ui_tablet_workspace_combined_bar";
     private static final String CENTER_ALLAPPS = "ui_tablet_workspace_allapps_center";
     private static final String HIDE_DRAWER_TAB = "ui_drawer_hide_topbar";
@@ -376,6 +377,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
             PreferenceGroup homescreen = (PreferenceGroup) findPreference("ui_homescreen");
             homescreen.removePreference(findPreference("ui_homescreen_padding"));
             homescreen.removePreference(findPreference("ui_homescreen_indicator"));
+            homescreen.removePreference(findPreference(PHONE_SEARCH_BAR));
             PreferenceGroup drawer = (PreferenceGroup) findPreference("ui_drawer");
             drawer.removePreference(findPreference("ui_drawer_indicator"));
         } else {
