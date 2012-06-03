@@ -4526,6 +4526,13 @@ public final class Launcher extends Activity
                         Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(rocketLauncher);
                 break;
+            case 9:
+                if (mStatusBarManager == null) {
+                    mStatusBarManager = (StatusBarManager)
+                            getApplicationContext().getSystemService(Context.STATUS_BAR_SERVICE);
+                }
+                mStatusBarManager.toggleRecentApps();
+                break;
         }
     }
 

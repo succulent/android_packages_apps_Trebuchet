@@ -504,7 +504,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
                 mDrawerSwipeDown.setIcon(null);
             }
             if (swipeDownValue > 2) swipeDownValue--;
-            if (swipeDownValue == 7) swipeDownValue--;
+            if (swipeDownValue >= 7) swipeDownValue--;
             CharSequence drawerSDSummary = drawerSwipeDownIndex[swipeDownValue];
             mDrawerSwipeDown.setSummary(drawerSDSummary);
             return true;
@@ -522,7 +522,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
                 mDrawerSwipeUp.setIcon(null);
             }
             if (swipeUpValue > 2) swipeUpValue--;
-            if (swipeUpValue == 7) swipeUpValue--;
+            if (swipeUpValue >= 7) swipeUpValue--;
             CharSequence drawerSUSummary = drawerSwipeUpIndex[swipeUpValue];
             mDrawerSwipeUp.setSummary(drawerSUSummary);
             return true;

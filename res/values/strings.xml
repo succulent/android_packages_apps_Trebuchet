@@ -427,6 +427,7 @@ s -->
     <string name="preferences_interface_gestures_rocket_launcher">Rocket Launcher</string>
     <string name="preferences_interface_gestures_app_bar_category">Apps bar gestures</string>
     <string name="preferences_interface_gestures_app_bar_long_click">Long click</string>
+    <string name="preferences_interface_gestures_toggle_recents">Toggle recent apps</string>
 
     <!-- General -->
     <string name="preferences_interface_general_title">General</string>
