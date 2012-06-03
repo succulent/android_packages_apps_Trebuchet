@@ -299,7 +299,6 @@ public final class Launcher extends Activity
     private int mActionButtonSix;
     private int mActionButtonSeven;
     private int mActionButtonEight;
-    private boolean mStatusBarDisabled = false;
 
     private ImageView mCustomButtonOne;
     private ImageView mCustomButtonTwo;
@@ -4460,13 +4459,7 @@ public final class Launcher extends Activity
                     mStatusBarManager = (StatusBarManager)
                             getApplicationContext().getSystemService(Context.STATUS_BAR_SERVICE);
                 }
-                if (!mStatusBarDisabled) {
-                    mStatusBarManager.disable(0x10000000);
-                    mStatusBarDisabled = true;
-                } else {
-                    mStatusBarManager.disable(0x00000000);
-                    mStatusBarDisabled = false;
-                }
+                mStatusBarManager.toggleVisibility();
                 break;
             case 4:
                 try {
