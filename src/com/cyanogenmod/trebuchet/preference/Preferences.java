@@ -30,8 +30,6 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.preference.PreferenceGroup;
 
-import com.cyanogenmod.trebuchet.LauncherApplication;
-
 import com.cyanogenmod.trebuchet.R;
 import com.cyanogenmod.trebuchet.LauncherApplication;
 

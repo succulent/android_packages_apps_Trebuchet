@@ -113,4 +113,8 @@ public class NumberPickerPreference extends DialogPreference {
     public void setMinValue(int min) {
         mMin = min;
     }
+
+    public int getMaxValue() {
+        return mMax;
+    }
 }

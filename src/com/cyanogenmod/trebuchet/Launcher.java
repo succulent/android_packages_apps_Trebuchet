@@ -1942,7 +1942,7 @@ public final class Launcher extends Activity
         Intent manageApps = new Intent(Settings.ACTION_MANAGE_ALL_APPLICATIONS_SETTINGS);
         manageApps.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-        Intent preferences = new Intent().setClass(this, Preferences.class);
+        Intent preferences = new Intent().setClass(this, PreferenceSettings.class);
         preferences.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         Intent settings = new Intent(android.provider.Settings.ACTION_SETTINGS);
@@ -4471,7 +4471,7 @@ public final class Launcher extends Activity
                 }
                 break;
             case 5:
-                Intent preferences = new Intent().setClass(this, Preferences.class);
+                Intent preferences = new Intent().setClass(this, PreferenceSettings.class);
                 preferences.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(preferences);
                 break;

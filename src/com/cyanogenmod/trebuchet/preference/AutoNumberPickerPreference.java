@@ -136,4 +136,8 @@ public class AutoNumberPickerPreference extends DialogPreference implements
     public void setMinValue(int min) {
         mMin = min;
     }
+
+    public int getMaxValue() {
+        return mMax;
+    }
 }

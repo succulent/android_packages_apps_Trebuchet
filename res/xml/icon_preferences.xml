@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:launcher="http://schemas.android.com/apk/res/com.cyanogenmod.trebuchet">
+
+            <PreferenceCategory android:title="@string/preferences_interface_homescreen_general_category"
+                android:key="ui_icons_small">
+                <CheckBoxPreference android:key="ui_homescreen_general_hide_icon_labels"
+                    android:title="@string/preferences_interface_homescreen_general_hide_icon_labels_summary" />
+            </PreferenceCategory>
+            <PreferenceCategory android:title="@string/preferences_interface_tablet_icons_title"
+                android:key="ui_icons_small">
+                <CheckBoxPreference android:key="ui_tablet_smaller_icons"
+                    android:title="@string/preferences_interface_tablet_icons_title"
+                    android:defaultValue="false" />
+                <CheckBoxPreference android:key="ui_tablet_show_dock_icon_labels"
+                    android:title="@string/preferences_interface_tablet_dock_icon_labels_title"
+                    android:dependency="ui_tablet_smaller_icons"
+                    android:defaultValue="false" />
+            </PreferenceCategory>
+
+</PreferenceScreen>

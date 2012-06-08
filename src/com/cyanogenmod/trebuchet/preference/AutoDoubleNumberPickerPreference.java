@@ -221,4 +221,11 @@ public class AutoDoubleNumberPickerPreference extends DialogPreference implement
         mDefault2 = def;
     }
 
+    public int getMax1() {
+        return mMax1;
+    }
+
+    public int getMax2() {
+        return mMax2;
+    }
 }

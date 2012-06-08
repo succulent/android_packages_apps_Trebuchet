@@ -106,7 +106,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.cyanogenmod.trebuchet.preference.Preferences"
+        <activity android:name="com.cyanogenmod.trebuchet.preference.PreferenceSettings"
             android:label="@string/preferences_title" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

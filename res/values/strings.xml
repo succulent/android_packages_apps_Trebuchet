@@ -285,7 +285,7 @@ s -->
 
     <!-- UI -->
     <!-- Homescreen -->
-    <string name="preferences_interface_homescreen_title">Homescreen</string>
+    <string name="preferences_interface_homescreen_title">Home</string>
     <string name="preferences_interface_homescreen_general_category">General</string>
     <string name="preferences_interface_homescreen_general_screens_title">Homescreens</string>
     <string name="preferences_interface_homescreen_general_screens_summary">Number of screens on the homescreen</string>
@@ -364,7 +364,7 @@ s -->
     <string name="preferences_interface_dock_title">Dock</string>
 
     <!-- Tablet -->
-    <string name="preferences_interface_tablet_title">Tablet controls</string>
+    <string name="preferences_interface_tablet_title">Controls</string>
     <string name="preferences_interface_tablet_combined_category">Search bar disabled options</string>
     <string name="preferences_interface_tablet_search_category">Search bar</string>
     <string name="preferences_interface_tablet_paging_category">Workspace page transitions</string>

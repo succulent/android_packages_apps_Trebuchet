@@ -481,11 +481,11 @@ public class LauncherModel extends BroadcastReceiver {
                 | (screen & 0xFF) << 16 | (localCellX & 0xFF) << 8 | (localCellY & 0xFF);
     }
 
-    static int getCellCountX() {
+    public static int getCellCountX() {
         return mCellCountX;
     }
 
-    static int getCellCountY() {
+    public static int getCellCountY() {
         return mCellCountY;
     }
 
@@ -493,7 +493,7 @@ public class LauncherModel extends BroadcastReceiver {
      * Updates the model orientation helper to take into account the current layout dimensions
      * when performing local/canonical coordinate transformations.
      */
-    static void updateWorkspaceLayoutCells(int shortAxisCellCount, int longAxisCellCount) {
+    public static void updateWorkspaceLayoutCells(int shortAxisCellCount, int longAxisCellCount) {
         mCellCountX = shortAxisCellCount;
         mCellCountY = longAxisCellCount;
     }

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:launcher="http://schemas.android.com/apk/res/com.cyanogenmod.trebuchet">
+
+            <PreferenceCategory android:title="@string/preferences_interface_tablet_show_workspace_allapps_title">
+                <CheckBoxPreference android:key="ui_tablet_workspace_allapps"
+                    android:title="@string/preferences_interface_tablet_show_workspace_allapps_title"
+                    android:defaultValue="true" />
+                <ListPreference android:key="ui_tablet_all_apps_corner"
+                    android:title="@string/preferences_interface_tablet_all_apps_corner_title"
+                    android:summary="@string/preferences_interface_tablet_all_apps_corner_summary"
+                    android:dependency="ui_tablet_workspace_allapps"
+                    android:defaultValue="0" />
+                <PreferenceScreen android:key="ui_tablet_app_bar_buttons"
+                    android:dependency="ui_tablet_workspace_allapps"
+                    android:title="@string/preferences_interface_tablet_buttons_title">
+                    <ListPreference android:key="ui_tablet_custom_button_one"
+                        android:title="@string/preferences_interface_tablet_custom_one_title"
+                        android:entries="@array/preferences_interface_apps_bar_entries"
+                        android:entryValues="@array/preferences_interface_apps_bar_values"
+                        android:dependency="ui_tablet_workspace_allapps"
+                        android:defaultValue="1" />
+                    <ListPreference android:key="ui_tablet_custom_button_two"
+                        android:title="@string/preferences_interface_tablet_custom_two_title"
+                        android:entries="@array/preferences_interface_apps_bar_entries"
+                        android:entryValues="@array/preferences_interface_apps_bar_values"
+                        android:dependency="ui_tablet_workspace_allapps"
+                        android:defaultValue="0" />
+                    <ListPreference android:key="ui_tablet_custom_button_three"
+                        android:title="@string/preferences_interface_tablet_custom_three_title"
+                        android:entries="@array/preferences_interface_apps_bar_entries"
+                        android:entryValues="@array/preferences_interface_apps_bar_values"
+                        android:dependency="ui_tablet_workspace_allapps"
+                        android:defaultValue="0" />
+                    <ListPreference android:key="ui_tablet_custom_button_four"
+                        android:title="@string/preferences_interface_tablet_custom_four_title"
+                        android:entries="@array/preferences_interface_apps_bar_entries"
+                        android:entryValues="@array/preferences_interface_apps_bar_values"
+                        android:dependency="ui_tablet_workspace_allapps"
+                        android:defaultValue="0" />
+                    <ListPreference android:key="ui_tablet_custom_button_five"
+                        android:title="@string/preferences_interface_tablet_custom_five_title"
+                        android:entries="@array/preferences_interface_apps_bar_entries"
+                        android:entryValues="@array/preferences_interface_apps_bar_values"
+                        android:dependency="ui_tablet_workspace_allapps"
+                        android:defaultValue="0" />
+                    <ListPreference android:key="ui_tablet_custom_button_six"
+                        android:title="@string/preferences_interface_tablet_custom_six_title"
+                        android:entries="@array/preferences_interface_apps_bar_entries"
+                        android:entryValues="@array/preferences_interface_apps_bar_values"
+                        android:dependency="ui_tablet_workspace_allapps"
+                        android:defaultValue="0" />
+                    <ListPreference android:key="ui_tablet_custom_button_seven"
+                        android:title="@string/preferences_interface_tablet_custom_seven_title"
+                        android:entries="@array/preferences_interface_apps_bar_entries"
+                        android:entryValues="@array/preferences_interface_apps_bar_values"
+                        android:dependency="ui_tablet_workspace_allapps"
+                        android:defaultValue="0" />
+                    <ListPreference android:key="ui_tablet_custom_button_eight"
+                        android:title="@string/preferences_interface_tablet_custom_eight_title"
+                        android:entries="@array/preferences_interface_apps_bar_entries"
+                        android:entryValues="@array/preferences_interface_apps_bar_values"
+                        android:dependency="ui_tablet_workspace_allapps"
+                        android:defaultValue="0" />
+                </PreferenceScreen>
+            </PreferenceCategory>
+
+            <PreferenceCategory android:title="@string/preferences_interface_tablet_search_category">
+                <CheckBoxPreference android:key="ui_tablet_search"
+                    android:title="@string/preferences_interface_homescreen_general_search_title"
+                    android:defaultValue="true" />
+               <ListPreference android:key="ui_tablet_search_corner"
+                    android:title="@string/preferences_interface_tablet_search_corner_title"
+                    android:summary="@string/preferences_interface_tablet_search_corner_summary"
+                    android:entries="@array/preferences_interface_button_corner_entries"
+                    android:entryValues="@array/preferences_interface_button_corner_values"
+                    android:dependency="ui_tablet_search"
+                    android:defaultValue="3" />
+            </PreferenceCategory>
+
+            <PreferenceCategory android:title="@string/preferences_interface_tablet_combined_category">
+                <CheckBoxPreference android:key="ui_tablet_workspace_combined_bar"
+                    android:title="@string/preferences_interface_tablet_workspace_combined_bar_title"
+                    android:dependency="ui_tablet_workspace_allapps"
+                    android:defaultValue="false" />
+                <CheckBoxPreference android:key="ui_tablet_workspace_allapps_center"
+                    android:title="@string/preferences_interface_tablet_center_allapps_title"
+                    android:dependency="ui_tablet_workspace_allapps"
+                    android:defaultValue="false" />
+            </PreferenceCategory>
+            <PreferenceCategory android:title="@string/preferences_interface_tablet_button_dividers_title">
+                <CheckBoxPreference android:key="ui_tablet_button_dividers"
+                    android:title="@string/preferences_interface_tablet_button_dividers_title"
+                    android:defaultValue="true" />
+            </PreferenceCategory>
+            <PreferenceCategory android:title="@string/preferences_interface_homescreen_scrolling_category">
+                <CheckBoxPreference android:key="ui_tablet_hide_tablet_controls"
+                    android:title="@string/preferences_interface_tablet_page_controls_title"
+                    android:defaultValue="false" />
+            </PreferenceCategory>
+
+</PreferenceScreen>

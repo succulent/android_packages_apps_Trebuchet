@@ -281,7 +281,6 @@ public class Workspace extends PagedView
     private Runnable mDoubleTapCallback = null;
     private final Handler mHandler = new Handler();
 
-
     /**
      * Used to inflate the Workspace from XML.
      *

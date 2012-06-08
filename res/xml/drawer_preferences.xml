@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:launcher="http://schemas.android.com/apk/res/com.cyanogenmod.trebuchet">
+
+            <PreferenceCategory android:title="@string/preferences_interface_drawer_background_category">
+                <CheckBoxPreference android:key="ui_drawer_background_show_wallpaper"
+                    android:title="@string/preferences_interface_drawer_background_show_wallpaper_title"
+                    android:defaultValue="false" />
+                <CheckBoxPreference android:key="ui_drawer_hide_topbar"
+                    android:title="@string/preferences_interface_drawer_topbar_hide_topbar_title"
+                    android:defaultValue="false" />
+            </PreferenceCategory>
+            <PreferenceCategory android:title="@string/preferences_interface_drawer_widgets_category">
+                <CheckBoxPreference android:key="ui_drawer_widgets_join_apps"
+                    android:title="@string/preferences_interface_drawer_widgets_join_apps_title"
+                    android:defaultValue="true" />
+            </PreferenceCategory>
+            <PreferenceCategory android:title="@string/preferences_interface_drawer_scrolling_category">
+                <ListPreference android:key="ui_drawer_scrolling_transition_effect"
+                    android:title="@string/preferences_interface_drawer_scrolling_transition_effect_title"
+                    android:summary="@string/preferences_interface_drawer_scrolling_transition_effect_summary"
+                    android:entries="@array/preferences_interface_drawer_scrolling_transition_effect_entries"
+                    android:entryValues="@array/preferences_interface_drawer_scrolling_transition_effect_values"
+                    android:defaultValue="@string/config_drawerDefaultTransitionEffect" />
+                <CheckBoxPreference android:key="ui_drawer_scrolling_fade_adjacent_screens"
+                    android:title="@string/preferences_interface_drawer_scrolling_fade_adjacent_screens_title" />
+            </PreferenceCategory>
+            <PreferenceCategory android:key="ui_drawer_indicator"
+                android:title="@string/preferences_interface_drawer_indicator_category">
+                <CheckBoxPreference android:key="ui_drawer_indicator_enable"
+                    android:title="@string/preferences_interface_drawer_indicator_enable_title"
+                    android:summary="@string/preferences_interface_drawer_indicator_enable_summary"
+                    android:defaultValue="true" />
+                <CheckBoxPreference android:key="ui_drawer_indicator_fade"
+                    android:title="@string/preferences_interface_drawer_indicator_fade_title"
+                    android:defaultValue="true"
+                    android:dependency="ui_drawer_indicator_enable" />
+            </PreferenceCategory>
+
+</PreferenceScreen>
