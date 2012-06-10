@@ -76,4 +76,6 @@
 <!-- Folders -->
     <!-- The size of the image which sits behind the preview of the folder contents -->
     <dimen name="folder_preview_size">58dp</dimen>
+
+    <dimen name="action_bar_tab_padding">54dp</dimen>
 </resources>

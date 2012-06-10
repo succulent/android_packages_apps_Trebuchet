@@ -128,4 +128,6 @@
     <dimen name="folder_name_padding">10dp</dimen>
     <dimen name="folder_width_gap">0dp</dimen>
     <dimen name="folder_height_gap">0dp</dimen>
+
+    <dimen name="action_bar_tab_padding">18dp</dimen>
 </resources>
