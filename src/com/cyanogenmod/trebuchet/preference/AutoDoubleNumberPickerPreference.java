@@ -29,7 +29,10 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.LinearLayout;
 import com.cyanogenmod.trebuchet.R;
+
+import com.cyanogenmod.trebuchet.LauncherApplication;
 
 /*
  * @author Danesh
@@ -149,6 +152,11 @@ public class AutoDoubleNumberPickerPreference extends DialogPreference implement
 
         mCheckBox = (CheckBox) view.findViewById(R.id.auto_check_box);
         mCheckBox.setChecked(getPersistedString("0|0").equals("0|0"));
+        if (!LauncherApplication.isScreenLarge()) {
+            mCheckBox.setChecked(false);
+            LinearLayout auto = (LinearLayout) view.findViewById(R.id.auto_layout);
+            auto.setVisibility(View.GONE);
+        }
         mCheckBox.setOnClickListener(this);
         if (mCheckBox.isChecked()) {
             mNumberPicker1.setEnabled(false);

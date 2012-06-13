@@ -73,11 +73,14 @@ public class HomescreenFragmentActivity extends PreferenceFragment implements
         mDefaultHomescreen.setSummary(Integer.toString(mPrefs.getInt(PreferenceSettings.DEFAULT_HOMESCREEN, 3)));
 
         mHomescreenGrid = (AutoDoubleNumberPickerPreference) prefSet.findPreference(PreferenceSettings.HOMESCREEN_GRID);
-        String hg = mPrefs.getString(PreferenceSettings.HOMESCREEN_GRID, "0|0");
+        String hg = mPrefs.getString(PreferenceSettings.HOMESCREEN_GRID,
+                LauncherApplication.isScreenLarge() ? "0|0" : "4|4");
         mHomescreenGrid.setSummary(hg.equals("0|0") ? getActivity().getString(R.string.preferences_auto_number_picker) :
                 hg.replace("|", " x "));
-        mHomescreenGrid.setMax1(LauncherModel.getCellCountY());
-        mHomescreenGrid.setMax2(LauncherModel.getCellCountX());
+        if (LauncherApplication.isScreenLarge()) {
+            mHomescreenGrid.setMax1(LauncherModel.getCellCountY());
+            mHomescreenGrid.setMax2(LauncherModel.getCellCountX());
+        }
 
         mVerticalPadding = (NumberPickerPreference) prefSet.findPreference(PreferenceSettings.VERTICAL_PADDING);
         mHorizontalPadding = (NumberPickerPreference) prefSet.findPreference(PreferenceSettings.HORIZONTAL_PADDING);
