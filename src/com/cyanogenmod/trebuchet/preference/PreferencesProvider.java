@@ -81,6 +81,10 @@ public final class PreferencesProvider {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return preferences.getBoolean("ui_homescreen_general_hide_icon_labels", false);
             }
+            public static boolean getShowSearchBackground(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("ui_search_background", true);
+            }
             public static class Scrolling {
                 public static boolean getScrollWallpaper(Context context) {
                     final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
@@ -121,6 +125,14 @@ public final class PreferencesProvider {
             public static boolean getJoinWidgetsApps(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return preferences.getBoolean("ui_drawer_widgets_join_apps", true);
+            }
+            public static boolean getShowMarketButton(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("ui_drawer_market_button", true);
+            }
+            public static boolean getShowMenuButton(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("ui_drawer_menu_button", true);
             }
             public static class Scrolling {
                 public static AppsCustomizePagedView.TransitionEffect getTransitionEffect(Context context, String def) {
@@ -176,6 +188,10 @@ public final class PreferencesProvider {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return preferences.getInt("ui_hotseat_all_apps", 0);
             }
+            public static boolean getShowBackground(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("ui_hotseat_background", true);
+            }
         }
 
         public static class Tablet {
@@ -209,8 +225,8 @@ public final class PreferencesProvider {
             }
             public static boolean getSmallerIcons(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return LauncherApplication.isScreenLarge() ?
-                        preferences.getBoolean("ui_tablet_smaller_icons", false) : false;
+                return //LauncherApplication.isScreenLarge() ?
+                        preferences.getBoolean("ui_tablet_smaller_icons", false);// : false;
             }
             public static boolean getShowDockIconLabels(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);

@@ -38,6 +38,10 @@
                 <CheckBoxPreference android:key="ui_homescreen_general_search"
                     android:title="@string/preferences_interface_homescreen_general_search_title"
                     android:defaultValue="true" />
+                <CheckBoxPreference android:key="ui_search_background"
+                    android:dependency="ui_homescreen_general_search"
+                    android:title="@string/preferences_interface_homescreen_search_background_title"
+                    android:defaultValue="true" />
             </PreferenceCategory>
             <PreferenceCategory android:key="ui_homescreen_padding"
                 android:title="@string/preferences_interface_homescreen_padding_category">

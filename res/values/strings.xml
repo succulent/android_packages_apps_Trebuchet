@@ -337,6 +337,7 @@ s -->
     <string name="preferences_interface_homescreen_general_show_hotseat_summary_off">Hiding the dock</string>
     <string name="preferences_interface_homescreen_general_show_hotseat_allapps_title">All apps button in dock</string>
     <string name="preferences_interface_homescreen_general_show_hotseat_allapps_summary">Show the all apps button in the dock</string>
+    <string name="preferences_interface_homescreen_search_background_title">Search bar background</string>
 
     <!-- Drawer -->
     <string name="preferences_interface_drawer_title">Drawer</string>
@@ -359,9 +360,12 @@ s -->
     <string name="preferences_interface_drawer_topbar_category">Tab Bar</string>
     <string name="preferences_interface_drawer_topbar_hide_topbar_title">Hide tab bar</string>
     <string name="preferences_interface_drawer_topbar_hide_topbar_summary">Hide the drawer tab bar at the top of the screen</string>
+    <string name="preferences_interface_drawer_menu_button_title">Show menu button</string>
+    <string name="preferences_interface_drawer_market_button_title">Show market button</string>
 
     <!-- Dock -->
     <string name="preferences_interface_dock_title">Dock</string>
+    <string name="preferences_interface_dock_background_title">Show background</string>
 
     <!-- Tablet -->
     <string name="preferences_interface_tablet_title">Controls</string>
@@ -454,5 +458,7 @@ s -->
     <string name="preferences_interface_tablet_custom_six_title">Button six</string>
     <string name="preferences_interface_tablet_custom_seven_title">Button seven</string>
     <string name="preferences_interface_tablet_custom_eight_title">Button eight</string>
+
+    <string name="menu_app_drawer">App Drawer</string>
 
 </resources>

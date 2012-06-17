@@ -47,6 +47,7 @@ public class Hotseat extends FrameLayout {
     private boolean mTopPadding;
     private boolean mShowHotseat;
     private boolean mSmallerIcons;
+    private boolean mShowBackground;
 
     // These animators are used to fade the children's outlines
     private ObjectAnimator mChildrenOutlineFadeInAnimation;
@@ -81,6 +82,7 @@ public class Hotseat extends FrameLayout {
         mShowHotseat =
                 PreferencesProvider.Interface.Dock.getShowHotseat(context);
         mSmallerIcons = PreferencesProvider.Interface.Tablet.getSmallerIcons(context);
+        mShowBackground = PreferencesProvider.Interface.Dock.getShowBackground(context);
 
         // Padding at the top or the bottom depending on the location of the search drop target bar
         int searchCorner = PreferencesProvider.Interface.Tablet.getSearchBarCorner(context);
@@ -154,7 +156,8 @@ public class Hotseat extends FrameLayout {
         }
 
         // Set the visibility of the hotseat if it is hidden
-        if (!mShowHotseat) this.setVisibility(View.INVISIBLE);
+        if (!mShowHotseat) this.setVisibility(View.GONE);
+        if (!mShowBackground) this.setBackgroundResource(0);
     }
 
     void resetLayout(boolean isPrimary) {

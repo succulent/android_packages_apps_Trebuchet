@@ -74,14 +74,16 @@ public class IconsFragmentActivity extends PreferenceFragment {
             if (!mSmallerIcons.isChecked()) {
                 mDockLabels.setChecked(false);
             }
+
             if (LauncherApplication.isScreenLarge()) {
-                mPrefs.edit().putBoolean("ui_tablet_smaller_icons",
-                        mSmallerIcons.isChecked()).commit();
                 int[] cellCount = Workspace.getCellCountsForLarge(getActivity());
                 LauncherModel.updateWorkspaceLayoutCells(cellCount[0], cellCount[1]);
-                DockFragmentActivity.updateMaxValue();
-                HomescreenFragmentActivity.updateMaxValue();
             }
+
+            if (getResources().getConfiguration().smallestScreenWidthDp > 480) {
+                DockFragmentActivity.updateMaxValue();
+            }
+            HomescreenFragmentActivity.updateMaxValue();
             return true;
         }
         return false;

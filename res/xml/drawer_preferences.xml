@@ -15,6 +15,12 @@
                 <CheckBoxPreference android:key="ui_drawer_widgets_join_apps"
                     android:title="@string/preferences_interface_drawer_widgets_join_apps_title"
                     android:defaultValue="true" />
+                <CheckBoxPreference android:key="ui_drawer_market_button"
+                    android:title="@string/preferences_interface_drawer_market_button_title"
+                    android:defaultValue="true" />
+                <CheckBoxPreference android:key="ui_drawer_menu_button"
+                    android:title="@string/preferences_interface_drawer_menu_button_title"
+                    android:defaultValue="true" />
             </PreferenceCategory>
             <PreferenceCategory android:title="@string/preferences_interface_drawer_scrolling_category">
                 <ListPreference android:key="ui_drawer_scrolling_transition_effect"

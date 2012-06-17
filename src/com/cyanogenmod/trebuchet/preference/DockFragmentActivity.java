@@ -41,6 +41,10 @@ public class DockFragmentActivity extends PreferenceFragment {
     private static NumberPickerPreference mHotseatPositions;
     private static AutoNumberPickerPreference mHotseatAllAppsPosition;
 
+    private CheckBoxPreference mShowDock;
+    private CheckBoxPreference mShowDockDivider;
+    private CheckBoxPreference mShowDockAppsButton;
+
     private static SharedPreferences mPrefs;
     private static Context mContext;
 
@@ -65,13 +69,38 @@ public class DockFragmentActivity extends PreferenceFragment {
         mHotseatAllAppsPosition = (AutoNumberPickerPreference)
                 prefSet.findPreference(PreferenceSettings.HOTSEAT_ALLAPPS_POSITION);
 
+        mShowDock = (CheckBoxPreference)
+                prefSet.findPreference(PreferenceSettings.SHOW_DOCK);
+
+        mShowDockDivider = (CheckBoxPreference)
+                prefSet.findPreference(PreferenceSettings.SHOW_DOCK_DIVIDER);
+
+        mShowDockAppsButton = (CheckBoxPreference)
+                prefSet.findPreference(PreferenceSettings.SHOW_DOCK_APPS_BUTTON);
+
+        mShowDock.setChecked(PreferencesProvider.Interface.Dock.getShowHotseat(mContext));
+
+        mShowDockDivider.setChecked(
+                PreferencesProvider.Interface.Homescreen.Indicator.getShowDockDivider(mContext));
+
+        mShowDockAppsButton.setChecked(
+                PreferencesProvider.Interface.Dock.getShowAllAppsHotseat(mContext));
+
+        mShowDockDivider = (CheckBoxPreference)
+                prefSet.findPreference(PreferenceSettings.SHOW_DOCK_DIVIDER);
+
         int hp = mPrefs.getInt(PreferenceSettings.HOTSEAT_ALLAPPS_POSITION, 3);
         mHotseatAllAppsPosition.setSummary(hp == 0 ? getActivity().getString(
                 R.string.preferences_auto_number_picker) : Integer.toString(hp));
 
          // Remove some preferences on small screens
         if (!LauncherApplication.isScreenLarge()) {
-            prefSet.removePreference(findPreference("ui_homescreen_tablet_dock_divider_two"));
+            PreferenceCategory dock = (PreferenceCategory) prefSet.findPreference("ui_dock");
+            dock.removePreference(findPreference("ui_homescreen_tablet_dock_divider_two"));
+            if (getResources().getConfiguration().smallestScreenWidthDp <= 480) {
+                mHotseatPositions.setMaxValue(5);
+                mHotseatAllAppsPosition.setMaxValue(5);
+            }
         } else {
             mHotseatPositions.setMaxValue(LauncherModel.getCellCountY());
             mHotseatAllAppsPosition.setMaxValue(LauncherModel.getCellCountY());

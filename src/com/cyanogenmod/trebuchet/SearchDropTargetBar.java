@@ -59,6 +59,7 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
     private int mSearchCorner;
     private int mAppsCorner;
     private boolean mShowButtonDividers;
+    private boolean mShowSearchBackground;
 
     private Launcher mLauncher;
 
@@ -75,6 +76,8 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
         mSearchCorner = PreferencesProvider.Interface.Tablet.getSearchBarCorner(context);
         mAppsCorner = PreferencesProvider.Interface.Tablet.getAllAppsBarCorner(context);
         mShowButtonDividers = PreferencesProvider.Interface.Tablet.getButtonDividers(context);
+        mShowSearchBackground =
+                PreferencesProvider.Interface.Homescreen.getShowSearchBackground(context);
     }
 
     public void setup(Launcher launcher, DragController dragController) {
@@ -137,6 +140,10 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
             mQSBSearchBar.setVisibility(View.GONE);
         }
 
+        if (!mShowSearchBackground) {
+            mQSBSearchBar.setBackgroundResource(0);
+            this.setBackgroundResource(0);
+        }
 
         boolean searchTop = (mShowQSBSearchBar && (mSearchCorner == 0 || mSearchCorner == 3)) ||
                 (!mShowQSBSearchBar && (mAppsCorner == 0 || mAppsCorner == 3));
@@ -283,7 +290,7 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
     }
 
     public void onSearchPackagesChanged(boolean searchVisible, boolean voiceVisible) {
-        if (mQSBSearchBar != null) {
+        if (mQSBSearchBar != null && mShowSearchBackground) {
             Drawable bg = mQSBSearchBar.getBackground();
             if (bg != null && (!searchVisible && !voiceVisible)) {
                 // Save the background and disable it

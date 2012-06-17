@@ -659,6 +659,11 @@ public class Workspace extends PagedView
                 ((BubbleTextView) child).setTextVisible(mShowDockIconLabels);
             }
 
+            if (!LauncherApplication.isScreenLandscape(mContext) && !mShowDockIconLabels &&
+                    mSmallerIcons && child instanceof BubbleTextView) {
+                child.setPadding(0, 24, 0, 0);
+            }
+
             if (screen < 0) {
                 screen = mLauncher.getHotseat().getOrderInHotseat(x, y);
             } else {

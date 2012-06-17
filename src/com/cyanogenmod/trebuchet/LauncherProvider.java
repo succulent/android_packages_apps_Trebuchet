@@ -265,7 +265,8 @@ public class LauncherProvider extends ContentProvider {
 
             if (!convertDatabase(db)) {
                 // Populate favorites table with initial favorites
-                loadFavorites(db, R.xml.default_workspace);
+                loadFavorites(db, mContext.getResources().getConfiguration().smallestScreenWidthDp
+                        >= 600 ? R.xml.default_tablet_workspace : R.xml.default_workspace);
             }
         }
 

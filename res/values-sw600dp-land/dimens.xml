@@ -55,4 +55,6 @@
     <dimen name="hotseat_height_gap">20dp</dimen>
     <dimen name="hotseat_width_gap_small">20dp</dimen>
     <dimen name="hotseat_height_gap_small">0dp</dimen>
+
+    <dimen name="action_bar_tab_padding">54dp</dimen>
 </resources>

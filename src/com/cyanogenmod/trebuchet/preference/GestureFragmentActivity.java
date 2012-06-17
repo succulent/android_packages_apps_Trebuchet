@@ -141,8 +141,10 @@ public class GestureFragmentActivity extends PreferenceFragment implements
             } else {
                 mHomescreenDoubleTap.setIcon(null);
             }
-            //if (doubleTapValue > 3) doubleTapValue = doubleTapValue - 2;
-            //if (doubleTapValue == 6) doubleTapValue--;
+            if (!LauncherApplication.isScreenLarge()) {
+                if (doubleTapValue > 7) doubleTapValue--;
+                if (doubleTapValue > 3) doubleTapValue = doubleTapValue - 2;
+            }
             CharSequence doubleTapSummary = doubleTapIndex[doubleTapValue];
             mHomescreenDoubleTap.setSummary(doubleTapSummary);
             return true;
@@ -159,7 +161,11 @@ public class GestureFragmentActivity extends PreferenceFragment implements
             } else {
                 mHomescreenSwipeDown.setIcon(null);
             }
-            CharSequence homeSDSummary = homeSwipeDownIndex[Integer.parseInt((String) newValue)];
+            if (!LauncherApplication.isScreenLarge()) {
+                if (hSDValue > 7) hSDValue--;
+                if (hSDValue > 3) hSDValue = hSDValue - 2;
+            }
+            CharSequence homeSDSummary = homeSwipeDownIndex[hSDValue];
             mHomescreenSwipeDown.setSummary(homeSDSummary);
             return true;
         } else if (preference == mHomescreenSwipeUp) {
@@ -175,7 +181,11 @@ public class GestureFragmentActivity extends PreferenceFragment implements
             } else {
                 mHomescreenSwipeUp.setIcon(null);
             }
-            CharSequence homeSUSummary = homeSwipeUpIndex[Integer.parseInt((String) newValue)];
+            if (!LauncherApplication.isScreenLarge()) {
+                if (hSUValue > 7) hSUValue--;
+                if (hSUValue > 3) hSUValue = hSUValue - 2;
+            }
+            CharSequence homeSUSummary = homeSwipeUpIndex[hSUValue];
             mHomescreenSwipeUp.setSummary(homeSUSummary);
             return true;
         } else if (preference == mDrawerSwipeDown) {
