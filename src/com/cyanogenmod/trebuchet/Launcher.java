@@ -1396,12 +1396,12 @@ public final class Launcher extends Activity
                 }
             } else if (!LauncherApplication.isScreenLarge()){
                 if (LauncherApplication.isScreenLandscape(getApplicationContext())) {
-                    mWorkspace.setPadding(getResources().getDimensionPixelSize(
-                            R.dimen.qsb_bar_height), 0, mShowHotseat ? getResources().getDimensionPixelSize(
+                    mWorkspace.setPadding(mShowSearchBar ? getResources().getDimensionPixelSize(
+                            R.dimen.qsb_bar_height) : 0, 0, mShowHotseat ? getResources().getDimensionPixelSize(
                             R.dimen.button_bar_height) : 0, 0);
                 } else {
-                    mWorkspace.setPadding(0, getResources().getDimensionPixelSize(
-                            R.dimen.qsb_bar_height_inset), 0, mShowHotseat ? getResources().getDimensionPixelSize(
+                    mWorkspace.setPadding(0, mShowSearchBar ? getResources().getDimensionPixelSize(
+                            R.dimen.qsb_bar_height_inset): 0, 0, mShowHotseat ? getResources().getDimensionPixelSize(
                             R.dimen.button_bar_height) : 0);
                     View indicator = findViewById(R.id.paged_view_indicator);
                     FrameLayout.LayoutParams dividerMargins = new FrameLayout.LayoutParams(

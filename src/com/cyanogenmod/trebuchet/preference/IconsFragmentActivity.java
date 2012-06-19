@@ -62,11 +62,6 @@ public class IconsFragmentActivity extends PreferenceFragment {
         if (!mSmallerIcons.isChecked()) {
             mDockLabels.setChecked(false);
         }
-
-         // Remove some preferences on small screens
-        if (!LauncherApplication.isScreenLarge()) {
-            prefSet.removePreference(findPreference("ui_icons_small"));
-        }
     }
 
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
@@ -80,7 +75,8 @@ public class IconsFragmentActivity extends PreferenceFragment {
                 LauncherModel.updateWorkspaceLayoutCells(cellCount[0], cellCount[1]);
             }
 
-            if (getResources().getConfiguration().smallestScreenWidthDp > 480) {
+            if (LauncherApplication.isScreenLarge() ||
+                    getResources().getConfiguration().smallestScreenWidthDp < 480) {
                 DockFragmentActivity.updateMaxValue();
             }
             HomescreenFragmentActivity.updateMaxValue();

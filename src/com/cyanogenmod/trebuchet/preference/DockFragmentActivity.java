@@ -97,9 +97,12 @@ public class DockFragmentActivity extends PreferenceFragment {
         if (!LauncherApplication.isScreenLarge()) {
             PreferenceCategory dock = (PreferenceCategory) prefSet.findPreference("ui_dock");
             dock.removePreference(findPreference("ui_homescreen_tablet_dock_divider_two"));
-            if (getResources().getConfiguration().smallestScreenWidthDp <= 480) {
+            if (getResources().getConfiguration().smallestScreenWidthDp >= 480) {
                 mHotseatPositions.setMaxValue(5);
                 mHotseatAllAppsPosition.setMaxValue(5);
+            } else {
+                mHotseatPositions.setMaxValue(6);
+                mHotseatAllAppsPosition.setMaxValue(6);
             }
         } else {
             mHotseatPositions.setMaxValue(LauncherModel.getCellCountY());
@@ -112,15 +115,28 @@ public class DockFragmentActivity extends PreferenceFragment {
     }
 
     public static void updateMaxValue() {
-        mHotseatPositions.setMaxValue(LauncherModel.getCellCountY());
-        if (mPrefs.getInt(PreferenceSettings.HOTSEAT_POSITIONS, 5) > mHotseatPositions.getMaxValue()) {
-            mPrefs.edit().putInt(PreferenceSettings.HOTSEAT_POSITIONS, LauncherModel.getCellCountY()).commit();
+        boolean smallIcons = mPrefs.getBoolean(PreferenceSettings.SMALLER_ICONS, false);
+        if (!LauncherApplication.isScreenLarge()) {
+            mHotseatPositions.setMaxValue(smallIcons ? 6 : 5);
+            mHotseatAllAppsPosition.setMaxValue(smallIcons ? 6 : 5);
+        } else {
+            mHotseatPositions.setMaxValue(LauncherModel.getCellCountY());
+            mHotseatAllAppsPosition.setMaxValue(LauncherModel.getCellCountY());
+        }
+        if (mPrefs.getInt(PreferenceSettings.HOTSEAT_POSITIONS, 5) >
+                mHotseatPositions.getMaxValue()) {
+            mPrefs.edit().putInt(PreferenceSettings.HOTSEAT_POSITIONS,
+                    LauncherApplication.isScreenLarge() ?
+                    LauncherModel.getCellCountY() : 5).commit();
         }
         mHotseatPositions.setSummary(Integer.toString(mPrefs.getInt(
                 PreferenceSettings.HOTSEAT_POSITIONS, 5)));
-        mHotseatAllAppsPosition.setMaxValue(LauncherModel.getCellCountY());
-        if (mPrefs.getInt(PreferenceSettings.HOTSEAT_ALLAPPS_POSITION, 3) > mHotseatAllAppsPosition.getMaxValue()) {
-            mPrefs.edit().putInt(PreferenceSettings.HOTSEAT_ALLAPPS_POSITION, LauncherModel.getCellCountY()).commit();
+
+        if (mPrefs.getInt(PreferenceSettings.HOTSEAT_ALLAPPS_POSITION, 3) >
+                mHotseatAllAppsPosition.getMaxValue()) {
+            mPrefs.edit().putInt(PreferenceSettings.HOTSEAT_ALLAPPS_POSITION,
+                    LauncherApplication.isScreenLarge() ?
+                    LauncherModel.getCellCountY() : 5).commit();
         }
         int hp = mPrefs.getInt(PreferenceSettings.HOTSEAT_ALLAPPS_POSITION, 3);
         mHotseatAllAppsPosition.setSummary(hp == 0 ? mContext.getString(

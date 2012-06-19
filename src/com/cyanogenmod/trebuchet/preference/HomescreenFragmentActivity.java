@@ -77,13 +77,16 @@ public class HomescreenFragmentActivity extends PreferenceFragment implements
                 LauncherApplication.isScreenLarge() ? "0|0" : "4|4");
         mHomescreenGrid.setSummary(hg.equals("0|0") ? getActivity().getString(R.string.preferences_auto_number_picker) :
                 hg.replace("|", " x "));
+        boolean smallIcons = mPrefs.getBoolean(PreferenceSettings.SMALLER_ICONS, false);
         if (LauncherApplication.isScreenLarge()) {
             mHomescreenGrid.setMax1(LauncherModel.getCellCountY());
             mHomescreenGrid.setMax2(LauncherModel.getCellCountX());
-        } else if (getResources().getConfiguration().smallestScreenWidthDp <= 480) {
-            boolean smallIcons = mPrefs.getBoolean(PreferenceSettings.SMALLER_ICONS, false);
+        } else if (getResources().getConfiguration().smallestScreenWidthDp >= 480) {
             mHomescreenGrid.setMax1(smallIcons ? 5 : 4);
             mHomescreenGrid.setMax2(smallIcons ? 5 : 4);
+        } else {
+            mHomescreenGrid.setMax1(smallIcons ? 6 : 5);
+            mHomescreenGrid.setMax2(smallIcons ? 8 : 6);
         }
 
         mVerticalPadding = (NumberPickerPreference) prefSet.findPreference(PreferenceSettings.VERTICAL_PADDING);
@@ -97,6 +100,7 @@ public class HomescreenFragmentActivity extends PreferenceFragment implements
             prefSet.removePreference(findPreference("ui_homescreen_indicator"));
             PreferenceCategory homescreenGeneral = (PreferenceCategory) findPreference("ui_homescreen_general");
             homescreenGeneral.removePreference(findPreference(PreferenceSettings.PHONE_SEARCH_BAR));
+            homescreenGeneral.removePreference(findPreference("ui_search_background"));
         } else {
             PreferenceCategory scrolling = (PreferenceCategory) findPreference("ui_homescreen_scrolling");
             scrolling.removePreference(findPreference("ui_homescreen_page_outline"));
@@ -119,9 +123,13 @@ public class HomescreenFragmentActivity extends PreferenceFragment implements
     }
 
     public static void updateMaxValue() {
-        boolean smallUi = mContext.getResources().getConfiguration().smallestScreenWidthDp <= 480;
+        boolean smallUi = !LauncherApplication.isScreenLarge() &&
+                mContext.getResources().getConfiguration().smallestScreenWidthDp >= 480;
+        boolean medUi = !LauncherApplication.isScreenLarge() &&
+                mContext.getResources().getConfiguration().smallestScreenWidthDp < 480;
         boolean smallIcons = mPrefs.getBoolean(PreferenceSettings.SMALLER_ICONS, false);
-        if (!smallUi && mHomescreenGrid.getMax1() > LauncherModel.getCellCountY()) {
+        if (LauncherApplication.isScreenLarge() && mHomescreenGrid.getMax1() >
+                LauncherModel.getCellCountY()) {
             if (!mPrefs.getString(PreferenceSettings.HOMESCREEN_GRID, "0|0").equals("0|0")) {
                 mPrefs.edit().putString(PreferenceSettings.HOMESCREEN_GRID,
                         LauncherModel.getCellCountY() + "|" + LauncherModel.getCellCountX()).commit();
@@ -129,9 +137,17 @@ public class HomescreenFragmentActivity extends PreferenceFragment implements
         } else if (smallUi) {
             mPrefs.edit().putString(PreferenceSettings.HOMESCREEN_GRID, (smallIcons ? "5" : "4")
                    + "|" + (smallIcons ? "5" : "4")).commit();
+        } else if (medUi) {
+            mPrefs.edit().putString(PreferenceSettings.HOMESCREEN_GRID, (smallIcons ? "6" : "5")
+                   + "|" + (smallIcons ? "8" : "6")).commit();
         }
-        mHomescreenGrid.setMax1(smallUi ? (smallIcons ? 5 : 4) : LauncherModel.getCellCountY());
-        mHomescreenGrid.setMax2(smallUi ? (smallIcons ? 5 : 4) : LauncherModel.getCellCountY());
+        if (medUi) {
+            mHomescreenGrid.setMax1(smallIcons ? 6 : 5);
+            mHomescreenGrid.setMax2(smallIcons ? 8 : 6);
+        } else {
+            mHomescreenGrid.setMax1(smallUi ? (smallIcons ? 5 : 4) : LauncherModel.getCellCountY());
+            mHomescreenGrid.setMax2(smallUi ? (smallIcons ? 5 : 4) : LauncherModel.getCellCountY());
+        }
         String hg = mPrefs.getString(PreferenceSettings.HOMESCREEN_GRID, "0|0");
         mHomescreenGrid.setSummary(hg.equals("0|0") ? mContext.getString(R.string.preferences_auto_number_picker) :
                 hg.replace("|", " x "));

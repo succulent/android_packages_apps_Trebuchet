@@ -274,6 +274,7 @@ public class Workspace extends PagedView
     private boolean mShowOutlinesWhenScrolling;
     private boolean mSmallerIcons;
     private boolean mShowDockIconLabels;
+    private boolean mShowHotseat;
 
     private final GestureDetector mGestureDetector;
     private Runnable mSwipeUpCallback = null;
@@ -369,6 +370,7 @@ public class Workspace extends PagedView
         mShowOutlinesWhenScrolling = PreferencesProvider.Interface.Tablet.getShowPageOutlines(context);
         mSmallerIcons = PreferencesProvider.Interface.Tablet.getSmallerIcons(context);
         mShowDockIconLabels = PreferencesProvider.Interface.Tablet.getShowDockIconLabels(context);
+        mShowHotseat = PreferencesProvider.Interface.Dock.getShowHotseat(context);
 
         mLauncher = (Launcher) context;
         initWorkspace();
@@ -2818,6 +2820,16 @@ public class Workspace extends PagedView
         if (LauncherApplication.isScreenLarge()) {
             showOutlines();
             mLauncher.showHotseatOutlines();
+        } else if (!mShowSearchBar){
+            if (LauncherApplication.isScreenLandscape(mContext)) {
+                 setPadding(getResources().getDimensionPixelSize(
+                         R.dimen.qsb_bar_height), 0, mShowHotseat ? getResources().getDimensionPixelSize(
+                         R.dimen.button_bar_height) : 0, 0);
+            } else {
+                 setPadding(0, getResources().getDimensionPixelSize(
+                         R.dimen.qsb_bar_height_inset), 0, mShowHotseat ? getResources().getDimensionPixelSize(
+                         R.dimen.button_bar_height) : 0);
+            }
         }
     }
 
@@ -2838,6 +2850,15 @@ public class Workspace extends PagedView
         if (!mIsPageMoving) {
             hideOutlines();
             mLauncher.hideHotseatOutlines();
+        }
+        if (!LauncherApplication.isScreenLarge()) {
+            if (LauncherApplication.isScreenLandscape(mContext) && !mShowSearchBar) {
+                 setPadding(0, 0, mShowHotseat ? getResources().getDimensionPixelSize(
+                         R.dimen.button_bar_height) : 0, 0);
+            } else if (!mShowSearchBar) {
+                 setPadding(0, 0, 0, mShowHotseat ? getResources().getDimensionPixelSize(
+                         R.dimen.button_bar_height) : 0);
+            }
         }
     }
 
