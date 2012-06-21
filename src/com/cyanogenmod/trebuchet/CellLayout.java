@@ -163,10 +163,10 @@ public class CellLayout extends ViewGroup {
                 R.styleable.CellLayout_cellHeightSmall : R.styleable.CellLayout_cellHeight, 10);
         mWidthGap = mOriginalWidthGap = (int) (a.getDimensionPixelSize(smallIcons ?
                 R.styleable.CellLayout_widthGapSmall : R.styleable.CellLayout_widthGap, 0) *
-                (maximize ? 2.8f : 1));
+                (maximize ? (smallIcons ? 2f : 2.8f) : 1));
         mHeightGap = mOriginalHeightGap = (int) (a.getDimensionPixelSize(smallIcons ?
                 R.styleable.CellLayout_heightGapSmall : R.styleable.CellLayout_heightGap, 0) *
-                (maximize ? 3.5f : 1));
+                (maximize ? (smallIcons ? 3.3f : 3.5f) : 1));
         mMaxGap = a.getDimensionPixelSize(R.styleable.CellLayout_maxGap, 0);
         mCountX = LauncherModel.getCellCountX();
         mCountY = LauncherModel.getCellCountY();
