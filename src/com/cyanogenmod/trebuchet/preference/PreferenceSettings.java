@@ -43,6 +43,7 @@ public class PreferenceSettings extends Activity {
 
     public static final String PHONE_SEARCH_BAR = "ui_homescreen_general_search";
     public static final String SEARCH_BAR = "ui_tablet_search";
+    public static final String ALL_APPS_BAR = "ui_tablet_workspace_allapps";
     public static final String COMBINED_BAR = "ui_tablet_workspace_combined_bar";
     public static final String CENTER_ALLAPPS = "ui_tablet_workspace_allapps_center";
     public static final String HIDE_DRAWER_TAB = "ui_drawer_hide_topbar";

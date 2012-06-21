@@ -47,6 +47,8 @@ public class GestureFragmentActivity extends PreferenceFragment implements
     private ListPreference mDrawerSwipeUp;
     private ListPreference mAppBarLongClick;
 
+    private boolean mMaximize;
+
     private SharedPreferences mPrefs;
 
     @Override
@@ -71,6 +73,26 @@ public class GestureFragmentActivity extends PreferenceFragment implements
         mDrawerSwipeUp.setOnPreferenceChangeListener(this);
         mAppBarLongClick = (ListPreference) prefSet.findPreference(PreferenceSettings.APP_BAR_LONGCLICK);
         mAppBarLongClick.setOnPreferenceChangeListener(this);
+
+        mMaximize = mPrefs.getBoolean("ui_homescreen_maximize", false);
+
+        if (mMaximize) {
+            if (mHomescreenDoubleTap.getValue().equals("2")) {
+                mPrefs.edit().putString(PreferenceSettings.HOMESCREEN_DOUBLETAP, "0").commit();
+            }
+            mHomescreenDoubleTap.setEntries(R.array.preferences_interface_gestures_homescreen_maximized_entries);
+            mHomescreenDoubleTap.setEntryValues(R.array.preferences_interface_gestures_homescreen_maximized_values);
+            if (mHomescreenSwipeDown.getValue().equals("2")) {
+                mPrefs.edit().putString(PreferenceSettings.HOMESCREEN_SWIPEDOWN, "0").commit();
+            }
+            mHomescreenSwipeDown.setEntries(R.array.preferences_interface_gestures_homescreen_maximized_entries);
+            mHomescreenSwipeDown.setEntryValues(R.array.preferences_interface_gestures_homescreen_maximized_values);
+            if (mHomescreenSwipeUp.getValue().equals("2")) {
+                mPrefs.edit().putString(PreferenceSettings.HOMESCREEN_SWIPEUP, "0").commit();
+            }
+            mHomescreenSwipeUp.setEntries(R.array.preferences_interface_gestures_homescreen_maximized_entries);
+            mHomescreenSwipeUp.setEntryValues(R.array.preferences_interface_gestures_homescreen_maximized_values);
+        }
 
         mHomescreenDoubleTap.setSummary(mHomescreenDoubleTap.getEntry());
         if (mHomescreenDoubleTap.getValue().equals("6")) {
@@ -127,6 +149,28 @@ public class GestureFragmentActivity extends PreferenceFragment implements
         }
     }
 
+    public void onResume() {
+        super.onResume();
+        if (LauncherApplication.isScreenLarge()) {
+            boolean max = mPrefs.getBoolean("ui_homescreen_maximize", false);
+            if (mHomescreenDoubleTap.getValue().equals("2") && max) {
+                mPrefs.edit().putString(PreferenceSettings.HOMESCREEN_DOUBLETAP, "0").commit();
+            }
+            mHomescreenDoubleTap.setEntries(max ? R.array.preferences_interface_gestures_homescreen_maximized_entries : R.array.preferences_interface_gestures_homescreen_entries);
+            mHomescreenDoubleTap.setEntryValues(max ? R.array.preferences_interface_gestures_homescreen_maximized_values : R.array.preferences_interface_gestures_homescreen_values);
+            if (mHomescreenSwipeDown.getValue().equals("2") && max) {
+                mPrefs.edit().putString(PreferenceSettings.HOMESCREEN_SWIPEDOWN, "0").commit();
+            }
+            mHomescreenSwipeUp.setEntries(max ? R.array.preferences_interface_gestures_homescreen_maximized_entries : R.array.preferences_interface_gestures_homescreen_entries);
+            mHomescreenSwipeUp.setEntryValues(max ? R.array.preferences_interface_gestures_homescreen_maximized_values : R.array.preferences_interface_gestures_homescreen_values);
+            if (mHomescreenSwipeUp.getValue().equals("2") && max) {
+                mPrefs.edit().putString(PreferenceSettings.HOMESCREEN_SWIPEUP, "0").commit();
+            }
+            mHomescreenSwipeDown.setEntries(max ? R.array.preferences_interface_gestures_homescreen_maximized_entries : R.array.preferences_interface_gestures_homescreen_entries);
+            mHomescreenSwipeDown.setEntryValues(max ? R.array.preferences_interface_gestures_homescreen_maximized_values : R.array.preferences_interface_gestures_homescreen_values);
+        }
+    }
+
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         if (preference == mHomescreenDoubleTap) {
             CharSequence doubleTapIndex[] = mHomescreenDoubleTap.getEntries();
@@ -144,6 +188,8 @@ public class GestureFragmentActivity extends PreferenceFragment implements
             if (!LauncherApplication.isScreenLarge()) {
                 if (doubleTapValue > 7) doubleTapValue--;
                 if (doubleTapValue > 3) doubleTapValue = doubleTapValue - 2;
+            } else if (mMaximize) {
+                if (doubleTapValue > 2) doubleTapValue--;
             }
             CharSequence doubleTapSummary = doubleTapIndex[doubleTapValue];
             mHomescreenDoubleTap.setSummary(doubleTapSummary);
@@ -164,6 +210,8 @@ public class GestureFragmentActivity extends PreferenceFragment implements
             if (!LauncherApplication.isScreenLarge()) {
                 if (hSDValue > 7) hSDValue--;
                 if (hSDValue > 3) hSDValue = hSDValue - 2;
+            } else if (mMaximize) {
+                if (hSDValue > 2) hSDValue--;
             }
             CharSequence homeSDSummary = homeSwipeDownIndex[hSDValue];
             mHomescreenSwipeDown.setSummary(homeSDSummary);
@@ -184,6 +232,8 @@ public class GestureFragmentActivity extends PreferenceFragment implements
             if (!LauncherApplication.isScreenLarge()) {
                 if (hSUValue > 7) hSUValue--;
                 if (hSUValue > 3) hSUValue = hSUValue - 2;
+            } else if (mMaximize) {
+                if (hSUValue > 2) hSUValue--;
             }
             CharSequence homeSUSummary = homeSwipeUpIndex[hSUValue];
             mHomescreenSwipeUp.setSummary(homeSUSummary);

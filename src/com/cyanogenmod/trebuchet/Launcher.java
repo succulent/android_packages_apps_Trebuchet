@@ -414,6 +414,9 @@ public final class Launcher extends Activity
             if (mActionButtonSix == 2) mActionButtonSix = 0;
             if (mActionButtonSeven == 2) mActionButtonSeven = 0;
             if (mActionButtonEight == 2) mActionButtonEight = 0;
+            if (mHomescreenDoubleTap == 2) mHomescreenDoubleTap = 0;
+            if (mHomescreenSwipeDown == 2) mHomescreenSwipeDown = 0;
+            if (mHomescreenSwipeUp == 2) mHomescreenSwipeUp = 0;
         }
 
         if (PROFILE_STARTUP) {

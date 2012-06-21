@@ -115,6 +115,15 @@ public class DockFragmentActivity extends PreferenceFragment {
         }
     }
 
+    public void onResume() {
+        super.onResume();
+        if (LauncherApplication.isScreenLarge()) {
+            boolean max = mPrefs.getBoolean("ui_homescreen_maximize", false);
+            if (max) mShowDock.setChecked(false);
+            mShowDock.setEnabled(!max);
+        }
+    }
+
     public static void restore(Context context) {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     }

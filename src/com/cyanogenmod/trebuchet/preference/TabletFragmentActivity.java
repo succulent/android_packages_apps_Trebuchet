@@ -40,6 +40,7 @@ public class TabletFragmentActivity extends PreferenceFragment implements
     private static final String TAG = "Trebuchet_Tablet";
 
     private CheckBoxPreference mSearchBar;
+    private CheckBoxPreference mAllAppsBar;
     private CheckBoxPreference mCombinedBar;
     private CheckBoxPreference mCenterAllApps;
     private ListPreference mAllAppsPosition;
@@ -68,6 +69,7 @@ public class TabletFragmentActivity extends PreferenceFragment implements
         PreferenceScreen prefSet = getPreferenceScreen();
 
         mSearchBar = (CheckBoxPreference) prefSet.findPreference(PreferenceSettings.SEARCH_BAR);
+        mAllAppsBar = (CheckBoxPreference) prefSet.findPreference(PreferenceSettings.ALL_APPS_BAR);
         mCombinedBar = (CheckBoxPreference) prefSet.findPreference(PreferenceSettings.COMBINED_BAR);
         mCenterAllApps = (CheckBoxPreference) prefSet.findPreference(PreferenceSettings.CENTER_ALLAPPS);
         mAllAppsPosition = (ListPreference) prefSet.findPreference(PreferenceSettings.ALLAPPS_POSITION);
@@ -127,8 +129,8 @@ public class TabletFragmentActivity extends PreferenceFragment implements
             mAllAppsPosition.setEntryValues(R.array.preferences_interface_button_corner_values);
         }
 
-        mAllAppsPosition.setSummary(mAllAppsPosition.getEntry());
-        mSearchPosition.setSummary(mSearchPosition.getEntry());
+        mAllAppsPosition.setSummary(mAllAppsBar.isChecked() ? mAllAppsPosition.getEntry() : "");
+        mSearchPosition.setSummary(mSearchBar.isChecked() ? mSearchPosition.getEntry() : "");
 
         mMaximize = mPrefs.getBoolean("ui_homescreen_maximize", false);
         if (mMaximize) {
@@ -430,6 +432,19 @@ public class TabletFragmentActivity extends PreferenceFragment implements
                 mCustomButtonSeven.setValueIndex(0);
                 mCustomButtonEight.setValueIndex(0);
                 mCombinedBar.setChecked(false);
+            } else {
+                mSearchPosition.setSummary("");
+            }
+            return true;
+        } else if (preference == mAllAppsBar) {
+            value = mCombinedBar.isChecked();
+            mCustomButtonSeven.setEnabled(!value && !mSearchBar.isChecked());
+            mCustomButtonEight.setEnabled(!value && !mSearchBar.isChecked());
+            if (value) {
+                mCustomButtonSeven.setValueIndex(0);
+                mCustomButtonEight.setValueIndex(0);
+            } else {
+                mAllAppsPosition.setSummary("");
             }
             return true;
         } else if (preference == mCombinedBar) {
