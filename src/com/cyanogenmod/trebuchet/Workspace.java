@@ -534,14 +534,14 @@ public class Workspace extends PagedView
         } catch (Resources.NotFoundException e) {
             // In this case, we will skip drawing background protection
         }
-
+/*
         if (!mShowSearchBar) {
             int paddingTop = 0;
             if (mLauncher.getCurrentOrientation() == Configuration.ORIENTATION_PORTRAIT) {
                 paddingTop = (int)res.getDimension(R.dimen.qsb_bar_hidden_inset);
             }
             setPadding(0, paddingTop, getPaddingRight(), getPaddingBottom());
-        }
+        }*/
 
         if (!mShowScrollingIndicator) {
             disableScrollingIndicator();
@@ -2820,16 +2820,6 @@ public class Workspace extends PagedView
         if (LauncherApplication.isScreenLarge()) {
             showOutlines();
             mLauncher.showHotseatOutlines();
-        } else if (!mShowSearchBar){
-            if (LauncherApplication.isScreenLandscape(mContext)) {
-                 setPadding(getResources().getDimensionPixelSize(
-                         R.dimen.qsb_bar_height), 0, mShowHotseat ? getResources().getDimensionPixelSize(
-                         R.dimen.button_bar_height) : 0, 0);
-            } else {
-                 setPadding(0, getResources().getDimensionPixelSize(
-                         R.dimen.qsb_bar_height_inset), 0, mShowHotseat ? getResources().getDimensionPixelSize(
-                         R.dimen.button_bar_height) : 0);
-            }
         }
     }
 
@@ -2851,16 +2841,7 @@ public class Workspace extends PagedView
             hideOutlines();
             mLauncher.hideHotseatOutlines();
         }
-        if (!LauncherApplication.isScreenLarge()) {
-            if (LauncherApplication.isScreenLandscape(mContext) && !mShowSearchBar) {
-                 setPadding(0, 0, mShowHotseat ? getResources().getDimensionPixelSize(
-                         R.dimen.button_bar_height) : 0, 0);
-            } else if (!mShowSearchBar) {
-                 setPadding(0, 0, 0, mShowHotseat ? getResources().getDimensionPixelSize(
-                         R.dimen.button_bar_height) : 0);
-            }
-        }
-    }
+     }
 
     public void onDragExit(DragObject d) {
         doDragExit(d);

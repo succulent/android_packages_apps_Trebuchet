@@ -53,6 +53,8 @@ public class TabletFragmentActivity extends PreferenceFragment implements
     private ListPreference mCustomButtonSeven;
     private ListPreference mCustomButtonEight;
 
+    private boolean mMaximize;
+
     private SharedPreferences mPrefs;
 
     @Override
@@ -127,6 +129,50 @@ public class TabletFragmentActivity extends PreferenceFragment implements
 
         mAllAppsPosition.setSummary(mAllAppsPosition.getEntry());
         mSearchPosition.setSummary(mSearchPosition.getEntry());
+
+        mMaximize = mPrefs.getBoolean("ui_homescreen_maximize", false);
+        if (mMaximize) {
+            if (mCustomButtonOne.getValue().equals("2")) {
+                mPrefs.edit().putString(PreferenceSettings.CUSTOM_BUTTON_ONE, "0").commit();
+            }
+            if (mCustomButtonTwo.getValue().equals("2")) {
+                mPrefs.edit().putString(PreferenceSettings.CUSTOM_BUTTON_TWO, "0").commit();
+            }
+            if (mCustomButtonThree.getValue().equals("2")) {
+                mPrefs.edit().putString(PreferenceSettings.CUSTOM_BUTTON_THREE, "0").commit();
+            }
+            if (mCustomButtonFour.getValue().equals("2")) {
+                mPrefs.edit().putString(PreferenceSettings.CUSTOM_BUTTON_FOUR, "0").commit();
+            }
+            if (mCustomButtonFive.getValue().equals("2")) {
+                mPrefs.edit().putString(PreferenceSettings.CUSTOM_BUTTON_FIVE, "0").commit();
+            }
+            if (mCustomButtonSix.getValue().equals("2")) {
+                mPrefs.edit().putString(PreferenceSettings.CUSTOM_BUTTON_SIX, "0").commit();
+            }
+            if (mCustomButtonSeven.getValue().equals("2")) {
+                mPrefs.edit().putString(PreferenceSettings.CUSTOM_BUTTON_SEVEN, "0").commit();
+            }
+            if (mCustomButtonEight.getValue().equals("2")) {
+                mPrefs.edit().putString(PreferenceSettings.CUSTOM_BUTTON_EIGHT, "0").commit();
+            }
+            mCustomButtonOne.setEntries(R.array.preferences_interface_apps_bar_maximized_entries);
+            mCustomButtonOne.setEntryValues(R.array.preferences_interface_apps_bar_maximized_values);
+            mCustomButtonTwo.setEntries(R.array.preferences_interface_apps_bar_maximized_entries);
+            mCustomButtonTwo.setEntryValues(R.array.preferences_interface_apps_bar_maximized_values);
+            mCustomButtonThree.setEntries(R.array.preferences_interface_apps_bar_maximized_entries);
+            mCustomButtonThree.setEntryValues(R.array.preferences_interface_apps_bar_maximized_values);
+            mCustomButtonFour.setEntries(R.array.preferences_interface_apps_bar_maximized_entries);
+            mCustomButtonFour.setEntryValues(R.array.preferences_interface_apps_bar_maximized_values);
+            mCustomButtonFive.setEntries(R.array.preferences_interface_apps_bar_maximized_entries);
+            mCustomButtonFive.setEntryValues(R.array.preferences_interface_apps_bar_maximized_values);
+            mCustomButtonSix.setEntries(R.array.preferences_interface_apps_bar_maximized_entries);
+            mCustomButtonSix.setEntryValues(R.array.preferences_interface_apps_bar_maximized_values);
+            mCustomButtonSeven.setEntries(R.array.preferences_interface_apps_bar_maximized_entries);
+            mCustomButtonSeven.setEntryValues(R.array.preferences_interface_apps_bar_maximized_values);
+            mCustomButtonEight.setEntries(R.array.preferences_interface_apps_bar_maximized_entries);
+            mCustomButtonEight.setEntryValues(R.array.preferences_interface_apps_bar_maximized_values);
+        }
 
         mCustomButtonOne.setSummary(mCustomButtonOne.getEntry());
         if (mCustomButtonOne.getValue().equals("3")) {
@@ -203,12 +249,14 @@ public class TabletFragmentActivity extends PreferenceFragment implements
                 mAllAppsPosition.setEntryValues(R.array.preferences_interface_search_button_bottom_values);
                 if (allAppsValue.equals("0") || allAppsValue.equals("3")) {
                     mAllAppsPosition.setValueIndex(0);
+                    mAllAppsPosition.setSummary("");
                 }
             } else if (mSearchBar.isChecked()) {
                 mAllAppsPosition.setEntries(R.array.preferences_interface_search_button_top_entries);
                 mAllAppsPosition.setEntryValues(R.array.preferences_interface_search_button_top_values);
                 if (allAppsValue.equals("1") || allAppsValue.equals("2")) {
                     mAllAppsPosition.setValueIndex(0);
+                    mAllAppsPosition.setSummary("");
                 }
             } else {
                 mAllAppsPosition.setEntries(R.array.preferences_interface_button_corner_entries);
@@ -239,7 +287,8 @@ public class TabletFragmentActivity extends PreferenceFragment implements
                 pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
                 startActivityForResult(pickIntent, 5);
             }
-            CharSequence customOneSummary = customOneIndex[customOneValue];
+            CharSequence customOneSummary = customOneIndex[mMaximize && customOneValue > 1
+                    ? customOneValue - 1 : customOneValue];
             mCustomButtonOne.setSummary(customOneSummary);
             if (customOneValue != 3) mCustomButtonOne.setIcon(null);
             return true;
@@ -254,7 +303,8 @@ public class TabletFragmentActivity extends PreferenceFragment implements
                 pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
                 startActivityForResult(pickIntent, 6);
             }
-            CharSequence customTwoSummary = customTwoIndex[customTwoValue];
+            CharSequence customTwoSummary = customTwoIndex[mMaximize && customTwoValue > 1
+                    ? customTwoValue - 1 : customTwoValue];
             mCustomButtonTwo.setSummary(customTwoSummary);
             if (customTwoValue != 3) mCustomButtonTwo.setIcon(null);
             return true;
@@ -269,7 +319,8 @@ public class TabletFragmentActivity extends PreferenceFragment implements
                 pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
                 startActivityForResult(pickIntent, 7);
             }
-            CharSequence customThreeSummary = customThreeIndex[customThreeValue];
+            CharSequence customThreeSummary = customThreeIndex[mMaximize && customThreeValue > 1
+                    ? customThreeValue - 1 : customThreeValue];
             mCustomButtonThree.setSummary(customThreeSummary);
             if (customThreeValue != 3) mCustomButtonThree.setIcon(null);
             return true;
@@ -284,7 +335,8 @@ public class TabletFragmentActivity extends PreferenceFragment implements
                 pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
                 startActivityForResult(pickIntent, 8);
             }
-            CharSequence customFourSummary = customFourIndex[customFourValue];
+            CharSequence customFourSummary = customFourIndex[mMaximize && customFourValue > 1
+                    ? customFourValue - 1 : customFourValue];
             mCustomButtonFour.setSummary(customFourSummary);
             if (customFourValue != 3) mCustomButtonFour.setIcon(null);
             return true;
@@ -299,7 +351,8 @@ public class TabletFragmentActivity extends PreferenceFragment implements
                 pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
                 startActivityForResult(pickIntent, 9);
             }
-            CharSequence customFiveSummary = customFiveIndex[customFiveValue];
+            CharSequence customFiveSummary = customFiveIndex[mMaximize && customFiveValue > 1
+                    ? customFiveValue - 1 : customFiveValue];
             mCustomButtonFive.setSummary(customFiveSummary);
             if (customFiveValue != 3) mCustomButtonFive.setIcon(null);
             return true;
@@ -314,7 +367,8 @@ public class TabletFragmentActivity extends PreferenceFragment implements
                 pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
                 startActivityForResult(pickIntent, 10);
             }
-            CharSequence customSixSummary = customSixIndex[customSixValue];
+            CharSequence customSixSummary = customSixIndex[mMaximize && customSixValue > 1
+                    ? customSixValue - 1 : customSixValue];
             mCustomButtonSix.setSummary(customSixSummary);
             if (customSixValue != 3) mCustomButtonSix.setIcon(null);
             return true;
@@ -329,7 +383,8 @@ public class TabletFragmentActivity extends PreferenceFragment implements
                 pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
                 startActivityForResult(pickIntent, 11);
             }
-            CharSequence customSevenSummary = customSevenIndex[customSevenValue];
+            CharSequence customSevenSummary = customSevenIndex[mMaximize && customSevenValue > 1
+                    ? customSevenValue - 1 : customSevenValue];
             mCustomButtonSeven.setSummary(customSevenSummary);
             if (customSevenValue != 3) mCustomButtonSeven.setIcon(null);
             return true;
@@ -344,7 +399,8 @@ public class TabletFragmentActivity extends PreferenceFragment implements
                 pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
                 startActivityForResult(pickIntent, 12);
             }
-            CharSequence customEightSummary = customEightIndex[customEightValue];
+            CharSequence customEightSummary = customEightIndex[mMaximize && customEightValue > 1
+                    ? customEightValue - 1 : customEightValue];
             mCustomButtonEight.setSummary(customEightSummary);
             if (customEightValue != 3) mCustomButtonEight.setIcon(null);
             return true;

@@ -154,4 +154,14 @@
         <item>2</item>
         <item>3</item>
     </string-array>
+    <string-array name="preferences_interface_apps_bar_maximized_entries">
+        <item>@string/preferences_interface_gestures_no_action</item>
+        <item>@string/preferences_interface_gestures_open_drawer</item>
+        <item>@string/preferences_interface_gestures_launch_application</item>
+    </string-array>
+    <string-array name="preferences_interface_apps_bar_maximized_values">
+        <item>0</item>
+        <item>1</item>
+        <item>3</item>
+    </string-array>
 </resources>

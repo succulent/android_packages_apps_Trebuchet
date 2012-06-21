@@ -58,6 +58,10 @@ public final class PreferencesProvider {
                     return def;
                 }
             }
+            public static boolean getMaximizeWorkspace(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("ui_homescreen_maximize", false);
+            }
             public static int getScreenPaddingVertical(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return (int)((float) preferences.getInt("ui_homescreen_screen_padding_vertical", 0) * 3.0f *

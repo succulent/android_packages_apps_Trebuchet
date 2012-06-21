@@ -153,6 +153,7 @@ public class CellLayout extends ViewGroup {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CellLayout, defStyle, 0);
 
         boolean smallIcons = PreferencesProvider.Interface.Tablet.getSmallerIcons(context);
+        boolean maximize = PreferencesProvider.Interface.Homescreen.getMaximizeWorkspace(context);
 
         mOriginalCellWidth =
                 mCellWidth = a.getDimensionPixelSize(smallIcons ?
@@ -160,10 +161,12 @@ public class CellLayout extends ViewGroup {
         mOriginalCellHeight =
                 mCellHeight = a.getDimensionPixelSize(smallIcons ?
                 R.styleable.CellLayout_cellHeightSmall : R.styleable.CellLayout_cellHeight, 10);
-        mWidthGap = mOriginalWidthGap = a.getDimensionPixelSize(smallIcons ?
-                R.styleable.CellLayout_widthGapSmall : R.styleable.CellLayout_widthGap, 0);
-        mHeightGap = mOriginalHeightGap = a.getDimensionPixelSize(smallIcons ?
-                R.styleable.CellLayout_heightGapSmall : R.styleable.CellLayout_heightGap, 0);
+        mWidthGap = mOriginalWidthGap = (int) (a.getDimensionPixelSize(smallIcons ?
+                R.styleable.CellLayout_widthGapSmall : R.styleable.CellLayout_widthGap, 0) *
+                (maximize ? 2.8f : 1));
+        mHeightGap = mOriginalHeightGap = (int) (a.getDimensionPixelSize(smallIcons ?
+                R.styleable.CellLayout_heightGapSmall : R.styleable.CellLayout_heightGap, 0) *
+                (maximize ? 3.5f : 1));
         mMaxGap = a.getDimensionPixelSize(R.styleable.CellLayout_maxGap, 0);
         mCountX = LauncherModel.getCellCountX();
         mCountY = LauncherModel.getCellCountY();

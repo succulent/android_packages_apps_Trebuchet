@@ -304,6 +304,7 @@ public final class Launcher extends Activity
     private int mActionButtonSix;
     private int mActionButtonSeven;
     private int mActionButtonEight;
+    private boolean mMaximize;
 
     private ImageView mCustomButtonOne;
     private ImageView mCustomButtonTwo;
@@ -386,6 +387,7 @@ public final class Launcher extends Activity
         mShowDockIconLabels = PreferencesProvider.Interface.Tablet.getShowDockIconLabels(this);
         mShowMarketButton = PreferencesProvider.Interface.Drawer.getShowMarketButton(this);
         mShowMenuButton = PreferencesProvider.Interface.Drawer.getShowMenuButton(this);
+        mMaximize = PreferencesProvider.Interface.Homescreen.getMaximizeWorkspace(this);
 
         // Combine all apps and search bar and hide search bar if they are on the same corner
         if ((mAllAppsCorner == mSearchCorner) && mShowSearchBar &&
@@ -402,6 +404,17 @@ public final class Launcher extends Activity
         mAllAppsLeft = mAllAppsCorner > 1 ? true : false;
         mAllAppsTop = mAllAppsCorner == 0 || mAllAppsCorner == 3;
         mSearchTop = mSearchCorner == 0 || mSearchCorner == 3;
+
+        if (mMaximize) {
+            if (mActionButtonOne == 2) mActionButtonOne = 0;
+            if (mActionButtonTwo == 2) mActionButtonTwo = 0;
+            if (mActionButtonThree == 2) mActionButtonThree = 0;
+            if (mActionButtonFour == 2) mActionButtonFour = 0;
+            if (mActionButtonFive == 2) mActionButtonFive = 0;
+            if (mActionButtonSix == 2) mActionButtonSix = 0;
+            if (mActionButtonSeven == 2) mActionButtonSeven = 0;
+            if (mActionButtonEight == 2) mActionButtonEight = 0;
+        }
 
         if (PROFILE_STARTUP) {
             android.os.Debug.startMethodTracing(
@@ -895,16 +908,16 @@ public final class Launcher extends Activity
         mDragLayer.setup(this, dragController);
 
         // Setup the hotseat
-        if (LauncherApplication.isScreenLarge() || (!LauncherApplication.isScreenLarge()
-                && mShowHotseat)) {
+        if ((LauncherApplication.isScreenLarge() && !mMaximize) ||
+                (!LauncherApplication.isScreenLarge() && mShowHotseat)) {
             mHotseat = (Hotseat) findViewById(R.id.hotseat);
+            mHotseatTwo = (Hotseat) findViewById(R.id.hotseat_two);
         }
         if (mHotseat != null) {
             mHotseat.setup(this);
             mHotseat.resetLayout(true);
         }
 
-        mHotseatTwo = (Hotseat) findViewById(R.id.hotseat_two);
         if (mHotseatTwo != null) {
             mHotseatTwo.setup(this);
             mHotseatTwo.resetLayout(false);
@@ -1417,6 +1430,12 @@ public final class Launcher extends Activity
                         mHotseat.setLayoutParams(hotseatParams);
                     }
                 }
+            }
+            if (mMaximize && LauncherApplication.isScreenLarge()) {
+                boolean padTop = (mShowSearchBar && mSearchTop) || (mShowAllAppsBar && mAllAppsTop);
+                int padding = (mShowSearchBar || mShowAllAppsBar) ? getResources().getDimensionPixelSize(
+                            R.dimen.workspace_content_large_only_top_margin) : 0;
+                mWorkspace.setPadding(0, padTop ? padding : 0, 0, padTop ? 0 : padding);
             }
         }
     }

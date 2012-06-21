@@ -94,16 +94,17 @@ public class HomescreenFragmentActivity extends PreferenceFragment implements
         mVerticalPadding.setSummary(Integer.toString(mPrefs.getInt(PreferenceSettings.VERTICAL_PADDING, 0)));
         mHorizontalPadding.setSummary(Integer.toString(mPrefs.getInt(PreferenceSettings.HORIZONTAL_PADDING, 0)));
 
+        PreferenceCategory homescreenGeneral = (PreferenceCategory) findPreference("ui_homescreen_general");
          // Remove some preferences on large screens
         if (LauncherApplication.isScreenLarge()) {
             prefSet.removePreference(findPreference("ui_homescreen_padding"));
             prefSet.removePreference(findPreference("ui_homescreen_indicator"));
-            PreferenceCategory homescreenGeneral = (PreferenceCategory) findPreference("ui_homescreen_general");
             homescreenGeneral.removePreference(findPreference(PreferenceSettings.PHONE_SEARCH_BAR));
             homescreenGeneral.removePreference(findPreference("ui_search_background"));
         } else {
             PreferenceCategory scrolling = (PreferenceCategory) findPreference("ui_homescreen_scrolling");
             scrolling.removePreference(findPreference("ui_homescreen_page_outline"));
+            homescreenGeneral.removePreference(findPreference(PreferenceSettings.MAXIMIZE_WORKSPACE));
         }
     }
 

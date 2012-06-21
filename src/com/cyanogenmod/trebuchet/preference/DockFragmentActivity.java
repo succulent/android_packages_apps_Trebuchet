@@ -105,6 +105,11 @@ public class DockFragmentActivity extends PreferenceFragment {
                 mHotseatAllAppsPosition.setMaxValue(6);
             }
         } else {
+            boolean max = mPrefs.getBoolean("ui_homescreen_maximize", false);
+            if (max) {
+                mShowDock.setChecked(false);
+                mShowDock.setEnabled(false);
+            }
             mHotseatPositions.setMaxValue(LauncherModel.getCellCountY());
             mHotseatAllAppsPosition.setMaxValue(LauncherModel.getCellCountY());
         }

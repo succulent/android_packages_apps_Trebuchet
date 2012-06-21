@@ -78,6 +78,7 @@ public class PreferenceSettings extends Activity {
     public static final String SHOW_DOCK = "ui_homescreen_general_show_hotseat";
     public static final String SHOW_DOCK_DIVIDER = "ui_homescreen_indicator_background";
     public static final String SHOW_DOCK_APPS_BUTTON = "ui_homescreen_general_show_hotseat_allapps";
+    public static final String MAXIMIZE_WORKSPACE = "ui_homescreen_maximize";
 
     private SharedPreferences mPrefs;
 
