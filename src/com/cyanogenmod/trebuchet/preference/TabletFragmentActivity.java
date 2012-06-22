@@ -514,6 +514,11 @@ public class TabletFragmentActivity extends PreferenceFragment implements
         }
     }
 
+    public void onResume() {
+        super.onResume();
+        mMaximize = mPrefs.getBoolean("ui_homescreen_maximize", false);
+    }
+
     public static void restore(Context context) {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     }

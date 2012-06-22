@@ -153,6 +153,7 @@ public class GestureFragmentActivity extends PreferenceFragment implements
         super.onResume();
         if (LauncherApplication.isScreenLarge()) {
             boolean max = mPrefs.getBoolean("ui_homescreen_maximize", false);
+            mMaximize = max;
             if (mHomescreenDoubleTap.getValue().equals("2") && max) {
                 mPrefs.edit().putString(PreferenceSettings.HOMESCREEN_DOUBLETAP, "0").commit();
             }
@@ -188,10 +189,9 @@ public class GestureFragmentActivity extends PreferenceFragment implements
             if (!LauncherApplication.isScreenLarge()) {
                 if (doubleTapValue > 7) doubleTapValue--;
                 if (doubleTapValue > 3) doubleTapValue = doubleTapValue - 2;
-            } else if (mMaximize) {
-                if (doubleTapValue > 2) doubleTapValue--;
             }
-            CharSequence doubleTapSummary = doubleTapIndex[doubleTapValue];
+            CharSequence doubleTapSummary = doubleTapIndex[mMaximize && doubleTapValue > 2 ?
+                    doubleTapValue - 1 : doubleTapValue];
             mHomescreenDoubleTap.setSummary(doubleTapSummary);
             return true;
         } else if (preference == mHomescreenSwipeDown) {
@@ -210,10 +210,9 @@ public class GestureFragmentActivity extends PreferenceFragment implements
             if (!LauncherApplication.isScreenLarge()) {
                 if (hSDValue > 7) hSDValue--;
                 if (hSDValue > 3) hSDValue = hSDValue - 2;
-            } else if (mMaximize) {
-                if (hSDValue > 2) hSDValue--;
             }
-            CharSequence homeSDSummary = homeSwipeDownIndex[hSDValue];
+            CharSequence homeSDSummary = homeSwipeDownIndex[mMaximize && hSDValue > 2 ?
+                    hSDValue - 1 : hSDValue];
             mHomescreenSwipeDown.setSummary(homeSDSummary);
             return true;
         } else if (preference == mHomescreenSwipeUp) {
@@ -232,10 +231,9 @@ public class GestureFragmentActivity extends PreferenceFragment implements
             if (!LauncherApplication.isScreenLarge()) {
                 if (hSUValue > 7) hSUValue--;
                 if (hSUValue > 3) hSUValue = hSUValue - 2;
-            } else if (mMaximize) {
-                if (hSUValue > 2) hSUValue--;
             }
-            CharSequence homeSUSummary = homeSwipeUpIndex[hSUValue];
+            CharSequence homeSUSummary = homeSwipeUpIndex[mMaximize && hSUValue > 2 ?
+                    hSUValue - 1 : hSUValue];
             mHomescreenSwipeUp.setSummary(homeSUSummary);
             return true;
         } else if (preference == mDrawerSwipeDown) {
