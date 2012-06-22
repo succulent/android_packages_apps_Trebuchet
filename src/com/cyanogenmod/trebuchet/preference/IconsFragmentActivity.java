@@ -74,12 +74,6 @@ public class IconsFragmentActivity extends PreferenceFragment {
                 int[] cellCount = Workspace.getCellCountsForLarge(getActivity());
                 LauncherModel.updateWorkspaceLayoutCells(cellCount[0], cellCount[1]);
             }
-
-            if (LauncherApplication.isScreenLarge() ||
-                    getResources().getConfiguration().smallestScreenWidthDp < 480) {
-                DockFragmentActivity.updateMaxValue();
-            }
-            HomescreenFragmentActivity.updateMaxValue();
             return true;
         }
         return false;

@@ -45,8 +45,8 @@ public class DockFragmentActivity extends PreferenceFragment {
     private CheckBoxPreference mShowDockDivider;
     private CheckBoxPreference mShowDockAppsButton;
 
-    private static SharedPreferences mPrefs;
-    private static Context mContext;
+    private SharedPreferences mPrefs;
+    private Context mContext;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -122,13 +122,6 @@ public class DockFragmentActivity extends PreferenceFragment {
             if (max) mShowDock.setChecked(false);
             mShowDock.setEnabled(!max);
         }
-    }
-
-    public static void restore(Context context) {
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-    }
-
-    public static void updateMaxValue() {
         boolean smallIcons = mPrefs.getBoolean(PreferenceSettings.SMALLER_ICONS, false);
         if (!LauncherApplication.isScreenLarge()) {
             mHotseatPositions.setMaxValue(smallIcons ? 6 : 5);
@@ -155,5 +148,9 @@ public class DockFragmentActivity extends PreferenceFragment {
         int hp = mPrefs.getInt(PreferenceSettings.HOTSEAT_ALLAPPS_POSITION, 3);
         mHotseatAllAppsPosition.setSummary(hp == 0 ? mContext.getString(
                 R.string.preferences_auto_number_picker) : Integer.toString(hp));
+    }
+
+    public static void restore(Context context) {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     }
 }

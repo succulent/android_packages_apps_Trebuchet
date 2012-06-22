@@ -119,11 +119,8 @@ public class HomescreenFragmentActivity extends PreferenceFragment implements
         return false;
     }
 
-    public static void restore(Context context) {
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-    }
-
-    public static void updateMaxValue() {
+    public void onResume() {
+        super.onResume();
         boolean smallUi = !LauncherApplication.isScreenLarge() &&
                 mContext.getResources().getConfiguration().smallestScreenWidthDp >= 480;
         boolean medUi = !LauncherApplication.isScreenLarge() &&
@@ -152,5 +149,9 @@ public class HomescreenFragmentActivity extends PreferenceFragment implements
         String hg = mPrefs.getString(PreferenceSettings.HOMESCREEN_GRID, "0|0");
         mHomescreenGrid.setSummary(hg.equals("0|0") ? mContext.getString(R.string.preferences_auto_number_picker) :
                 hg.replace("|", " x "));
+    }
+
+    public static void restore(Context context) {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     }
 }

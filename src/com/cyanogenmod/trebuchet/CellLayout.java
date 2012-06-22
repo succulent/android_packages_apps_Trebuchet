@@ -154,6 +154,7 @@ public class CellLayout extends ViewGroup {
 
         boolean smallIcons = PreferencesProvider.Interface.Tablet.getSmallerIcons(context);
         boolean maximize = PreferencesProvider.Interface.Homescreen.getMaximizeWorkspace(context);
+        boolean largeTablet = getResources().getConfiguration().smallestScreenWidthDp >= 800;
 
         mOriginalCellWidth =
                 mCellWidth = a.getDimensionPixelSize(smallIcons ?
@@ -161,12 +162,21 @@ public class CellLayout extends ViewGroup {
         mOriginalCellHeight =
                 mCellHeight = a.getDimensionPixelSize(smallIcons ?
                 R.styleable.CellLayout_cellHeightSmall : R.styleable.CellLayout_cellHeight, 10);
-        mWidthGap = mOriginalWidthGap = (int) (a.getDimensionPixelSize(smallIcons ?
-                R.styleable.CellLayout_widthGapSmall : R.styleable.CellLayout_widthGap, 0) *
-                (maximize ? (smallIcons ? 2f : 2.8f) : 1));
-        mHeightGap = mOriginalHeightGap = (int) (a.getDimensionPixelSize(smallIcons ?
-                R.styleable.CellLayout_heightGapSmall : R.styleable.CellLayout_heightGap, 0) *
-                (maximize ? (smallIcons ? 3.3f : 3.5f) : 1));
+        if (largeTablet) {
+            mWidthGap = mOriginalWidthGap = (int) (a.getDimensionPixelSize(smallIcons ?
+                    R.styleable.CellLayout_widthGapSmall : R.styleable.CellLayout_widthGap, 0) *
+                    (maximize ? (smallIcons ? 1.4f : 2.1f) : 1));
+            mHeightGap = mOriginalHeightGap = (int) (a.getDimensionPixelSize(smallIcons ?
+                    R.styleable.CellLayout_heightGapSmall : R.styleable.CellLayout_heightGap, 0) *
+                    (maximize ? (smallIcons ? 2.2f : 2.3f) : 1));
+        } else {
+            mWidthGap = mOriginalWidthGap = (int) (a.getDimensionPixelSize(smallIcons ?
+                    R.styleable.CellLayout_widthGapSmall : R.styleable.CellLayout_widthGap, 0) *
+                    (maximize ? (smallIcons ? 2f : 2.8f) : 1));
+            mHeightGap = mOriginalHeightGap = (int) (a.getDimensionPixelSize(smallIcons ?
+                    R.styleable.CellLayout_heightGapSmall : R.styleable.CellLayout_heightGap, 0) *
+                    (maximize ? (smallIcons ? 3.3f : 3.5f) : 1));
+        }
         mMaxGap = a.getDimensionPixelSize(R.styleable.CellLayout_maxGap, 0);
         mCountX = LauncherModel.getCellCountX();
         mCountY = LauncherModel.getCellCountY();
