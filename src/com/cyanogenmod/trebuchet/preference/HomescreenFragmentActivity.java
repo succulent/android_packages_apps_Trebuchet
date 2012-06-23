@@ -17,6 +17,8 @@
 package com.cyanogenmod.trebuchet.preference;
 
 import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -78,10 +80,14 @@ public class HomescreenFragmentActivity extends PreferenceFragment implements
         mHomescreenGrid.setSummary(hg.equals("0|0") ? getActivity().getString(R.string.preferences_auto_number_picker) :
                 hg.replace("|", " x "));
         boolean smallIcons = mPrefs.getBoolean(PreferenceSettings.SMALLER_ICONS, false);
+        final int screenSize = Resources.getSystem().getConfiguration().screenLayout &
+                Configuration.SCREENLAYOUT_SIZE_MASK;
+        boolean isScreenLarge = screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE ||
+                screenSize == Configuration.SCREENLAYOUT_SIZE_XLARGE;
         if (LauncherApplication.isScreenLarge()) {
             mHomescreenGrid.setMax1(LauncherModel.getCellCountY());
             mHomescreenGrid.setMax2(LauncherModel.getCellCountX());
-        } else if (getResources().getConfiguration().smallestScreenWidthDp >= 480) {
+        } else if (!isScreenLarge) {
             mHomescreenGrid.setMax1(smallIcons ? 5 : 4);
             mHomescreenGrid.setMax2(smallIcons ? 5 : 4);
         } else {
@@ -121,10 +127,10 @@ public class HomescreenFragmentActivity extends PreferenceFragment implements
 
     public void onResume() {
         super.onResume();
-        boolean smallUi = !LauncherApplication.isScreenLarge() &&
-                mContext.getResources().getConfiguration().smallestScreenWidthDp >= 480;
-        boolean medUi = !LauncherApplication.isScreenLarge() &&
-                mContext.getResources().getConfiguration().smallestScreenWidthDp < 480;
+        final int screenSize = Resources.getSystem().getConfiguration().screenLayout &
+                Configuration.SCREENLAYOUT_SIZE_MASK;
+        boolean isScreenLarge = screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE ||
+                screenSize == Configuration.SCREENLAYOUT_SIZE_XLARGE;
         boolean smallIcons = mPrefs.getBoolean(PreferenceSettings.SMALLER_ICONS, false);
         if (LauncherApplication.isScreenLarge() && mHomescreenGrid.getMax1() >
                 LauncherModel.getCellCountY()) {
@@ -132,19 +138,21 @@ public class HomescreenFragmentActivity extends PreferenceFragment implements
                 mPrefs.edit().putString(PreferenceSettings.HOMESCREEN_GRID,
                         LauncherModel.getCellCountY() + "|" + LauncherModel.getCellCountX()).commit();
             }
-        } else if (smallUi) {
+        } else if (!isScreenLarge) {
             mPrefs.edit().putString(PreferenceSettings.HOMESCREEN_GRID, (smallIcons ? "5" : "4")
                    + "|" + (smallIcons ? "5" : "4")).commit();
-        } else if (medUi) {
+        } else {
             mPrefs.edit().putString(PreferenceSettings.HOMESCREEN_GRID, (smallIcons ? "6" : "5")
                    + "|" + (smallIcons ? "8" : "6")).commit();
         }
-        if (medUi) {
+        if (!LauncherApplication.isScreenLarge() && isScreenLarge) {
             mHomescreenGrid.setMax1(smallIcons ? 6 : 5);
             mHomescreenGrid.setMax2(smallIcons ? 8 : 6);
         } else {
-            mHomescreenGrid.setMax1(smallUi ? (smallIcons ? 5 : 4) : LauncherModel.getCellCountY());
-            mHomescreenGrid.setMax2(smallUi ? (smallIcons ? 5 : 4) : LauncherModel.getCellCountY());
+            mHomescreenGrid.setMax1(!LauncherApplication.isScreenLarge() ? (smallIcons ? 5 : 4) :
+                    LauncherModel.getCellCountY());
+            mHomescreenGrid.setMax2(!LauncherApplication.isScreenLarge() ? (smallIcons ? 5 : 4) :
+                    LauncherModel.getCellCountY());
         }
         String hg = mPrefs.getString(PreferenceSettings.HOMESCREEN_GRID, "0|0");
         mHomescreenGrid.setSummary(hg.equals("0|0") ? mContext.getString(R.string.preferences_auto_number_picker) :

@@ -17,6 +17,8 @@
 package com.cyanogenmod.trebuchet.preference;
 
 import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -93,11 +95,16 @@ public class DockFragmentActivity extends PreferenceFragment {
         mHotseatAllAppsPosition.setSummary(hp == 0 ? getActivity().getString(
                 R.string.preferences_auto_number_picker) : Integer.toString(hp));
 
+        final int screenSize = Resources.getSystem().getConfiguration().screenLayout &
+                Configuration.SCREENLAYOUT_SIZE_MASK;
+        boolean isScreenLarge = screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE ||
+                screenSize == Configuration.SCREENLAYOUT_SIZE_XLARGE;
+
          // Remove some preferences on small screens
         if (!LauncherApplication.isScreenLarge()) {
             PreferenceCategory dock = (PreferenceCategory) prefSet.findPreference("ui_dock");
             dock.removePreference(findPreference("ui_homescreen_tablet_dock_divider_two"));
-            if (getResources().getConfiguration().smallestScreenWidthDp >= 480) {
+            if (!isScreenLarge) {
                 mHotseatPositions.setMaxValue(5);
                 mHotseatAllAppsPosition.setMaxValue(5);
             } else {
@@ -123,9 +130,13 @@ public class DockFragmentActivity extends PreferenceFragment {
             mShowDock.setEnabled(!max);
         }
         boolean smallIcons = mPrefs.getBoolean(PreferenceSettings.SMALLER_ICONS, false);
+        final int screenSize = Resources.getSystem().getConfiguration().screenLayout &
+                Configuration.SCREENLAYOUT_SIZE_MASK;
+        boolean isScreenLarge = screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE ||
+                screenSize == Configuration.SCREENLAYOUT_SIZE_XLARGE;
         if (!LauncherApplication.isScreenLarge()) {
-            mHotseatPositions.setMaxValue(smallIcons ? 6 : 5);
-            mHotseatAllAppsPosition.setMaxValue(smallIcons ? 6 : 5);
+            mHotseatPositions.setMaxValue(smallIcons && isScreenLarge ? 6 : 5);
+            mHotseatAllAppsPosition.setMaxValue(smallIcons && isScreenLarge ? 6 : 5);
         } else {
             mHotseatPositions.setMaxValue(LauncherModel.getCellCountY());
             mHotseatAllAppsPosition.setMaxValue(LauncherModel.getCellCountY());
