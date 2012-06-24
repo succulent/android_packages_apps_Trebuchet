@@ -24,8 +24,6 @@ import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
@@ -62,7 +60,8 @@ public class TabletFragmentActivity extends PreferenceFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mPrefs = getActivity().getSharedPreferences(PreferencesProvider.PREFERENCES_KEY, Context.MODE_PRIVATE);
+        mPrefs = getActivity().getSharedPreferences(PreferencesProvider.PREFERENCES_KEY,
+                Context.MODE_PRIVATE);
 
         addPreferencesFromResource(R.xml.tablet_preferences);
 
@@ -71,175 +70,38 @@ public class TabletFragmentActivity extends PreferenceFragment implements
         mSearchBar = (CheckBoxPreference) prefSet.findPreference(PreferenceSettings.SEARCH_BAR);
         mAllAppsBar = (CheckBoxPreference) prefSet.findPreference(PreferenceSettings.ALL_APPS_BAR);
         mCombinedBar = (CheckBoxPreference) prefSet.findPreference(PreferenceSettings.COMBINED_BAR);
-        mCenterAllApps = (CheckBoxPreference) prefSet.findPreference(PreferenceSettings.CENTER_ALLAPPS);
-        mAllAppsPosition = (ListPreference) prefSet.findPreference(PreferenceSettings.ALLAPPS_POSITION);
+        mCenterAllApps = (CheckBoxPreference)
+                prefSet.findPreference(PreferenceSettings.CENTER_ALLAPPS);
+        mAllAppsPosition = (ListPreference)
+                prefSet.findPreference(PreferenceSettings.ALLAPPS_POSITION);
         mAllAppsPosition.setOnPreferenceChangeListener(this);
-        mSearchPosition = (ListPreference) prefSet.findPreference(PreferenceSettings.SEARCH_POSITION);
+        mSearchPosition = (ListPreference)
+                prefSet.findPreference(PreferenceSettings.SEARCH_POSITION);
         mSearchPosition.setOnPreferenceChangeListener(this);
-        mCustomButtonOne = (ListPreference) prefSet.findPreference(PreferenceSettings.CUSTOM_BUTTON_ONE);
+        mCustomButtonOne = (ListPreference)
+                prefSet.findPreference(PreferenceSettings.CUSTOM_BUTTON_ONE);
         mCustomButtonOne.setOnPreferenceChangeListener(this);
-        mCustomButtonTwo = (ListPreference) prefSet.findPreference(PreferenceSettings.CUSTOM_BUTTON_TWO);
+        mCustomButtonTwo = (ListPreference)
+                prefSet.findPreference(PreferenceSettings.CUSTOM_BUTTON_TWO);
         mCustomButtonTwo.setOnPreferenceChangeListener(this);
-        mCustomButtonThree = (ListPreference) prefSet.findPreference(PreferenceSettings.CUSTOM_BUTTON_THREE);
+        mCustomButtonThree = (ListPreference)
+                prefSet.findPreference(PreferenceSettings.CUSTOM_BUTTON_THREE);
         mCustomButtonThree.setOnPreferenceChangeListener(this);
-        mCustomButtonFour = (ListPreference) prefSet.findPreference(PreferenceSettings.CUSTOM_BUTTON_FOUR);
+        mCustomButtonFour = (ListPreference)
+                prefSet.findPreference(PreferenceSettings.CUSTOM_BUTTON_FOUR);
         mCustomButtonFour.setOnPreferenceChangeListener(this);
-        mCustomButtonFive = (ListPreference) prefSet.findPreference(PreferenceSettings.CUSTOM_BUTTON_FIVE);
+        mCustomButtonFive = (ListPreference)
+                prefSet.findPreference(PreferenceSettings.CUSTOM_BUTTON_FIVE);
         mCustomButtonFive.setOnPreferenceChangeListener(this);
-        mCustomButtonSix = (ListPreference) prefSet.findPreference(PreferenceSettings.CUSTOM_BUTTON_SIX);
+        mCustomButtonSix = (ListPreference)
+                prefSet.findPreference(PreferenceSettings.CUSTOM_BUTTON_SIX);
         mCustomButtonSix.setOnPreferenceChangeListener(this);
-        mCustomButtonSeven = (ListPreference) prefSet.findPreference(PreferenceSettings.CUSTOM_BUTTON_SEVEN);
+        mCustomButtonSeven = (ListPreference)
+                prefSet.findPreference(PreferenceSettings.CUSTOM_BUTTON_SEVEN);
         mCustomButtonSeven.setOnPreferenceChangeListener(this);
-        mCustomButtonEight = (ListPreference) prefSet.findPreference(PreferenceSettings.CUSTOM_BUTTON_EIGHT);
+        mCustomButtonEight = (ListPreference)
+                prefSet.findPreference(PreferenceSettings.CUSTOM_BUTTON_EIGHT);
         mCustomButtonEight.setOnPreferenceChangeListener(this);
-
-        if (mSearchBar.isChecked()) {
-            mCombinedBar.setEnabled(false);
-            mCenterAllApps.setEnabled(false);
-            mCustomButtonSeven.setEnabled(false);
-            mCustomButtonSeven.setValueIndex(0);
-            mCustomButtonEight.setEnabled(false);
-            mCustomButtonEight.setValueIndex(0);
-        }
-
-        if (mCombinedBar.isChecked()) {
-            mCustomButtonSeven.setEnabled(false);
-            mCustomButtonSeven.setValueIndex(0);
-            mCustomButtonEight.setEnabled(false);
-            mCustomButtonEight.setValueIndex(0);
-        }
-
-        String searchValue = mSearchPosition.getValue();
-        String allAppsValue = mAllAppsPosition.getValue();
-
-        if (mSearchBar.isChecked() && (searchValue.equals("1") || searchValue.equals("2"))) {
-            mAllAppsPosition.setEntries(R.array.preferences_interface_search_button_bottom_entries);
-            mAllAppsPosition.setEntryValues(R.array.preferences_interface_search_button_bottom_values);
-            if (allAppsValue.equals("0") || allAppsValue.equals("3")) {
-                mAllAppsPosition.setValueIndex(0);
-            }
-        } else if (mSearchBar.isChecked()) {
-            mAllAppsPosition.setEntries(R.array.preferences_interface_search_button_top_entries);
-            mAllAppsPosition.setEntryValues(R.array.preferences_interface_search_button_top_values);
-            if (allAppsValue.equals("1") || allAppsValue.equals("2")) {
-                mAllAppsPosition.setValueIndex(0);
-            }
-        } else {
-            mAllAppsPosition.setEntries(R.array.preferences_interface_button_corner_entries);
-            mAllAppsPosition.setEntryValues(R.array.preferences_interface_button_corner_values);
-        }
-
-        mAllAppsPosition.setSummary(mAllAppsBar.isChecked() ? mAllAppsPosition.getEntry() : "");
-        mSearchPosition.setSummary(mSearchBar.isChecked() ? mSearchPosition.getEntry() : "");
-
-        mMaximize = mPrefs.getBoolean("ui_homescreen_maximize", false);
-        if (mMaximize) {
-            if (mCustomButtonOne.getValue().equals("2")) {
-                mPrefs.edit().putString(PreferenceSettings.CUSTOM_BUTTON_ONE, "0").commit();
-            }
-            if (mCustomButtonTwo.getValue().equals("2")) {
-                mPrefs.edit().putString(PreferenceSettings.CUSTOM_BUTTON_TWO, "0").commit();
-            }
-            if (mCustomButtonThree.getValue().equals("2")) {
-                mPrefs.edit().putString(PreferenceSettings.CUSTOM_BUTTON_THREE, "0").commit();
-            }
-            if (mCustomButtonFour.getValue().equals("2")) {
-                mPrefs.edit().putString(PreferenceSettings.CUSTOM_BUTTON_FOUR, "0").commit();
-            }
-            if (mCustomButtonFive.getValue().equals("2")) {
-                mPrefs.edit().putString(PreferenceSettings.CUSTOM_BUTTON_FIVE, "0").commit();
-            }
-            if (mCustomButtonSix.getValue().equals("2")) {
-                mPrefs.edit().putString(PreferenceSettings.CUSTOM_BUTTON_SIX, "0").commit();
-            }
-            if (mCustomButtonSeven.getValue().equals("2")) {
-                mPrefs.edit().putString(PreferenceSettings.CUSTOM_BUTTON_SEVEN, "0").commit();
-            }
-            if (mCustomButtonEight.getValue().equals("2")) {
-                mPrefs.edit().putString(PreferenceSettings.CUSTOM_BUTTON_EIGHT, "0").commit();
-            }
-            mCustomButtonOne.setEntries(R.array.preferences_interface_apps_bar_maximized_entries);
-            mCustomButtonOne.setEntryValues(R.array.preferences_interface_apps_bar_maximized_values);
-            mCustomButtonTwo.setEntries(R.array.preferences_interface_apps_bar_maximized_entries);
-            mCustomButtonTwo.setEntryValues(R.array.preferences_interface_apps_bar_maximized_values);
-            mCustomButtonThree.setEntries(R.array.preferences_interface_apps_bar_maximized_entries);
-            mCustomButtonThree.setEntryValues(R.array.preferences_interface_apps_bar_maximized_values);
-            mCustomButtonFour.setEntries(R.array.preferences_interface_apps_bar_maximized_entries);
-            mCustomButtonFour.setEntryValues(R.array.preferences_interface_apps_bar_maximized_values);
-            mCustomButtonFive.setEntries(R.array.preferences_interface_apps_bar_maximized_entries);
-            mCustomButtonFive.setEntryValues(R.array.preferences_interface_apps_bar_maximized_values);
-            mCustomButtonSix.setEntries(R.array.preferences_interface_apps_bar_maximized_entries);
-            mCustomButtonSix.setEntryValues(R.array.preferences_interface_apps_bar_maximized_values);
-            mCustomButtonSeven.setEntries(R.array.preferences_interface_apps_bar_maximized_entries);
-            mCustomButtonSeven.setEntryValues(R.array.preferences_interface_apps_bar_maximized_values);
-            mCustomButtonEight.setEntries(R.array.preferences_interface_apps_bar_maximized_entries);
-            mCustomButtonEight.setEntryValues(R.array.preferences_interface_apps_bar_maximized_values);
-        }
-
-        mCustomButtonOne.setSummary(mCustomButtonOne.getEntry());
-        if (mCustomButtonOne.getValue().equals("3")) {
-            try {
-                mCustomButtonOne.setIcon(getActivity().getPackageManager().getActivityIcon(
-                        Intent.parseUri(mPrefs.getString("custom_application_one", ""), 0)));
-            } catch (Exception e) {
-            }
-        }
-        mCustomButtonTwo.setSummary(mCustomButtonTwo.getEntry());
-        if (mCustomButtonTwo.getValue().equals("3")) {
-            try {
-                mCustomButtonTwo.setIcon(getActivity().getPackageManager().getActivityIcon(
-                        Intent.parseUri(mPrefs.getString("custom_application_two", ""), 0)));
-            } catch (Exception e) {
-            }
-        }
-        mCustomButtonThree.setSummary(mCustomButtonThree.getEntry());
-        if (mCustomButtonThree.getValue().equals("3")) {
-            try {
-                mCustomButtonThree.setIcon(getActivity().getPackageManager().getActivityIcon(
-                        Intent.parseUri(mPrefs.getString("custom_application_three", ""), 0)));
-            } catch (Exception e) {
-            }
-        }
-        mCustomButtonFour.setSummary(mCustomButtonFour.getEntry());
-        if (mCustomButtonFour.getValue().equals("3")) {
-            try {
-                mCustomButtonFour.setIcon(getActivity().getPackageManager().getActivityIcon(
-                        Intent.parseUri(mPrefs.getString("custom_application_four", ""), 0)));
-            } catch (Exception e) {
-            }
-        }
-        mCustomButtonFive.setSummary(mCustomButtonFive.getEntry());
-        if (mCustomButtonFive.getValue().equals("3")) {
-            try {
-                mCustomButtonFive.setIcon(getActivity().getPackageManager().getActivityIcon(
-                        Intent.parseUri(mPrefs.getString("custom_application_five", ""), 0)));
-            } catch (Exception e) {
-            }
-        }
-        mCustomButtonSix.setSummary(mCustomButtonSix.getEntry());
-        if (mCustomButtonSix.getValue().equals("3")) {
-            try {
-                mCustomButtonSix.setIcon(getActivity().getPackageManager().getActivityIcon(
-                        Intent.parseUri(mPrefs.getString("custom_application_six", ""), 0)));
-            } catch (Exception e) {
-            }
-        }
-        mCustomButtonSeven.setSummary(mCustomButtonSeven.getEntry());
-        if (mCustomButtonSeven.getValue().equals("3")) {
-            try {
-                mCustomButtonSeven.setIcon(getActivity().getPackageManager().getActivityIcon(
-                        Intent.parseUri(mPrefs.getString("custom_application_seven", ""), 0)));
-            } catch (Exception e) {
-            }
-        }
-        mCustomButtonEight.setSummary(mCustomButtonEight.getEntry());
-        if (mCustomButtonEight.getValue().equals("3")) {
-            try {
-                mCustomButtonEight.setIcon(getActivity().getPackageManager().getActivityIcon(
-                        Intent.parseUri(mPrefs.getString("custom_application_eight", ""), 0)));
-            } catch (Exception e) {
-            }
-        }
     }
 
     public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -247,15 +109,19 @@ public class TabletFragmentActivity extends PreferenceFragment implements
             String searchValue = (String) newValue;
             String allAppsValue = mAllAppsPosition.getValue();
             if (mSearchBar.isChecked() && (searchValue.equals("1") || searchValue.equals("2"))) {
-                mAllAppsPosition.setEntries(R.array.preferences_interface_search_button_bottom_entries);
-                mAllAppsPosition.setEntryValues(R.array.preferences_interface_search_button_bottom_values);
+                mAllAppsPosition.setEntries(
+                        R.array.preferences_interface_search_button_bottom_entries);
+                mAllAppsPosition.setEntryValues(
+                        R.array.preferences_interface_search_button_bottom_values);
                 if (allAppsValue.equals("0") || allAppsValue.equals("3")) {
                     mAllAppsPosition.setValueIndex(0);
                     mAllAppsPosition.setSummary("");
                 }
             } else if (mSearchBar.isChecked()) {
-                mAllAppsPosition.setEntries(R.array.preferences_interface_search_button_top_entries);
-                mAllAppsPosition.setEntryValues(R.array.preferences_interface_search_button_top_values);
+                mAllAppsPosition.setEntries(
+                        R.array.preferences_interface_search_button_top_entries);
+                mAllAppsPosition.setEntryValues(
+                        R.array.preferences_interface_search_button_top_values);
                 if (allAppsValue.equals("1") || allAppsValue.equals("2")) {
                     mAllAppsPosition.setValueIndex(0);
                     mAllAppsPosition.setSummary("");
@@ -416,12 +282,17 @@ public class TabletFragmentActivity extends PreferenceFragment implements
             value = mSearchBar.isChecked();
             mCombinedBar.setEnabled(!value);
             mCenterAllApps.setEnabled(!value);
-            if (value && (mSearchPosition.getValue().equals("1") || mSearchPosition.getValue().equals("2"))) {
-                mAllAppsPosition.setEntries(R.array.preferences_interface_search_button_bottom_entries);
-                mAllAppsPosition.setEntryValues(R.array.preferences_interface_search_button_bottom_values);
+            if (value && (mSearchPosition.getValue().equals("1") ||
+                    mSearchPosition.getValue().equals("2"))) {
+                mAllAppsPosition.setEntries(
+                        R.array.preferences_interface_search_button_bottom_entries);
+                mAllAppsPosition.setEntryValues(
+                        R.array.preferences_interface_search_button_bottom_values);
             } else if (value) {
-                mAllAppsPosition.setEntries(R.array.preferences_interface_search_button_top_entries);
-                mAllAppsPosition.setEntryValues(R.array.preferences_interface_search_button_top_values);
+                mAllAppsPosition.setEntries(
+                        R.array.preferences_interface_search_button_top_entries);
+                mAllAppsPosition.setEntryValues(
+                        R.array.preferences_interface_search_button_top_values);
             } else {
                 mAllAppsPosition.setEntries(R.array.preferences_interface_button_corner_entries);
                 mAllAppsPosition.setEntryValues(R.array.preferences_interface_button_corner_values);
@@ -465,49 +336,57 @@ public class TabletFragmentActivity extends PreferenceFragment implements
             if (requestCode == 5) {
                 mPrefs.edit().putString("custom_application_one", data.toUri(0)).commit();
                 try {
-                    mCustomButtonOne.setIcon(getActivity().getPackageManager().getActivityIcon(data));
+                    mCustomButtonOne.setIcon(
+                            getActivity().getPackageManager().getActivityIcon(data));
                 } catch (Exception e) {
                 }
             } else if (requestCode == 6) {
                 mPrefs.edit().putString("custom_application_two", data.toUri(0)).commit();
                 try {
-                    mCustomButtonTwo.setIcon(getActivity().getPackageManager().getActivityIcon(data));
+                    mCustomButtonTwo.setIcon(
+                            getActivity().getPackageManager().getActivityIcon(data));
                 } catch (Exception e) {
                 }
             } else if (requestCode == 7) {
                 mPrefs.edit().putString("custom_application_three", data.toUri(0)).commit();
                 try {
-                    mCustomButtonThree.setIcon(getActivity().getPackageManager().getActivityIcon(data));
+                    mCustomButtonThree.setIcon(
+                            getActivity().getPackageManager().getActivityIcon(data));
                 } catch (Exception e) {
                 }
             } else if (requestCode == 8) {
                 mPrefs.edit().putString("custom_application_four", data.toUri(0)).commit();
                 try {
-                    mCustomButtonFour.setIcon(getActivity().getPackageManager().getActivityIcon(data));
+                    mCustomButtonFour.setIcon(
+                            getActivity().getPackageManager().getActivityIcon(data));
                 } catch (Exception e) {
                 }
             } else if (requestCode == 9) {
                 mPrefs.edit().putString("custom_application_five", data.toUri(0)).commit();
                 try {
-                    mCustomButtonFive.setIcon(getActivity().getPackageManager().getActivityIcon(data));
+                    mCustomButtonFive.setIcon(
+                            getActivity().getPackageManager().getActivityIcon(data));
                 } catch (Exception e) {
                 }
             } else if (requestCode == 10) {
                 mPrefs.edit().putString("custom_application_six", data.toUri(0)).commit();
                 try {
-                    mCustomButtonSix.setIcon(getActivity().getPackageManager().getActivityIcon(data));
+                    mCustomButtonSix.setIcon(
+                            getActivity().getPackageManager().getActivityIcon(data));
                 } catch (Exception e) {
                 }
             } else if (requestCode == 11) {
                 mPrefs.edit().putString("custom_application_seven", data.toUri(0)).commit();
                 try {
-                    mCustomButtonSeven.setIcon(getActivity().getPackageManager().getActivityIcon(data));
+                    mCustomButtonSeven.setIcon(
+                            getActivity().getPackageManager().getActivityIcon(data));
                 } catch (Exception e) {
                 }
             } else if (requestCode == 12) {
                 mPrefs.edit().putString("custom_application_eight", data.toUri(0)).commit();
                 try {
-                    mCustomButtonEight.setIcon(getActivity().getPackageManager().getActivityIcon(data));
+                    mCustomButtonEight.setIcon(
+                            getActivity().getPackageManager().getActivityIcon(data));
                 } catch (Exception e) {
                 }
             }
@@ -516,7 +395,165 @@ public class TabletFragmentActivity extends PreferenceFragment implements
 
     public void onResume() {
         super.onResume();
+
         mMaximize = mPrefs.getBoolean("ui_homescreen_maximize", false);
+
+        if (mSearchBar.isChecked()) {
+            mCombinedBar.setEnabled(false);
+            mCenterAllApps.setEnabled(false);
+            mCustomButtonSeven.setEnabled(false);
+            mCustomButtonSeven.setValueIndex(0);
+            mCustomButtonEight.setEnabled(false);
+            mCustomButtonEight.setValueIndex(0);
+        }
+
+        if (mCombinedBar.isChecked()) {
+            mCustomButtonSeven.setEnabled(false);
+            mCustomButtonSeven.setValueIndex(0);
+            mCustomButtonEight.setEnabled(false);
+            mCustomButtonEight.setValueIndex(0);
+        }
+
+        String searchValue = mSearchPosition.getValue();
+        String allAppsValue = mAllAppsPosition.getValue();
+
+        if (mSearchBar.isChecked() && (searchValue.equals("1") || searchValue.equals("2"))) {
+            mAllAppsPosition.setEntries(R.array.preferences_interface_search_button_bottom_entries);
+            mAllAppsPosition.setEntryValues(
+                    R.array.preferences_interface_search_button_bottom_values);
+            if (allAppsValue.equals("0") || allAppsValue.equals("3")) {
+                mAllAppsPosition.setValueIndex(0);
+            }
+        } else if (mSearchBar.isChecked()) {
+            mAllAppsPosition.setEntries(R.array.preferences_interface_search_button_top_entries);
+            mAllAppsPosition.setEntryValues(R.array.preferences_interface_search_button_top_values);
+            if (allAppsValue.equals("1") || allAppsValue.equals("2")) {
+                mAllAppsPosition.setValueIndex(0);
+            }
+        } else {
+            mAllAppsPosition.setEntries(R.array.preferences_interface_button_corner_entries);
+            mAllAppsPosition.setEntryValues(R.array.preferences_interface_button_corner_values);
+        }
+
+        mAllAppsPosition.setSummary(mAllAppsBar.isChecked() ? mAllAppsPosition.getEntry() : "");
+        mSearchPosition.setSummary(mSearchBar.isChecked() ? mSearchPosition.getEntry() : "");
+
+        if (mMaximize) {
+            if (mCustomButtonOne.getValue().equals("2")) {
+                mPrefs.edit().putString(PreferenceSettings.CUSTOM_BUTTON_ONE, "0").commit();
+            }
+            if (mCustomButtonTwo.getValue().equals("2")) {
+                mPrefs.edit().putString(PreferenceSettings.CUSTOM_BUTTON_TWO, "0").commit();
+            }
+            if (mCustomButtonThree.getValue().equals("2")) {
+                mPrefs.edit().putString(PreferenceSettings.CUSTOM_BUTTON_THREE, "0").commit();
+            }
+            if (mCustomButtonFour.getValue().equals("2")) {
+                mPrefs.edit().putString(PreferenceSettings.CUSTOM_BUTTON_FOUR, "0").commit();
+            }
+            if (mCustomButtonFive.getValue().equals("2")) {
+                mPrefs.edit().putString(PreferenceSettings.CUSTOM_BUTTON_FIVE, "0").commit();
+            }
+            if (mCustomButtonSix.getValue().equals("2")) {
+                mPrefs.edit().putString(PreferenceSettings.CUSTOM_BUTTON_SIX, "0").commit();
+            }
+            if (mCustomButtonSeven.getValue().equals("2")) {
+                mPrefs.edit().putString(PreferenceSettings.CUSTOM_BUTTON_SEVEN, "0").commit();
+            }
+            if (mCustomButtonEight.getValue().equals("2")) {
+                mPrefs.edit().putString(PreferenceSettings.CUSTOM_BUTTON_EIGHT, "0").commit();
+            }
+            mCustomButtonOne.setEntries(R.array.preferences_interface_apps_bar_maximized_entries);
+            mCustomButtonOne.setEntryValues(
+                    R.array.preferences_interface_apps_bar_maximized_values);
+            mCustomButtonTwo.setEntries(
+                    R.array.preferences_interface_apps_bar_maximized_entries);
+            mCustomButtonTwo.setEntryValues(
+                    R.array.preferences_interface_apps_bar_maximized_values);
+            mCustomButtonThree.setEntries(R.array.preferences_interface_apps_bar_maximized_entries);
+            mCustomButtonThree.setEntryValues(
+                    R.array.preferences_interface_apps_bar_maximized_values);
+            mCustomButtonFour.setEntries(R.array.preferences_interface_apps_bar_maximized_entries);
+            mCustomButtonFour.setEntryValues(
+                    R.array.preferences_interface_apps_bar_maximized_values);
+            mCustomButtonFive.setEntries(R.array.preferences_interface_apps_bar_maximized_entries);
+            mCustomButtonFive.setEntryValues(
+                    R.array.preferences_interface_apps_bar_maximized_values);
+            mCustomButtonSix.setEntries(R.array.preferences_interface_apps_bar_maximized_entries);
+            mCustomButtonSix.setEntryValues(
+                    R.array.preferences_interface_apps_bar_maximized_values);
+            mCustomButtonSeven.setEntries(R.array.preferences_interface_apps_bar_maximized_entries);
+            mCustomButtonSeven.setEntryValues(
+                    R.array.preferences_interface_apps_bar_maximized_values);
+            mCustomButtonEight.setEntries(R.array.preferences_interface_apps_bar_maximized_entries);
+            mCustomButtonEight.setEntryValues(
+                    R.array.preferences_interface_apps_bar_maximized_values);
+        }
+
+        mCustomButtonOne.setSummary(mCustomButtonOne.getEntry());
+        if (mCustomButtonOne.getValue().equals("3")) {
+            try {
+                mCustomButtonOne.setIcon(getActivity().getPackageManager().getActivityIcon(
+                        Intent.parseUri(mPrefs.getString("custom_application_one", ""), 0)));
+            } catch (Exception e) {
+            }
+        }
+        mCustomButtonTwo.setSummary(mCustomButtonTwo.getEntry());
+        if (mCustomButtonTwo.getValue().equals("3")) {
+            try {
+                mCustomButtonTwo.setIcon(getActivity().getPackageManager().getActivityIcon(
+                        Intent.parseUri(mPrefs.getString("custom_application_two", ""), 0)));
+            } catch (Exception e) {
+            }
+        }
+        mCustomButtonThree.setSummary(mCustomButtonThree.getEntry());
+        if (mCustomButtonThree.getValue().equals("3")) {
+            try {
+                mCustomButtonThree.setIcon(getActivity().getPackageManager().getActivityIcon(
+                        Intent.parseUri(mPrefs.getString("custom_application_three", ""), 0)));
+            } catch (Exception e) {
+            }
+        }
+        mCustomButtonFour.setSummary(mCustomButtonFour.getEntry());
+        if (mCustomButtonFour.getValue().equals("3")) {
+            try {
+                mCustomButtonFour.setIcon(getActivity().getPackageManager().getActivityIcon(
+                        Intent.parseUri(mPrefs.getString("custom_application_four", ""), 0)));
+            } catch (Exception e) {
+            }
+        }
+        mCustomButtonFive.setSummary(mCustomButtonFive.getEntry());
+        if (mCustomButtonFive.getValue().equals("3")) {
+            try {
+                mCustomButtonFive.setIcon(getActivity().getPackageManager().getActivityIcon(
+                        Intent.parseUri(mPrefs.getString("custom_application_five", ""), 0)));
+            } catch (Exception e) {
+            }
+        }
+        mCustomButtonSix.setSummary(mCustomButtonSix.getEntry());
+        if (mCustomButtonSix.getValue().equals("3")) {
+            try {
+                mCustomButtonSix.setIcon(getActivity().getPackageManager().getActivityIcon(
+                        Intent.parseUri(mPrefs.getString("custom_application_six", ""), 0)));
+            } catch (Exception e) {
+            }
+        }
+        mCustomButtonSeven.setSummary(mCustomButtonSeven.getEntry());
+        if (mCustomButtonSeven.getValue().equals("3")) {
+            try {
+                mCustomButtonSeven.setIcon(getActivity().getPackageManager().getActivityIcon(
+                        Intent.parseUri(mPrefs.getString("custom_application_seven", ""), 0)));
+            } catch (Exception e) {
+            }
+        }
+        mCustomButtonEight.setSummary(mCustomButtonEight.getEntry());
+        if (mCustomButtonEight.getValue().equals("3")) {
+            try {
+                mCustomButtonEight.setIcon(getActivity().getPackageManager().getActivityIcon(
+                        Intent.parseUri(mPrefs.getString("custom_application_eight", ""), 0)));
+            } catch (Exception e) {
+            }
+        }
     }
 
     public static void restore(Context context) {

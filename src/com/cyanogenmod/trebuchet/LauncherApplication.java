@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.os.Handler;
 
@@ -32,7 +33,9 @@ public class LauncherApplication extends Application {
     public LauncherModel mModel;
     public IconCache mIconCache;
     private static boolean sIsScreenLarge;
+    private static boolean sIsLayoutLarge;
     private static float sScreenDensity;
+
     WeakReference<LauncherProvider> mLauncherProvider;
 
     @Override
@@ -41,6 +44,10 @@ public class LauncherApplication extends Application {
 
         // set sIsScreenXLarge and sScreenDensity *before* creating icon cache
         sIsScreenLarge = getResources().getConfiguration().smallestScreenWidthDp >= 600;
+        final int layoutSize = Resources.getSystem().getConfiguration().screenLayout &
+                Configuration.SCREENLAYOUT_SIZE_MASK;
+        sIsLayoutLarge = layoutSize == Configuration.SCREENLAYOUT_SIZE_LARGE ||
+                layoutSize == Configuration.SCREENLAYOUT_SIZE_XLARGE;
         sScreenDensity = getResources().getDisplayMetrics().density;
 
         mIconCache = new IconCache(this);
@@ -117,6 +124,10 @@ public class LauncherApplication extends Application {
 
     public static boolean isScreenLarge() {
         return sIsScreenLarge;
+    }
+
+    public static boolean isLayoutLarge() {
+        return sIsLayoutLarge;
     }
 
     public static boolean isScreenLandscape(Context context) {

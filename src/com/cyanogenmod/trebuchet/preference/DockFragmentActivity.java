@@ -17,14 +17,10 @@
 package com.cyanogenmod.trebuchet.preference;
 
 import android.content.Context;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
-import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -44,6 +40,7 @@ public class DockFragmentActivity extends PreferenceFragment {
     private static AutoNumberPickerPreference mHotseatAllAppsPosition;
 
     private CheckBoxPreference mShowDock;
+    private CheckBoxPreference mShowDockBackground;
     private CheckBoxPreference mShowDockDivider;
     private CheckBoxPreference mShowDockAppsButton;
 
@@ -65,8 +62,6 @@ public class DockFragmentActivity extends PreferenceFragment {
 
         mHotseatPositions = (NumberPickerPreference)
                 prefSet.findPreference(PreferenceSettings.HOTSEAT_POSITIONS);
-        mHotseatPositions.setSummary(Integer.toString(mPrefs.getInt(
-                PreferenceSettings.HOTSEAT_POSITIONS, 5)));
 
         mHotseatAllAppsPosition = (AutoNumberPickerPreference)
                 prefSet.findPreference(PreferenceSettings.HOTSEAT_ALLAPPS_POSITION);
@@ -74,51 +69,24 @@ public class DockFragmentActivity extends PreferenceFragment {
         mShowDock = (CheckBoxPreference)
                 prefSet.findPreference(PreferenceSettings.SHOW_DOCK);
 
+        mShowDockBackground = (CheckBoxPreference)
+                prefSet.findPreference(PreferenceSettings.SHOW_DOCK_BACKGROUND);
+
         mShowDockDivider = (CheckBoxPreference)
                 prefSet.findPreference(PreferenceSettings.SHOW_DOCK_DIVIDER);
 
         mShowDockAppsButton = (CheckBoxPreference)
                 prefSet.findPreference(PreferenceSettings.SHOW_DOCK_APPS_BUTTON);
 
-        mShowDock.setChecked(PreferencesProvider.Interface.Dock.getShowHotseat(mContext));
-
-        mShowDockDivider.setChecked(
-                PreferencesProvider.Interface.Homescreen.Indicator.getShowDockDivider(mContext));
-
-        mShowDockAppsButton.setChecked(
-                PreferencesProvider.Interface.Dock.getShowAllAppsHotseat(mContext));
-
         mShowDockDivider = (CheckBoxPreference)
                 prefSet.findPreference(PreferenceSettings.SHOW_DOCK_DIVIDER);
 
-        int hp = mPrefs.getInt(PreferenceSettings.HOTSEAT_ALLAPPS_POSITION, 3);
-        mHotseatAllAppsPosition.setSummary(hp == 0 ? getActivity().getString(
-                R.string.preferences_auto_number_picker) : Integer.toString(hp));
-
-        final int screenSize = Resources.getSystem().getConfiguration().screenLayout &
-                Configuration.SCREENLAYOUT_SIZE_MASK;
-        boolean isScreenLarge = screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE ||
-                screenSize == Configuration.SCREENLAYOUT_SIZE_XLARGE;
-
+        PreferenceCategory dock = (PreferenceCategory) prefSet.findPreference("ui_dock");
          // Remove some preferences on small screens
         if (!LauncherApplication.isScreenLarge()) {
-            PreferenceCategory dock = (PreferenceCategory) prefSet.findPreference("ui_dock");
             dock.removePreference(findPreference("ui_homescreen_tablet_dock_divider_two"));
-            if (!isScreenLarge) {
-                mHotseatPositions.setMaxValue(5);
-                mHotseatAllAppsPosition.setMaxValue(5);
-            } else {
-                mHotseatPositions.setMaxValue(6);
-                mHotseatAllAppsPosition.setMaxValue(6);
-            }
         } else {
-            boolean max = mPrefs.getBoolean("ui_homescreen_maximize", false);
-            if (max) {
-                mShowDock.setChecked(false);
-                mShowDock.setEnabled(false);
-            }
-            mHotseatPositions.setMaxValue(LauncherModel.getCellCountY());
-            mHotseatAllAppsPosition.setMaxValue(LauncherModel.getCellCountY());
+            dock.removePreference(mShowDockBackground);
         }
     }
 
@@ -130,13 +98,11 @@ public class DockFragmentActivity extends PreferenceFragment {
             mShowDock.setEnabled(!max);
         }
         boolean smallIcons = mPrefs.getBoolean(PreferenceSettings.SMALLER_ICONS, false);
-        final int screenSize = Resources.getSystem().getConfiguration().screenLayout &
-                Configuration.SCREENLAYOUT_SIZE_MASK;
-        boolean isScreenLarge = screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE ||
-                screenSize == Configuration.SCREENLAYOUT_SIZE_XLARGE;
         if (!LauncherApplication.isScreenLarge()) {
-            mHotseatPositions.setMaxValue(smallIcons && isScreenLarge ? 6 : 5);
-            mHotseatAllAppsPosition.setMaxValue(smallIcons && isScreenLarge ? 6 : 5);
+            mHotseatPositions.setMaxValue(smallIcons &&
+                    LauncherApplication.isLayoutLarge() ? 6 : 5);
+            mHotseatAllAppsPosition.setMaxValue(smallIcons &&
+                    LauncherApplication.isLayoutLarge() ? 6 : 5);
         } else {
             mHotseatPositions.setMaxValue(LauncherModel.getCellCountY());
             mHotseatAllAppsPosition.setMaxValue(LauncherModel.getCellCountY());
@@ -159,6 +125,24 @@ public class DockFragmentActivity extends PreferenceFragment {
         int hp = mPrefs.getInt(PreferenceSettings.HOTSEAT_ALLAPPS_POSITION, 3);
         mHotseatAllAppsPosition.setSummary(hp == 0 ? mContext.getString(
                 R.string.preferences_auto_number_picker) : Integer.toString(hp));
+
+        mShowDock.setChecked(PreferencesProvider.Interface.Dock.getShowHotseat(mContext));
+
+        mShowDockDivider.setChecked(
+                PreferencesProvider.Interface.Homescreen.Indicator.getShowDockDivider(mContext));
+
+        mShowDockAppsButton.setChecked(
+                PreferencesProvider.Interface.Dock.getShowAllAppsHotseat(mContext));
+    }
+
+    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+        if (preference == mShowDock) {
+            if (!mShowDock.isChecked() && !LauncherApplication.isScreenLarge()) {
+                mShowDockBackground.setChecked(false);
+            }
+            return true;
+        }
+        return false;
     }
 
     public static void restore(Context context) {

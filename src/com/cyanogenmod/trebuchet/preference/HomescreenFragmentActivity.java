@@ -17,15 +17,12 @@
 package com.cyanogenmod.trebuchet.preference;
 
 import android.content.Context;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -48,6 +45,8 @@ public class HomescreenFragmentActivity extends PreferenceFragment implements
     private NumberPickerPreference mVerticalPadding;
     private NumberPickerPreference mHorizontalPadding;
     private static AutoDoubleNumberPickerPreference mHomescreenGrid;
+    private CheckBoxPreference mSearchBar;
+    private CheckBoxPreference mSearchBackground;
 
     private static SharedPreferences mPrefs;
     private static Context mContext;
@@ -58,59 +57,51 @@ public class HomescreenFragmentActivity extends PreferenceFragment implements
 
         mContext = getActivity();
 
-        mPrefs = getActivity().getSharedPreferences(PreferencesProvider.PREFERENCES_KEY, Context.MODE_PRIVATE);
+        mPrefs = getActivity().getSharedPreferences(PreferencesProvider.PREFERENCES_KEY,
+                Context.MODE_PRIVATE);
 
         addPreferencesFromResource(R.xml.homescreen_preferences);
 
         PreferenceScreen prefSet = getPreferenceScreen();
 
-        mHomescreenTransition = (ListPreference) prefSet.findPreference(PreferenceSettings.HOMESCREEN_TRANSITION);
+        mHomescreenTransition =
+                (ListPreference) prefSet.findPreference(PreferenceSettings.HOMESCREEN_TRANSITION);
         mHomescreenTransition.setOnPreferenceChangeListener(this);
-        mHomescreenTransition.setSummary(mHomescreenTransition.getEntry());
 
-        mHomescreens = (NumberPickerPreference) prefSet.findPreference(PreferenceSettings.HOMESCREENS);
-        mHomescreens.setSummary(Integer.toString(mPrefs.getInt(PreferenceSettings.HOMESCREENS, 5)));
+        mHomescreens =
+                (NumberPickerPreference) prefSet.findPreference(PreferenceSettings.HOMESCREENS);
 
-        mDefaultHomescreen = (NumberPickerPreference) prefSet.findPreference(PreferenceSettings.DEFAULT_HOMESCREEN);
-        mDefaultHomescreen.setSummary(Integer.toString(mPrefs.getInt(PreferenceSettings.DEFAULT_HOMESCREEN, 3)));
+        mDefaultHomescreen = (NumberPickerPreference)
+                prefSet.findPreference(PreferenceSettings.DEFAULT_HOMESCREEN);
 
-        mHomescreenGrid = (AutoDoubleNumberPickerPreference) prefSet.findPreference(PreferenceSettings.HOMESCREEN_GRID);
-        String hg = mPrefs.getString(PreferenceSettings.HOMESCREEN_GRID,
-                LauncherApplication.isScreenLarge() ? "0|0" : "4|4");
-        mHomescreenGrid.setSummary(hg.equals("0|0") ? getActivity().getString(R.string.preferences_auto_number_picker) :
-                hg.replace("|", " x "));
-        boolean smallIcons = mPrefs.getBoolean(PreferenceSettings.SMALLER_ICONS, false);
-        final int screenSize = Resources.getSystem().getConfiguration().screenLayout &
-                Configuration.SCREENLAYOUT_SIZE_MASK;
-        boolean isScreenLarge = screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE ||
-                screenSize == Configuration.SCREENLAYOUT_SIZE_XLARGE;
-        if (LauncherApplication.isScreenLarge()) {
-            mHomescreenGrid.setMax1(LauncherModel.getCellCountY());
-            mHomescreenGrid.setMax2(LauncherModel.getCellCountX());
-        } else if (!isScreenLarge) {
-            mHomescreenGrid.setMax1(smallIcons ? 5 : 4);
-            mHomescreenGrid.setMax2(smallIcons ? 5 : 4);
-        } else {
-            mHomescreenGrid.setMax1(smallIcons ? 6 : 5);
-            mHomescreenGrid.setMax2(smallIcons ? 8 : 6);
-        }
+        mHomescreenGrid = (AutoDoubleNumberPickerPreference)
+                prefSet.findPreference(PreferenceSettings.HOMESCREEN_GRID);
 
-        mVerticalPadding = (NumberPickerPreference) prefSet.findPreference(PreferenceSettings.VERTICAL_PADDING);
-        mHorizontalPadding = (NumberPickerPreference) prefSet.findPreference(PreferenceSettings.HORIZONTAL_PADDING);
-        mVerticalPadding.setSummary(Integer.toString(mPrefs.getInt(PreferenceSettings.VERTICAL_PADDING, 0)));
-        mHorizontalPadding.setSummary(Integer.toString(mPrefs.getInt(PreferenceSettings.HORIZONTAL_PADDING, 0)));
+        mVerticalPadding = (NumberPickerPreference)
+                prefSet.findPreference(PreferenceSettings.VERTICAL_PADDING);
+        mHorizontalPadding = (NumberPickerPreference)
+                prefSet.findPreference(PreferenceSettings.HORIZONTAL_PADDING);
 
-        PreferenceCategory homescreenGeneral = (PreferenceCategory) findPreference("ui_homescreen_general");
-         // Remove some preferences on large screens
+        mSearchBar = (CheckBoxPreference)
+                prefSet.findPreference(PreferenceSettings.PHONE_SEARCH_BAR);
+
+        mSearchBackground = (CheckBoxPreference)
+                prefSet.findPreference(PreferenceSettings.SEARCH_BACKGROUND);
+
+        PreferenceCategory homescreenGeneral =
+                (PreferenceCategory) findPreference("ui_homescreen_general");
+         // Remove some preferences based on screen size
         if (LauncherApplication.isScreenLarge()) {
             prefSet.removePreference(findPreference("ui_homescreen_padding"));
             prefSet.removePreference(findPreference("ui_homescreen_indicator"));
-            homescreenGeneral.removePreference(findPreference(PreferenceSettings.PHONE_SEARCH_BAR));
-            homescreenGeneral.removePreference(findPreference("ui_search_background"));
+            homescreenGeneral.removePreference(mSearchBar);
+            homescreenGeneral.removePreference(mSearchBackground);
         } else {
-            PreferenceCategory scrolling = (PreferenceCategory) findPreference("ui_homescreen_scrolling");
+            PreferenceCategory scrolling =
+                    (PreferenceCategory) findPreference("ui_homescreen_scrolling");
             scrolling.removePreference(findPreference("ui_homescreen_page_outline"));
-            homescreenGeneral.removePreference(findPreference(PreferenceSettings.MAXIMIZE_WORKSPACE));
+            homescreenGeneral.removePreference(
+                    findPreference(PreferenceSettings.MAXIMIZE_WORKSPACE));
         }
     }
 
@@ -125,27 +116,39 @@ public class HomescreenFragmentActivity extends PreferenceFragment implements
         return false;
     }
 
+    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+        if (preference == mSearchBar) {
+            if (!mSearchBar.isChecked()) {
+                mSearchBackground.setChecked(false);
+            }
+            return true;
+        }
+        return false;
+    }
+
     public void onResume() {
         super.onResume();
-        final int screenSize = Resources.getSystem().getConfiguration().screenLayout &
-                Configuration.SCREENLAYOUT_SIZE_MASK;
-        boolean isScreenLarge = screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE ||
-                screenSize == Configuration.SCREENLAYOUT_SIZE_XLARGE;
+        mHomescreenTransition.setSummary(mHomescreenTransition.getEntry());
+        mHomescreens.setSummary(Integer.toString(mPrefs.getInt(PreferenceSettings.HOMESCREENS, 5)));
+        mDefaultHomescreen.setSummary(
+                Integer.toString(mPrefs.getInt(PreferenceSettings.DEFAULT_HOMESCREEN, 3)));
+
         boolean smallIcons = mPrefs.getBoolean(PreferenceSettings.SMALLER_ICONS, false);
         if (LauncherApplication.isScreenLarge() && mHomescreenGrid.getMax1() >
                 LauncherModel.getCellCountY()) {
             if (!mPrefs.getString(PreferenceSettings.HOMESCREEN_GRID, "0|0").equals("0|0")) {
                 mPrefs.edit().putString(PreferenceSettings.HOMESCREEN_GRID,
-                        LauncherModel.getCellCountY() + "|" + LauncherModel.getCellCountX()).commit();
+                        LauncherModel.getCellCountY() + "|" +
+                        LauncherModel.getCellCountX()).commit();
             }
-        } else if (!isScreenLarge) {
+        } else if (!LauncherApplication.isLayoutLarge()) {
             mPrefs.edit().putString(PreferenceSettings.HOMESCREEN_GRID, (smallIcons ? "5" : "4")
                    + "|" + (smallIcons ? "5" : "4")).commit();
-        } else {
+        } else if (!LauncherApplication.isScreenLarge()){
             mPrefs.edit().putString(PreferenceSettings.HOMESCREEN_GRID, (smallIcons ? "6" : "5")
                    + "|" + (smallIcons ? "8" : "6")).commit();
         }
-        if (!LauncherApplication.isScreenLarge() && isScreenLarge) {
+        if (!LauncherApplication.isScreenLarge() && LauncherApplication.isLayoutLarge()) {
             mHomescreenGrid.setMax1(smallIcons ? 6 : 5);
             mHomescreenGrid.setMax2(smallIcons ? 8 : 6);
         } else {
@@ -154,9 +157,18 @@ public class HomescreenFragmentActivity extends PreferenceFragment implements
             mHomescreenGrid.setMax2(!LauncherApplication.isScreenLarge() ? (smallIcons ? 5 : 4) :
                     LauncherModel.getCellCountY());
         }
-        String hg = mPrefs.getString(PreferenceSettings.HOMESCREEN_GRID, "0|0");
-        mHomescreenGrid.setSummary(hg.equals("0|0") ? mContext.getString(R.string.preferences_auto_number_picker) :
+        String hg = mPrefs.getString(PreferenceSettings.HOMESCREEN_GRID,
+                LauncherApplication.isScreenLarge() ? "0|0" : "4|4");
+        mHomescreenGrid.setSummary(hg.equals("0|0") ?
+                getActivity().getString(R.string.preferences_auto_number_picker) :
                 hg.replace("|", " x "));
+
+        if (!LauncherApplication.isScreenLarge()) {
+            mVerticalPadding.setSummary(
+                    Integer.toString(mPrefs.getInt(PreferenceSettings.VERTICAL_PADDING, 0)));
+            mHorizontalPadding.setSummary(
+                    Integer.toString(mPrefs.getInt(PreferenceSettings.HORIZONTAL_PADDING, 0)));
+        }
     }
 
     public static void restore(Context context) {

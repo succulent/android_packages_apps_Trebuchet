@@ -77,9 +77,11 @@ public class PreferenceSettings extends Activity {
     public static final String CUSTOM_BUTTON_SEVEN = "ui_tablet_custom_button_seven";
     public static final String CUSTOM_BUTTON_EIGHT = "ui_tablet_custom_button_eight";
     public static final String SHOW_DOCK = "ui_homescreen_general_show_hotseat";
+    public static final String SHOW_DOCK_BACKGROUND = "ui_hotseat_background";
     public static final String SHOW_DOCK_DIVIDER = "ui_homescreen_indicator_background";
     public static final String SHOW_DOCK_APPS_BUTTON = "ui_homescreen_general_show_hotseat_allapps";
     public static final String MAXIMIZE_WORKSPACE = "ui_homescreen_maximize";
+    public static final String SEARCH_BACKGROUND = "ui_search_background";
 
     private SharedPreferences mPrefs;
 
