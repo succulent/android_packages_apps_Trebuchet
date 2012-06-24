@@ -165,6 +165,11 @@ public class CellLayout extends ViewGroup {
                 mCellHeight = a.getDimensionPixelSize(smallIcons ?
                 R.styleable.CellLayout_cellHeightSmall : R.styleable.CellLayout_cellHeight, 10);
         if (LauncherApplication.isScreenLarge()) {
+            if (LauncherApplication.isScreenLandscape(context)) {
+                mCellHeight = getMaxCellHeight();
+            } else {
+                mCellWidth = getMaxCellWidth();
+            }
             mWidthGap = mOriginalWidthGap = maximize && LauncherApplication.isScreenLandscape(context) ?
                     getMaxWidthGap() : a.getDimensionPixelSize(smallIcons ?
                     R.styleable.CellLayout_widthGapSmall : R.styleable.CellLayout_widthGap, 0);
@@ -860,6 +865,24 @@ public class CellLayout extends ViewGroup {
         int height = getResources().getConfiguration().screenHeightDp
                 - systemBarHeight - actionBarHeight;
         return (height - (mCountY * mCellHeight)) / numHeightGaps;
+    }
+
+    private int getMaxCellWidth() {
+        int width = getResources().getConfiguration().screenWidthDp;
+        return width / mCountX;
+    }
+
+    private int getMaxCellHeight() {
+        boolean actionBarGap =
+                PreferencesProvider.Interface.Tablet.getShowAllAppsWorkspace(getContext()) ||
+                PreferencesProvider.Interface.Homescreen.getShowSearchBar(getContext());
+        int actionBarHeight = !actionBarGap ? 0 :
+                getResources().getDimensionPixelSize(
+                R.dimen.workspace_content_large_only_top_margin);
+        int systemBarHeight = getResources().getDimensionPixelSize(R.dimen.status_bar_height);
+        int height = getResources().getConfiguration().screenHeightDp
+                - systemBarHeight - actionBarHeight;
+        return height / mCountY;
     }
 
     @Override
