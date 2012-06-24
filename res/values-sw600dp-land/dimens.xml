@@ -16,7 +16,8 @@
 
 <resources>
 <!-- Workspace -->
-    <dimen name="workspace_cell_height">98dip</dimen>
+    <dimen name="workspace_cell_height">99dip</dimen>
+    <dimen name="workspace_cell_height_small">82dip</dimen>
     <dimen name="workspace_left_padding">24dip</dimen>
     <dimen name="workspace_right_padding">24dip</dimen>
     <!-- We need padding on the screens for portals to look right -->

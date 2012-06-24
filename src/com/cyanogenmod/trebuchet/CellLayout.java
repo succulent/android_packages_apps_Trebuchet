@@ -154,7 +154,9 @@ public class CellLayout extends ViewGroup {
 
         boolean smallIcons = PreferencesProvider.Interface.Tablet.getSmallerIcons(context);
         boolean maximize = PreferencesProvider.Interface.Homescreen.getMaximizeWorkspace(context);
-        boolean largeTablet = getResources().getConfiguration().smallestScreenWidthDp >= 800;
+
+        mCountX = LauncherModel.getCellCountX();
+        mCountY = LauncherModel.getCellCountY();
 
         mOriginalCellWidth =
                 mCellWidth = a.getDimensionPixelSize(smallIcons ?
@@ -162,24 +164,21 @@ public class CellLayout extends ViewGroup {
         mOriginalCellHeight =
                 mCellHeight = a.getDimensionPixelSize(smallIcons ?
                 R.styleable.CellLayout_cellHeightSmall : R.styleable.CellLayout_cellHeight, 10);
-        if (largeTablet) {
-            mWidthGap = mOriginalWidthGap = (int) (a.getDimensionPixelSize(smallIcons ?
-                    R.styleable.CellLayout_widthGapSmall : R.styleable.CellLayout_widthGap, 0) *
-                    (maximize ? (smallIcons ? 1.4f : 2.1f) : 1));
-            mHeightGap = mOriginalHeightGap = (int) (a.getDimensionPixelSize(smallIcons ?
-                    R.styleable.CellLayout_heightGapSmall : R.styleable.CellLayout_heightGap, 0) *
-                    (maximize ? (smallIcons ? 2.2f : 2.3f) : 1));
+        if (LauncherApplication.isScreenLarge()) {
+            mWidthGap = mOriginalWidthGap = maximize && LauncherApplication.isScreenLandscape(context) ?
+                    getMaxWidthGap() : a.getDimensionPixelSize(smallIcons ?
+                    R.styleable.CellLayout_widthGapSmall : R.styleable.CellLayout_widthGap, 0);
+            mHeightGap = mOriginalHeightGap = maximize  && !LauncherApplication.isScreenLandscape(context) ?
+                    getMaxHeightGap() : a.getDimensionPixelSize(smallIcons ?
+                    R.styleable.CellLayout_heightGapSmall : R.styleable.CellLayout_heightGap, 0);
         } else {
-            mWidthGap = mOriginalWidthGap = (int) (a.getDimensionPixelSize(smallIcons ?
-                    R.styleable.CellLayout_widthGapSmall : R.styleable.CellLayout_widthGap, 0) *
-                    (maximize ? (smallIcons ? 2f : 2.8f) : 1));
-            mHeightGap = mOriginalHeightGap = (int) (a.getDimensionPixelSize(smallIcons ?
-                    R.styleable.CellLayout_heightGapSmall : R.styleable.CellLayout_heightGap, 0) *
-                    (maximize ? (smallIcons ? 3.3f : 3.5f) : 1));
+            mWidthGap = mOriginalWidthGap = a.getDimensionPixelSize(
+                    R.styleable.CellLayout_widthGap, -1);
+            mHeightGap = mOriginalHeightGap = a.getDimensionPixelSize(
+                    R.styleable.CellLayout_heightGap, -1);
         }
         mMaxGap = a.getDimensionPixelSize(R.styleable.CellLayout_maxGap, 0);
-        mCountX = LauncherModel.getCellCountX();
-        mCountY = LauncherModel.getCellCountY();
+
         mOccupied = new boolean[mCountX][mCountY];
 
         a.recycle();
@@ -841,6 +840,26 @@ public class CellLayout extends ViewGroup {
         int bottom = top + getHeight() - mPaddingTop - mPaddingBottom;
         r.set(left, top, right, bottom);
         return r;
+    }
+
+    private int getMaxWidthGap() {
+        int numWidthGaps = mCountX - 1;
+        int width = getResources().getConfiguration().screenWidthDp;
+        return (width - (mCountX * mCellWidth)) / numWidthGaps;
+    }
+
+    private int getMaxHeightGap() {
+        int numHeightGaps = mCountY - 1;
+        boolean actionBarGap =
+                PreferencesProvider.Interface.Tablet.getShowAllAppsWorkspace(getContext()) ||
+                PreferencesProvider.Interface.Homescreen.getShowSearchBar(getContext());
+        int actionBarHeight = !actionBarGap ? 0 :
+                getResources().getDimensionPixelSize(
+                R.dimen.workspace_content_large_only_top_margin);
+        int systemBarHeight = getResources().getDimensionPixelSize(R.dimen.status_bar_height);
+        int height = getResources().getConfiguration().screenHeightDp
+                - systemBarHeight - actionBarHeight;
+        return (height - (mCountY * mCellHeight)) / numHeightGaps;
     }
 
     @Override
