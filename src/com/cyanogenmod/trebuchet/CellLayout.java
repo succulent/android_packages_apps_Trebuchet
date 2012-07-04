@@ -314,6 +314,14 @@ public class CellLayout extends ViewGroup {
         mChildren.enableHardwareLayers();
     }
 
+    public void setHotseatGridSize(int x, int y) {
+        if (LauncherApplication.isScreenLarge()) {
+            mCellWidth = mOriginalCellWidth;
+            mCellHeight = mOriginalCellHeight;
+        }
+        setGridSize(x, y);
+    }
+
     public void setGridSize(int x, int y) {
         mCountX = x;
         mCountY = y;

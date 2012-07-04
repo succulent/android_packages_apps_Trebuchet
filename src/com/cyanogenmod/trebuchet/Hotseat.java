@@ -148,7 +148,7 @@ public class Hotseat extends FrameLayout {
         else mCellCountX = prefCount;
 
         mContent = (CellLayout) findViewById(R.id.layout);
-        mContent.setGridSize(mCellCountX, mCellCountY);
+        mContent.setHotseatGridSize(mCellCountX, mCellCountY);
 
         // Add padding in landscape large screen mode for the search drop target bar
         if (mIsLandscape && mIsScreenLarge) {
