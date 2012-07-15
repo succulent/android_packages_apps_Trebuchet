@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:launcher="http://schemas.android.com/apk/res/com.android.launcher2">
+
+             <PreferenceCategory android:key="ui_homescreen_gestures"
+                android:title="@string/preferences_interface_gestures_homescreen_category">
+                <ListPreference android:key="ui_homescreen_doubletap"
+                    android:title="@string/preferences_interface_gestures_double_tap_title"
+                    android:entries="@array/preferences_interface_gestures_homescreen_entries"
+                    android:entryValues="@array/preferences_interface_gestures_homescreen_values"
+                    android:defaultValue="0" />
+                <ListPreference android:key="ui_homescreen_swipe_up"
+                    android:title="@string/preferences_interface_gestures_swipe_up_title"
+                    android:entries="@array/preferences_interface_gestures_homescreen_entries"
+                    android:entryValues="@array/preferences_interface_gestures_homescreen_values"
+                    android:defaultValue="0" />
+                <ListPreference android:key="ui_homescreen_swipe_down"
+                    android:title="@string/preferences_interface_gestures_swipe_down_title"
+                    android:entries="@array/preferences_interface_gestures_homescreen_entries"
+                    android:entryValues="@array/preferences_interface_gestures_homescreen_values"
+                    android:defaultValue="0" />
+            </PreferenceCategory>
+</PreferenceScreen>

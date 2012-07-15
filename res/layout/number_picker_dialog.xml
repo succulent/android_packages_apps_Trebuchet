@@ -13,17 +13,16 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<com.android.launcher2.SearchDropTargetBar
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/QSBBar"
-    android:focusable="false">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
 
-    <!-- Drag specific targets container -->
-    <LinearLayout
-        style="@style/SearchDropTargetBar"
-        android:id="@+id/drag_target_bar">
+    <NumberPicker
+        android:id="@+id/number_picker"
+        android:layout_centerInParent="true"
+        android:layout_width="100dip"
+        android:layout_height="match_parent" />
 
-        <include
-            layout="@layout/drop_target_bar" />
-    </LinearLayout>
-</com.android.launcher2.SearchDropTargetBar>
+</LinearLayout>

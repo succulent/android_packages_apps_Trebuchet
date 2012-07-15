@@ -35,9 +35,7 @@
         launcher:defaultScreen="2"
         launcher:cellCountX="@integer/cell_count_x"
         launcher:cellCountY="@integer/cell_count_y"
-        launcher:pageSpacing="@dimen/workspace_page_spacing"
-        launcher:scrollIndicatorPaddingLeft="@dimen/qsb_bar_height"
-        launcher:scrollIndicatorPaddingRight="@dimen/button_bar_height">
+        launcher:pageSpacing="@dimen/workspace_page_spacing">
 
         <include android:id="@+id/cell1" layout="@layout/workspace_screen" />
         <include android:id="@+id/cell2" layout="@layout/workspace_screen" />
@@ -46,13 +44,6 @@
         <include android:id="@+id/cell5" layout="@layout/workspace_screen" />
     </com.android.launcher2.Workspace>
 
-    <include
-        android:id="@+id/qsb_divider"
-        layout="@layout/workspace_divider"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/qsb_bar_height"
-        android:layout_gravity="left" />
     <include
         android:id="@+id/dock_divider"
         layout="@layout/workspace_divider"
@@ -75,16 +66,6 @@
     <include
         android:id="@+id/qsb_bar"
         layout="@layout/qsb_bar" />
-
-    <com.android.launcher2.DrawableStateProxyView
-        android:id="@+id/voice_button_proxy"
-        android:layout_width="@dimen/qsb_bar_height"
-        android:layout_height="@dimen/app_icon_size"
-        android:layout_gravity="bottom|left"
-        android:clickable="true"
-        android:onClick="onClickVoiceButton"
-        android:importantForAccessibility="no"
-        launcher:sourceViewId="@+id/voice_button" />
 
     <include layout="@layout/apps_customize_pane"
         android:id="@+id/apps_customize_pane"

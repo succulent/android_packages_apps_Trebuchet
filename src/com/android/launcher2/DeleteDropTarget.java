@@ -79,14 +79,6 @@ public class DeleteDropTarget extends ButtonDropTarget {
         // The current drawable is set to either the remove drawable or the uninstall drawable 
         // and is initially set to the remove drawable, as set in the layout xml.
         mCurrentDrawable = (TransitionDrawable) getCurrentDrawable();
-
-        // Remove the text in the Phone UI in landscape
-        int orientation = getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            if (!LauncherApplication.isScreenLarge()) {
-                setText("");
-            }
-        }
     }
 
     private boolean isAllAppsApplication(DragSource source, Object info) {

@@ -42,12 +42,14 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.Region.Op;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +60,7 @@ import android.widget.TextView;
 import com.android.launcher.R;
 import com.android.launcher2.FolderIcon.FolderRingAnimator;
 import com.android.launcher2.LauncherSettings.Favorites;
+import com.android.launcher2.preference.PreferencesProvider;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -256,6 +259,17 @@ public class Workspace extends SmoothPagedView
     private float[] mNewRotationYs;
     private float mTransitionProgress;
 
+    // Preferences
+    private boolean mResizeAnyWidget;
+    private boolean mHideIconLabels;
+    private boolean mShowDockDivider;
+
+    private final GestureDetector mGestureDetector;
+    private Runnable mSwipeUpCallback = null;
+    private Runnable mSwipeDownCallback = null;
+    private Runnable mDoubleTapCallback = null;
+    private final Handler mHandler = new Handler();
+
     /**
      * Used to inflate the Workspace from XML.
      *
@@ -326,19 +340,58 @@ public class Workspace extends SmoothPagedView
         // if the value is manually specified, use that instead
         cellCountX = a.getInt(R.styleable.Workspace_cellCountX, cellCountX);
         cellCountY = a.getInt(R.styleable.Workspace_cellCountY, cellCountY);
-        mDefaultPage = a.getInt(R.styleable.Workspace_defaultScreen, 1);
+        mDefaultPage = PreferencesProvider.Interface.Homescreen.getDefaultHomescreen(
+                context, a.getInt(R.styleable.Workspace_defaultScreen, 1));
         a.recycle();
+
+        cellCountX = PreferencesProvider.Interface.Homescreen.getCellCountX(context, cellCountX);
+        cellCountY = PreferencesProvider.Interface.Homescreen.getCellCountY(context, cellCountY);
 
         setOnHierarchyChangeListener(this);
 
         LauncherModel.updateWorkspaceLayoutCells(cellCountX, cellCountY);
         setHapticFeedbackEnabled(false);
 
+        // Preferences
+        mResizeAnyWidget = PreferencesProvider.Interface.Homescreen.getResizeAnyWidget(context);
+        mHideIconLabels = PreferencesProvider.Interface.Homescreen.getHideIconLabels(context);
+        mShowDockDivider = PreferencesProvider.Interface.Homescreen.Indicator.getShowDockDivider(context);
+
         mLauncher = (Launcher) context;
         initWorkspace();
 
         // Disable multitouch across the workspace/all apps/customize tray
         setMotionEventSplittingEnabled(true);
+
+        mGestureDetector = new GestureDetector(context,
+                new GestureDetector.SimpleOnGestureListener() {
+                    @Override
+                    public boolean onFling(MotionEvent e1, MotionEvent e2, float vX, float vY) {
+                        if (Math.abs(vY) > Math.abs(vX)) {
+                            if (vY < 0) {
+                                if (mSwipeUpCallback != null) {
+                                    mHandler.post(mSwipeUpCallback);
+                                    return true;
+                                }
+                            } else {
+                                if (mSwipeDownCallback != null) {
+                                    mHandler.post(mSwipeDownCallback);
+                                    return true;
+                                }
+                            }
+                        }
+                        return false;
+                    }
+                    @Override
+                    public boolean onDoubleTapEvent(MotionEvent e) {
+                        if (mDoubleTapCallback != null) {
+                            mHandler.removeCallbacks(mDoubleTapCallback);
+                            mHandler.postDelayed(mDoubleTapCallback, 100);
+                            return true;
+                        }
+                        return false;
+                    }
+        });
 
         // Unless otherwise specified this view is important for accessibility.
         if (getImportantForAccessibility() == View.IMPORTANT_FOR_ACCESSIBILITY_AUTO) {
@@ -525,9 +578,13 @@ public class Workspace extends SmoothPagedView
             layout = mLauncher.getHotseat().getLayout();
             child.setOnKeyListener(null);
 
-            // Hide folder title in the hotseat
-            if (child instanceof FolderIcon) {
-                ((FolderIcon) child).setTextVisible(false);
+            if (!mHideIconLabels) {
+                // Hide titles in the hotseat
+                if (child instanceof FolderIcon) {
+                    ((FolderIcon) child).setTextVisible(false);
+                } else if (child instanceof BubbleTextView) {
+                    ((BubbleTextView) child).setTextVisible(false);
+                }
             }
 
             if (screen < 0) {
@@ -539,9 +596,13 @@ public class Workspace extends SmoothPagedView
                 y = mLauncher.getHotseat().getCellYFromOrder(screen);
             }
         } else {
-            // Show folder title if not in the hotseat
-            if (child instanceof FolderIcon) {
-                ((FolderIcon) child).setTextVisible(true);
+            if (!mHideIconLabels) {
+                // Show titles if not in the hotseat
+                if (child instanceof FolderIcon) {
+                    ((FolderIcon) child).setTextVisible(true);
+                } else if (child instanceof BubbleTextView) {
+                    ((BubbleTextView) child).setTextVisible(true);
+                }
             }
 
             layout = (CellLayout) getChildAt(screen);
@@ -652,8 +713,32 @@ public class Workspace extends SmoothPagedView
         return super.dispatchUnhandledMove(focused, direction);
     }
 
+    public void setOnSwipeUpCallback(Runnable callback) {
+        mSwipeUpCallback = callback;
+    }
+
+    public void setOnSwipeDownCallback(Runnable callback) {
+        mSwipeDownCallback = callback;
+    }
+
+    public void setOnDoubleTapCallback(Runnable callback) {
+        mDoubleTapCallback = callback;
+    }
+
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if (mSwipeUpCallback != null || mSwipeDownCallback != null || mDoubleTapCallback != null) {
+            boolean handled = mGestureDetector.onTouchEvent(ev);
+            switch (ev.getAction() & MotionEvent.ACTION_MASK) {
+                case MotionEvent.ACTION_OUTSIDE:
+                case MotionEvent.ACTION_CANCEL:
+                case MotionEvent.ACTION_UP:
+                    return handled;
+                case MotionEvent.ACTION_MOVE:
+                case MotionEvent.ACTION_DOWN:
+            }
+        }
+
         switch (ev.getAction() & MotionEvent.ACTION_MASK) {
         case MotionEvent.ACTION_DOWN:
             mXDown = ev.getX();
@@ -1752,11 +1837,13 @@ public class Workspace extends SmoothPagedView
             d.draw(destCanvas);
         } else {
             if (v instanceof FolderIcon) {
-                // For FolderIcons the text can bleed into the icon area, and so we need to
-                // hide the text completely (which can't be achieved by clipping).
-                if (((FolderIcon) v).getTextVisible()) {
-                    ((FolderIcon) v).setTextVisible(false);
-                    textVisible = true;
+                if (!mHideIconLabels) {
+                    // For FolderIcons the text can bleed into the icon area, and so we need to
+                    // hide the text completely (which can't be achieved by clipping).
+                    if (((FolderIcon) v).getTextVisible()) {
+                        ((FolderIcon) v).setTextVisible(false);
+                        textVisible = true;
+                    }
                 }
             } else if (v instanceof BubbleTextView) {
                 final BubbleTextView tv = (BubbleTextView) v;
@@ -1772,7 +1859,7 @@ public class Workspace extends SmoothPagedView
             v.draw(destCanvas);
 
             // Restore text visibility of FolderIcon if necessary
-            if (textVisible) {
+            if (!mHideIconLabels && textVisible) {
                 ((FolderIcon) v).setTextVisible(true);
             }
         }
@@ -2256,7 +2343,7 @@ public class Workspace extends SmoothPagedView
                         final LauncherAppWidgetHostView hostView = (LauncherAppWidgetHostView) cell;
                         AppWidgetProviderInfo pinfo = hostView.getAppWidgetInfo();
                         if (pinfo != null &&
-                                pinfo.resizeMode != AppWidgetProviderInfo.RESIZE_NONE) {
+                                pinfo.resizeMode != AppWidgetProviderInfo.RESIZE_NONE || mResizeAnyWidget) {
                             final Runnable addResizeFrame = new Runnable() {
                                 public void run() {
                                     DragLayer dragLayer = mLauncher.getDragLayer();
@@ -3087,6 +3174,9 @@ public class Workspace extends SmoothPagedView
             case LauncherSettings.Favorites.ITEM_TYPE_FOLDER:
                 view = FolderIcon.fromXml(R.layout.folder_icon, mLauncher, cellLayout,
                         (FolderInfo) info, mIconCache);
+                if (mHideIconLabels) {
+                    ((FolderIcon) view).setTextVisible(false);
+                }
                 break;
             default:
                 throw new IllegalStateException("Unknown item type: " + info.itemType);
@@ -3769,13 +3859,11 @@ public class Workspace extends SmoothPagedView
         mOverscrollFade = fade;
         float reducedFade = 0.5f + 0.5f * (1 - fade);
         final ViewGroup parent = (ViewGroup) getParent();
-        final ImageView qsbDivider = (ImageView) (parent.findViewById(R.id.qsb_divider));
         final ImageView dockDivider = (ImageView) (parent.findViewById(R.id.dock_divider));
         final View scrollIndicator = getScrollingIndicator();
 
         cancelScrollingIndicatorAnimations();
-        if (qsbDivider != null) qsbDivider.setAlpha(reducedFade);
-        if (dockDivider != null) dockDivider.setAlpha(reducedFade);
+        if (dockDivider != null && mShowDockDivider) dockDivider.setAlpha(reducedFade);
         scrollIndicator.setAlpha(1 - fade);
     }
 }

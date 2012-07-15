@@ -54,7 +54,8 @@
             android:singleLine="true"
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
-
+            android:shadowRadius="2.0"
+            android:shadowColor="#B0000000"
             android:textColor="#FFFFFFFF"
             android:textSize="13sp" />
 
@@ -68,8 +69,9 @@
             android:layout_marginLeft="5dp"
             android:layout_weight="0"
             android:gravity="left"
-
-            android:textColor="#FF555555"
+            android:shadowRadius="2.0"
+            android:shadowColor="#B0000000"
+            android:textColor="#FFFFFFFF"
             android:textSize="12sp" />
     </LinearLayout>
 
