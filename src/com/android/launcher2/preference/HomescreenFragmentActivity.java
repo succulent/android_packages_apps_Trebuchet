@@ -33,6 +33,7 @@ public class HomescreenFragmentActivity extends PreferenceFragment {
     private static final String PREF_ENABLED = "1";
     private static final String TAG = "Trebuchet_Homescreen";
 
+    private NumberPickerPreference mHomescreens;
     private NumberPickerPreference mDefaultHomescreen;
     private static AutoDoubleNumberPickerPreference mHomescreenGrid;
 
@@ -52,6 +53,9 @@ public class HomescreenFragmentActivity extends PreferenceFragment {
 
         PreferenceScreen prefSet = getPreferenceScreen();
 
+        mHomescreens =
+                (NumberPickerPreference) prefSet.findPreference(Preferences.HOMESCREENS);
+
         mDefaultHomescreen = (NumberPickerPreference)
                 prefSet.findPreference(Preferences.DEFAULT_HOMESCREEN);
 
@@ -61,8 +65,14 @@ public class HomescreenFragmentActivity extends PreferenceFragment {
 
     public void onResume() {
         super.onResume();
-        mDefaultHomescreen.setSummary(
-                Integer.toString(mPrefs.getInt(Preferences.DEFAULT_HOMESCREEN, 3)));
+        int homescreens = mPrefs.getInt(Preferences.HOMESCREENS, 5);
+        int defaultScreen = mPrefs.getInt(Preferences.DEFAULT_HOMESCREEN, 3);
+        if (defaultScreen > homescreens) {
+            mPrefs.edit().putInt(Preferences.DEFAULT_HOMESCREEN, homescreens).commit();
+            defaultScreen = homescreens;
+        }
+        mHomescreens.setSummary(Integer.toString(homescreens));
+        mDefaultHomescreen.setSummary(Integer.toString(defaultScreen));
 
         String hg = mPrefs.getString(Preferences.HOMESCREEN_GRID, "6|6");
         mHomescreenGrid.setSummary(hg.equals("0|0") ?

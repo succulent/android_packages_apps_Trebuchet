@@ -36,12 +36,6 @@
         launcher:cellCountX="@integer/cell_count_x"
         launcher:cellCountY="@integer/cell_count_y"
         launcher:pageSpacing="@dimen/workspace_page_spacing">
-
-        <include android:id="@+id/cell1" layout="@layout/workspace_screen" />
-        <include android:id="@+id/cell2" layout="@layout/workspace_screen" />
-        <include android:id="@+id/cell3" layout="@layout/workspace_screen" />
-        <include android:id="@+id/cell4" layout="@layout/workspace_screen" />
-        <include android:id="@+id/cell5" layout="@layout/workspace_screen" />
     </com.android.launcher2.Workspace>
 
     <include
