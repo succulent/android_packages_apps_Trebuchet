@@ -49,6 +49,7 @@ import android.util.Log;
 
 import com.android.launcher.R;
 import com.android.launcher2.InstallWidgetReceiver.WidgetMimeTypeHandlerData;
+import com.android.launcher2.preference.PreferencesProvider;
 
 import java.lang.ref.WeakReference;
 import java.net.URISyntaxException;
@@ -124,6 +125,8 @@ public class LauncherModel extends BroadcastReceiver {
 
     protected int mPreviousConfigMcc;
 
+    private int mNumberHomescreens;
+
     public interface Callbacks {
         public boolean setLoadOnResume();
         public int getCurrentWorkspaceScreen();
@@ -156,6 +159,8 @@ public class LauncherModel extends BroadcastReceiver {
         mBatchSize = res.getInteger(R.integer.config_allAppsBatchSize);
         Configuration config = res.getConfiguration();
         mPreviousConfigMcc = config.mcc;
+
+        mNumberHomescreens = PreferencesProvider.Interface.Homescreen.getNumberHomescreens(app.getApplicationContext());
     }
 
     public Bitmap getFallbackIcon() {
@@ -960,13 +965,13 @@ public class LauncherModel extends BroadcastReceiver {
 
                 // We use the last index to refer to the hotseat and the screen as the rank, so
                 // test and update the occupied state accordingly
-                if (occupied[Launcher.SCREEN_COUNT][item.screen][0] != null) {
+                if (occupied[mNumberHomescreens][item.screen][0] != null) {
                     Log.e(TAG, "Error loading shortcut into hotseat " + item
                         + " into position (" + item.screen + ":" + item.cellX + "," + item.cellY
-                        + ") occupied by " + occupied[Launcher.SCREEN_COUNT][item.screen][0]);
+                        + ") occupied by " + occupied[mNumberHomescreens][item.screen][0]);
                     return false;
                 } else {
-                    occupied[Launcher.SCREEN_COUNT][item.screen][0] = item;
+                    occupied[mNumberHomescreens][item.screen][0] = item;
                     return true;
                 }
             } else if (item.container != LauncherSettings.Favorites.CONTAINER_DESKTOP) {
@@ -1023,7 +1028,7 @@ public class LauncherModel extends BroadcastReceiver {
             // Load workspace in reverse order to ensure that latest items are loaded first (and
             // before any earlier duplicates)
             final ItemInfo occupied[][][] =
-                    new ItemInfo[Launcher.SCREEN_COUNT + 1][mCellCountX + 1][mCellCountY + 1];
+                    new ItemInfo[mNumberHomescreens + 1][mCellCountX + 1][mCellCountY + 1];
 
             try {
                 final int idIndex = c.getColumnIndexOrThrow(LauncherSettings.Favorites._ID);
@@ -1246,7 +1251,7 @@ public class LauncherModel extends BroadcastReceiver {
                 Log.d(TAG, "workspace layout: ");
                 for (int y = 0; y < mCellCountY; y++) {
                     String line = "";
-                    for (int s = 0; s < Launcher.SCREEN_COUNT; s++) {
+                    for (int s = 0; s < mNumberHomescreens; s++) {
                         if (s > 0) {
                             line += " | ";
                         }
@@ -1285,7 +1290,7 @@ public class LauncherModel extends BroadcastReceiver {
                     int cellCountX = LauncherModel.getCellCountX();
                     int cellCountY = LauncherModel.getCellCountY();
                     int screenOffset = cellCountX * cellCountY;
-                    int containerOffset = screenOffset * (Launcher.SCREEN_COUNT + 1); // +1 hotseat
+                    int containerOffset = screenOffset * (mNumberHomescreens + 1); // +1 hotseat
                     long lr = (lhs.container * containerOffset + lhs.screen * screenOffset +
                             lhs.cellY * cellCountX + lhs.cellX);
                     long rr = (rhs.container * containerOffset + rhs.screen * screenOffset +

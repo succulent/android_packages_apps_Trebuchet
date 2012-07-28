@@ -3290,7 +3290,7 @@ public final class Launcher extends Activity
         if (mWorkspace != null) {
             return mWorkspace.getCurrentPage();
         } else {
-            return SCREEN_COUNT / 2;
+            return PreferencesProvider.Interface.Homescreen.getNumberHomescreens(getApplicationContext()) / 2;
         }
     }
 
