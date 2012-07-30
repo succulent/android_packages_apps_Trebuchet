@@ -103,13 +103,12 @@ public class DockFragmentActivity extends PreferenceFragment {
         mShowDockAppsButton.setChecked(
                 PreferencesProvider.Interface.Dock.getShowAllAppsHotseat(mContext));
 
-        mShowAppsButton.setEnabled(!mShowDock.isChecked());
-        mAppsButtonPosition.setEnabled(!mShowDock.isChecked());
         if (!mShowDock.isChecked()) {
             mShowDockDivider.setChecked(false);
         } else {
             mShowAppsButton.setChecked(false);
         }
+        mAppsButtonPosition.setEnabled(mShowAppsButton.isChecked());
     }
 
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
@@ -119,8 +118,13 @@ public class DockFragmentActivity extends PreferenceFragment {
             } else {
                 mShowAppsButton.setChecked(false);
             }
-            mShowAppsButton.setEnabled(!mShowDock.isChecked());
-            mAppsButtonPosition.setEnabled(!mShowDock.isChecked());
+            mAppsButtonPosition.setEnabled(mShowAppsButton.isChecked());
+            return true;
+        } else if (preference == mShowAppsButton) {
+            if (mShowAppsButton.isChecked()) {
+                mShowDock.setChecked(!mShowAppsButton.isChecked());
+            }
+            mAppsButtonPosition.setEnabled(mShowAppsButton.isChecked());
             return true;
         }
         return false;
