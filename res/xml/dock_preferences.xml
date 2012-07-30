@@ -3,8 +3,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:launcher="http://schemas.android.com/apk/res/com.android.launcher">
 
-        <PreferenceCategory android:key="ui_dock"
-            android:title="@string/preferences_interface_homescreen_general_category">
                 <CheckBoxPreference android:key="ui_homescreen_general_show_hotseat"
                     android:title="@string/preferences_interface_homescreen_general_show_hotseat_title" />
                 <CheckBoxPreference android:key="ui_homescreen_indicator_background"
@@ -28,6 +26,13 @@
                     launcher:maxExternal="ui_hotseat_apps"
                     launcher:max="7"
                     launcher:min="1" />
-            </PreferenceCategory>
+                <CheckBoxPreference android:key="ui_show_apps_button"
+                    android:defaultValue="false"
+                    android:title="@string/preferences_interface_dock_apps_button_title" />
+                <ListPreference android:key="ui_apps_button_position"
+                    android:defaultValue="0"
+                    android:entries="@array/preferences_interface_apps_bar_entries"
+                    android:entryValues="@array/preferences_interface_apps_bar_values"
+                    android:title="@string/preferences_interface_dock_apps_button_position_title" />
 
 </PreferenceScreen>

@@ -121,6 +121,18 @@ public final class PreferencesProvider {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return preferences.getBoolean("ui_drawer_menu_button", true);
             }
+            public static boolean getOpenWithHome(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("ui_drawer_launch_home", false);
+            }
+            public static boolean getStayOnPage(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("ui_drawer_launch_home_page", false);
+            }
+            public static boolean getOpenWithBack(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("ui_drawer_launch_back", false);
+            }
             public static boolean getDismissDrawerOnTap(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return preferences.getBoolean("ui_drawer_dismiss_on_tap", true);
@@ -175,6 +187,14 @@ public final class PreferencesProvider {
             public static boolean getShowBackground(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return preferences.getBoolean("ui_hotseat_background", true);
+            }
+            public static boolean getShowAppsButton(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("ui_show_apps_button", false);
+            }
+            public static int getAppsButtonPosition(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return Integer.parseInt(preferences.getString("ui_apps_button_position", "0"));
             }
         }
 

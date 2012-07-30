@@ -64,6 +64,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.launcher.R;
+import com.android.launcher2.preference.PreferencesProvider;
 import com.android.launcher2.DropTarget.DragObject;
 
 import java.util.ArrayList;
@@ -375,10 +376,10 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
 
     @Override
     protected void onUnhandledTap(MotionEvent ev) {
-        //if (LauncherApplication.isScreenLarge()) {
+        if (PreferencesProvider.Interface.Drawer.getDismissDrawerOnTap(getContext())) {
             // Dismiss AppsCustomize if we tap
             mLauncher.showWorkspace(true);
-        //}
+        }
     }
 
     /** Returns the item index of the center item on this page so that we can restore to this

@@ -93,6 +93,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Advanceable;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -313,6 +314,8 @@ public final class Launcher extends Activity
     private int mHomescreenDoubleTap;
     private int mHomescreenSwipeUp;
     private int mHomescreenSwipeDown;
+    private boolean mShowAppsButton;
+    private int mAppsButtonPosition;
 
     private StatusBarManager mStatusBarManager;
 
@@ -379,6 +382,8 @@ public final class Launcher extends Activity
                 .getShowDockDivider(this);
         mHideIconLabels = PreferencesProvider.Interface.Homescreen.getHideIconLabels(this);
         mAutoRotate = PreferencesProvider.Interface.General.getAutoRotate(this, true);
+        mShowAppsButton = PreferencesProvider.Interface.Dock.getShowAppsButton(this);
+        mAppsButtonPosition = PreferencesProvider.Interface.Dock.getAppsButtonPosition(this);
 
         if (PROFILE_STARTUP) {
             android.os.Debug.startMethodTracing(
@@ -982,6 +987,47 @@ public final class Launcher extends Activity
             mDockDivider.setVisibility(View.GONE);
         }
 
+        LinearLayout appsBar = (LinearLayout) findViewById(R.id.apps_bar);
+        if (appsBar != null) {
+            appsBar.setVisibility(mShowAppsButton && !mShowHotseat ? View.VISIBLE : View.GONE);
+            int gravity = 0;
+            switch (mAppsButtonPosition) {
+                case 0:
+                    gravity = Gravity.TOP | Gravity.LEFT;
+                    break;
+                case 1:
+                    gravity = Gravity.TOP | Gravity.RIGHT;
+                    break;
+                case 2:
+                    gravity = Gravity.BOTTOM | Gravity.RIGHT;
+                    break;
+                case 3:
+                    gravity = Gravity.BOTTOM | Gravity.LEFT;
+                    break;
+                case 4:
+                    gravity = LauncherApplication.isScreenLandscape(this) ?
+                            Gravity.RIGHT | Gravity.CENTER_VERTICAL :
+                            Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+                    break;
+                case 5:
+                    gravity = LauncherApplication.isScreenLandscape(this) ?
+                            Gravity.LEFT | Gravity.CENTER_VERTICAL :
+                            Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+                    break;
+                case 6:
+                    gravity = LauncherApplication.isScreenLandscape(this) ?
+                            Gravity.LEFT | Gravity.CENTER_VERTICAL :
+                            Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+                    break;
+                case 7:
+                    gravity = LauncherApplication.isScreenLandscape(this) ?
+                            Gravity.RIGHT | Gravity.CENTER_VERTICAL :
+                            Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+                    break;
+            }
+            appsBar.setGravity(gravity);
+        }
+
         // Setup AppsCustomize
         mAppsCustomizeTabHost = (AppsCustomizeTabHost)
                 findViewById(R.id.apps_customize_pane);
@@ -1013,12 +1059,22 @@ public final class Launcher extends Activity
             mSearchDropTargetBar.setup(this, dragController);
         }
 
+        boolean appsButtonTop = mAppsButtonPosition < 2 || mAppsButtonPosition > 5;
+        boolean appsButtonLeft = mAppsButtonPosition == 0 || mAppsButtonPosition == 3 ||
+                mAppsButtonPosition == 5 || mAppsButtonPosition == 6;
+
         if (LauncherApplication.isScreenLandscape(getApplicationContext())) {
-            mWorkspace.setPadding(0, 0, mShowHotseat ? getResources().getDimensionPixelSize(
-                    R.dimen.button_bar_height) : 0, 0);
+            mWorkspace.setPadding(mShowAppsButton && appsButtonLeft ?
+                    getResources().getDimensionPixelSize(R.dimen.qsb_bar_height) : 0,
+                    0, mShowHotseat ? getResources().getDimensionPixelSize(
+                    R.dimen.button_bar_height) : (mShowAppsButton && !appsButtonLeft ?
+                    getResources().getDimensionPixelSize(R.dimen.qsb_bar_height) : 0), 0);
         } else {
-            mWorkspace.setPadding(0, 0, 0, mShowHotseat ? getResources().getDimensionPixelSize(
-                    R.dimen.button_bar_height) : 0);
+            mWorkspace.setPadding(0, mShowAppsButton && appsButtonTop ?
+                    getResources().getDimensionPixelSize(R.dimen.qsb_bar_height) : 0,
+                    0, mShowHotseat ? getResources().getDimensionPixelSize(
+                    R.dimen.button_bar_height) : (mShowAppsButton && !appsButtonTop ?
+                    getResources().getDimensionPixelSize(R.dimen.qsb_bar_height) : 0));
             View indicator = findViewById(R.id.paged_view_indicator);
             FrameLayout.LayoutParams dividerMargins = new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
@@ -1449,12 +1505,16 @@ public final class Launcher extends Activity
 
             boolean alreadyOnHome = ((intent.getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT)
                         != Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+            boolean drawerClosed = mState == State.WORKSPACE;
+            boolean openWithHome = PreferencesProvider.Interface.Drawer.getOpenWithHome(this);
+            boolean stayOnPage =
+                    PreferencesProvider.Interface.Drawer.getStayOnPage(this) && openWithHome;
 
             Folder openFolder = mWorkspace.getOpenFolder();
             // In all these cases, only animate if we're already on home
             mWorkspace.exitWidgetResizeMode();
             if (alreadyOnHome && mState == State.WORKSPACE && !mWorkspace.isTouchActive() &&
-                    openFolder == null) {
+                    openFolder == null && !stayOnPage) {
                 mWorkspace.moveToDefaultScreen(true);
             }
 
@@ -1470,8 +1530,12 @@ public final class Launcher extends Activity
             }
 
             // Reset AllApps to its initial state
-            if (!alreadyOnHome && mAppsCustomizeTabHost != null) {
+            if (!alreadyOnHome && mAppsCustomizeTabHost != null && !stayOnPage) {
                 mAppsCustomizeTabHost.reset();
+            }
+
+            if (alreadyOnHome && drawerClosed && openWithHome) {
+                onClickAllAppsButton(null);
             }
         }
     }
@@ -1903,7 +1967,9 @@ public final class Launcher extends Activity
             // Back button is a no-op here, but give at least some feedback for the button press
             mWorkspace.showOutlinesTemporarily();
 
-            onClickAllAppsButton(null);
+            if (PreferencesProvider.Interface.Drawer.getOpenWithBack(this)) {
+                onClickAllAppsButton(null);
+            }
         }
     }
 

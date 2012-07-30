@@ -58,6 +58,8 @@ public class Preferences extends Activity {
     public static final String SHOW_DOCK_BACKGROUND = "ui_hotseat_background";
     public static final String SHOW_DOCK_DIVIDER = "ui_homescreen_indicator_background";
     public static final String SHOW_DOCK_APPS_BUTTON = "ui_homescreen_general_show_hotseat_allapps";
+    public static final String SHOW_APPS_BUTTON = "ui_show_apps_button";
+    public static final String APPS_BUTTON_POSITION = "ui_apps_button_position";
 
     private SharedPreferences mPrefs;
 

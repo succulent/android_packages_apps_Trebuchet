@@ -7,6 +7,21 @@
                     android:title="@string/preferences_interface_drawer_background_show_wallpaper_title"
                     android:defaultValue="false" />
             </PreferenceCategory>
+            <PreferenceCategory android:title="@string/preferences_interface_drawer_launch_category">
+                <CheckBoxPreference android:key="ui_drawer_launch_home"
+                    android:title="@string/preferences_interface_drawer_launch_home_title"
+                    android:defaultValue="false" />
+                <CheckBoxPreference android:key="ui_drawer_launch_home_page"
+                    android:title="@string/preferences_interface_drawer_launch_home_page_title"
+                    android:dependency="ui_drawer_launch_home"
+                    android:defaultValue="false" />
+                <CheckBoxPreference android:key="ui_drawer_launch_back"
+                    android:title="@string/preferences_interface_drawer_launch_back_title"
+                    android:defaultValue="false" />
+                <CheckBoxPreference android:key="ui_drawer_dismiss_on_tap"
+                    android:title="@string/preferences_interface_drawer_dismiss_on_tap_title"
+                    android:defaultValue="true" />
+            </PreferenceCategory>
             <PreferenceCategory android:title="@string/preferences_interface_drawer_tab_category">
                 <CheckBoxPreference android:key="ui_drawer_hide_topbar"
                     android:title="@string/preferences_interface_drawer_topbar_hide_topbar_title"

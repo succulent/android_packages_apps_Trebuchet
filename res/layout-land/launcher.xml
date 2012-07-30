@@ -57,6 +57,13 @@
         android:layout_width="@dimen/button_bar_height_plus_padding"
         android:layout_height="match_parent"
         android:layout_gravity="right" />
+
+    <include layout="@layout/apps_bar"
+        android:id="@+id/apps_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="right" />
+
     <include
         android:id="@+id/qsb_bar"
         layout="@layout/qsb_bar" />

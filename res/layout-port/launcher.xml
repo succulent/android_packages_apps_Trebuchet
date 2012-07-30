@@ -63,6 +63,14 @@
         android:layout_height="@dimen/button_bar_height_plus_padding"
         android:layout_gravity="bottom" />
 
+    <include layout="@layout/apps_bar"
+        android:id="@+id/apps_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_gravity="bottom" />
+
     <include
         android:id="@+id/qsb_bar"
         layout="@layout/qsb_bar" />

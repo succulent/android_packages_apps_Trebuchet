@@ -42,7 +42,7 @@
     <!-- AppsCustomize pane -->
     <!-- Message to tell the user to press and hold on a widget to add it [CHAR_LIMIT=50] -->
     <string name="long_press_widget_to_add">Touch &amp; hold to pick up a widget.</string>
-    <!-- Market button text.  The market button text is removed in Launcher.java 
+    <!-- Market button text.  The market button text is removed in Launcher.java
          in the Phone UI. [CHAR LIMIT=32] -->
     <string name="market">Shop</string>
     <!-- Menu button text. -->
@@ -200,7 +200,7 @@ s -->
         shortcuts in Home.</string>
 
     <!-- Widgets: -->
-    <skip />    
+    <skip />
 
     <!-- Text to show user in place of a gadget when we can't display it properly -->
     <string name="gadget_error_text">Problem loading widget</string>
@@ -346,11 +346,16 @@ s -->
     <string name="preferences_interface_drawer_topbar_hide_topbar_title">Hide tab bar</string>
     <string name="preferences_interface_drawer_menu_button_title">Menu button</string>
     <string name="preferences_interface_drawer_market_button_title">Market button</string>
-    <string name="preferences_interface_drawer_dismiss_on_tap_title">Dismiss drawer on unhandled tap</string>
+    <string name="preferences_interface_drawer_launch_category">Open and close</string>
+    <string name="preferences_interface_drawer_launch_back_title">Open with back button</string>
+    <string name="preferences_interface_drawer_launch_home_title">Open with home button</string>
+    <string name="preferences_interface_drawer_launch_home_page_title">Stay on same page</string>
+    <string name="preferences_interface_drawer_dismiss_on_tap_title">Close on unhandled tap</string>
 
     <!-- Dock -->
     <string name="preferences_interface_dock_title">Dock</string>
-    <string name="preferences_interface_dock_background_title">Dock background</string>
+    <string name="preferences_interface_dock_apps_button_title">Tablet drawer button</string>
+    <string name="preferences_interface_dock_apps_button_position_title">Tablet drawer button position</string>
 
     <!-- Icons -->
     <string name="preferences_interface_icons_title">Icons</string>
@@ -375,5 +380,14 @@ s -->
     <string name="preferences_auto_number_picker">Automatic</string>
 
     <string name="menu_app_drawer">App drawer</string>
+
+    <string name="position_bottom_right">Bottom right</string>
+    <string name="position_bottom_left">Bottom left</string>
+    <string name="position_top_left">Top left</string>
+    <string name="position_top_right">Top right</string>
+    <string name="position_center">Centered on bottom in portrait and right in landscape</string>
+    <string name="position_center_left">Centered on bottom in portrait and left in landscape</string>
+    <string name="position_center_top">Centered on top in portrait and left in landscape</string>
+    <string name="position_center_top_right">Centered on top in portrait and right in landscape</string>
 
 </resources>

@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
@@ -32,7 +33,7 @@ import com.android.launcher.R;
 public class DockFragmentActivity extends PreferenceFragment {
 
     private static final String PREF_ENABLED = "1";
-    private static final String TAG = "Trebuchet_Dock";
+    private static final String TAG = "Launcher2_Dock";
 
     private static NumberPickerPreference mHotseatPositions;
     private static AutoNumberPickerPreference mHotseatAllAppsPosition;
@@ -40,6 +41,8 @@ public class DockFragmentActivity extends PreferenceFragment {
     private CheckBoxPreference mShowDock;
     private CheckBoxPreference mShowDockDivider;
     private CheckBoxPreference mShowDockAppsButton;
+    private CheckBoxPreference mShowAppsButton;
+    private ListPreference mAppsButtonPosition;
 
     private SharedPreferences mPrefs;
     private Context mContext;
@@ -74,6 +77,12 @@ public class DockFragmentActivity extends PreferenceFragment {
 
         mShowDockDivider = (CheckBoxPreference)
                 prefSet.findPreference(Preferences.SHOW_DOCK_DIVIDER);
+
+        mShowAppsButton = (CheckBoxPreference)
+                prefSet.findPreference(Preferences.SHOW_APPS_BUTTON);
+
+        mAppsButtonPosition = (ListPreference)
+                prefSet.findPreference(Preferences.APPS_BUTTON_POSITION);
     }
 
     public void onResume() {
@@ -93,13 +102,25 @@ public class DockFragmentActivity extends PreferenceFragment {
 
         mShowDockAppsButton.setChecked(
                 PreferencesProvider.Interface.Dock.getShowAllAppsHotseat(mContext));
+
+        mShowAppsButton.setEnabled(!mShowDock.isChecked());
+        mAppsButtonPosition.setEnabled(!mShowDock.isChecked());
+        if (!mShowDock.isChecked()) {
+            mShowDockDivider.setChecked(false);
+        } else {
+            mShowAppsButton.setChecked(false);
+        }
     }
 
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         if (preference == mShowDock) {
             if (!mShowDock.isChecked()) {
                 mShowDockDivider.setChecked(false);
+            } else {
+                mShowAppsButton.setChecked(false);
             }
+            mShowAppsButton.setEnabled(!mShowDock.isChecked());
+            mAppsButtonPosition.setEnabled(!mShowDock.isChecked());
             return true;
         }
         return false;

@@ -932,13 +932,17 @@ public class CellLayout extends ViewGroup {
     private int getMaxCellWidth(boolean portrait) {
         int width = getResources().getConfiguration().screenWidthDp - (portrait ?
                 0 : (PreferencesProvider.Interface.Dock.getShowHotseat(getContext()) ?
-                getResources().getDimensionPixelSize(R.dimen.button_bar_height): 0));
+                getResources().getDimensionPixelSize(R.dimen.button_bar_height) :
+                (PreferencesProvider.Interface.Dock.getShowAppsButton(getContext()) ?
+                getResources().getDimensionPixelSize(R.dimen.qsb_bar_height) : 0)));
         return width / mCountX;
     }
 
     private int getMaxCellHeight(boolean portrait) {
         int buttonBarHeight = PreferencesProvider.Interface.Dock.getShowHotseat(getContext()) ?
-                getResources().getDimensionPixelSize(R.dimen.button_bar_height) : 0;
+                getResources().getDimensionPixelSize(R.dimen.button_bar_height) :
+                (PreferencesProvider.Interface.Dock.getShowAppsButton(getContext()) ?
+                getResources().getDimensionPixelSize(R.dimen.qsb_bar_height) : 0);
         int height = getResources().getConfiguration().screenHeightDp
                 - (portrait ? buttonBarHeight : 0);
         return height / mCountY;
