@@ -27,11 +27,12 @@ import android.preference.PreferenceScreen;
 import android.util.Log;
 
 import com.android.launcher.R;
+import com.android.launcher2.LauncherApplication;
 
 public class HomescreenFragmentActivity extends PreferenceFragment {
 
     private static final String PREF_ENABLED = "1";
-    private static final String TAG = "Trebuchet_Homescreen";
+    private static final String TAG = "Launcher2_Homescreen";
 
     private NumberPickerPreference mHomescreens;
     private NumberPickerPreference mDefaultHomescreen;
@@ -78,6 +79,10 @@ public class HomescreenFragmentActivity extends PreferenceFragment {
         mHomescreenGrid.setSummary(hg.equals("0|0") ?
                 getActivity().getString(R.string.preferences_auto_number_picker) :
                 hg.replace("|", " x "));
+        if (LauncherApplication.isScreenLarge()) {
+            mHomescreenGrid.setMax1(7);
+            mHomescreenGrid.setMax2(8);
+        }
     }
 
     public static void restore(Context context) {

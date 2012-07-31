@@ -2990,7 +2990,7 @@ public final class Launcher extends Activity
      * Shows the hotseat area.
      */
     void showHotseat(boolean animated) {
-        if (!LauncherApplication.isScreenLarge()) {
+        if (mHotseat != null) {
             if (animated) {
                 if (mHotseat.getAlpha() != 1f) {
                     int duration = mSearchDropTargetBar.getTransitionInDuration();
@@ -3006,7 +3006,7 @@ public final class Launcher extends Activity
      * Hides the hotseat area.
      */
     void hideHotseat(boolean animated) {
-        if (!LauncherApplication.isScreenLarge()) {
+        if (mHotseat != null) {
             if (animated) {
                 if (mHotseat.getAlpha() != 0f) {
                     int duration = mSearchDropTargetBar.getTransitionOutDuration();

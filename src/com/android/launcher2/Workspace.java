@@ -343,8 +343,13 @@ public class Workspace extends SmoothPagedView
         cellCountY = a.getInt(R.styleable.Workspace_cellCountY, cellCountY);
         a.recycle();
 
-        cellCountX = PreferencesProvider.Interface.Homescreen.getCellCountX(context, cellCountX);
-        cellCountY = PreferencesProvider.Interface.Homescreen.getCellCountY(context, cellCountY);
+        int countX = PreferencesProvider.Interface.Homescreen.getCellCountX(context, cellCountX);
+        int countY = PreferencesProvider.Interface.Homescreen.getCellCountY(context, cellCountY);
+
+        if (countX > 0) {
+            cellCountX = countX;
+            cellCountY = countY;
+        }
 
         setOnHierarchyChangeListener(this);
 
@@ -849,7 +854,7 @@ public class Workspace extends SmoothPagedView
 
         // Only show page outlines as we pan if we are on large screen
         if (LauncherApplication.isScreenLarge()) {
-            showOutlines();
+            //showOutlines();
             mIsStaticWallpaper = mWallpaperManager.getWallpaperInfo() == null;
         }
 
@@ -884,7 +889,7 @@ public class Workspace extends SmoothPagedView
         } else {
             // If we are not mid-dragging, hide the page outlines if we are on a large screen
             if (LauncherApplication.isScreenLarge()) {
-                hideOutlines();
+                //hideOutlines();
             }
 
             // Hide the scroll indicator as you pan the page
@@ -2469,7 +2474,7 @@ public class Workspace extends SmoothPagedView
         // Because we don't have space in the Phone UI (the CellLayouts run to the edge) we
         // don't need to show the outlines
         if (LauncherApplication.isScreenLarge()) {
-            showOutlines();
+            //showOutlines();
         }
     }
 
@@ -2536,7 +2541,7 @@ public class Workspace extends SmoothPagedView
         mSpringLoadedDragController.cancel();
 
         if (!mIsPageMoving) {
-            hideOutlines();
+            //hideOutlines();
         }
     }
 

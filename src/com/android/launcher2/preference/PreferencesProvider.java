@@ -194,7 +194,7 @@ public final class PreferencesProvider {
             }
             public static int getAppsButtonPosition(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return Integer.parseInt(preferences.getString("ui_apps_button_position", "0"));
+                return Integer.parseInt(preferences.getString("ui_apps_button_position", "1"));
             }
         }
 

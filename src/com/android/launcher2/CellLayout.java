@@ -188,10 +188,10 @@ public class CellLayout extends ViewGroup {
                 a.getDimensionPixelSize(R.styleable.CellLayout_cellWidth, 10);
         mCellHeight = mOriginalCellHeight =
                 a.getDimensionPixelSize(R.styleable.CellLayout_cellHeight, 10);
-        if (!LauncherApplication.isScreenLarge()) {
+        //if (!LauncherApplication.isScreenLarge()) {
             mCellWidth = getMaxCellWidth(!LauncherApplication.isScreenLandscape(context));
             mCellHeight = getMaxCellHeight(!LauncherApplication.isScreenLandscape(context));
-        }
+        //}
         mWidthGap = mOriginalWidthGap = a.getDimensionPixelSize(R.styleable.CellLayout_widthGap, 0);
         mHeightGap = mOriginalHeightGap = a.getDimensionPixelSize(R.styleable.CellLayout_heightGap, 0);
         mMaxGap = a.getDimensionPixelSize(R.styleable.CellLayout_maxGap, 0);
@@ -930,7 +930,7 @@ public class CellLayout extends ViewGroup {
     }
 
     private int getMaxCellWidth(boolean portrait) {
-        int width = getResources().getConfiguration().screenWidthDp - (portrait ?
+        int width = (int) (getResources().getConfiguration().screenWidthDp * LauncherApplication.getScreenDensity()) - (portrait ?
                 0 : (PreferencesProvider.Interface.Dock.getShowHotseat(getContext()) ?
                 getResources().getDimensionPixelSize(R.dimen.button_bar_height) :
                 (PreferencesProvider.Interface.Dock.getShowAppsButton(getContext()) ?
@@ -943,7 +943,7 @@ public class CellLayout extends ViewGroup {
                 getResources().getDimensionPixelSize(R.dimen.button_bar_height) :
                 (PreferencesProvider.Interface.Dock.getShowAppsButton(getContext()) ?
                 getResources().getDimensionPixelSize(R.dimen.qsb_bar_height) : 0);
-        int height = getResources().getConfiguration().screenHeightDp
+        int height = (int) (getResources().getConfiguration().screenHeightDp * LauncherApplication.getScreenDensity())
                 - (portrait ? buttonBarHeight : 0);
         return height / mCountY;
     }

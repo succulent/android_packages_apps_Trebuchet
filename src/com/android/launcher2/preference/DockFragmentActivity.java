@@ -29,6 +29,7 @@ import android.preference.PreferenceScreen;
 import android.util.Log;
 
 import com.android.launcher.R;
+import com.android.launcher2.LauncherApplication;
 
 public class DockFragmentActivity extends PreferenceFragment {
 
@@ -109,6 +110,9 @@ public class DockFragmentActivity extends PreferenceFragment {
             mShowAppsButton.setChecked(false);
         }
         mAppsButtonPosition.setEnabled(mShowAppsButton.isChecked());
+        if (LauncherApplication.isScreenLarge()) {
+            mHotseatPositions.setMaxValue(9);
+        }
     }
 
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
