@@ -14,9 +14,9 @@
      limitations under the License.
 -->
 
-<com.android.launcher2.DragLayer
+<com.cyanogenmod.trebuchet.DragLayer
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:launcher="http://schemas.android.com/apk/res/com.android.launcher"
+    xmlns:launcher="http://schemas.android.com/apk/res/com.cyanogenmod.trebuchet"
 
     android:id="@+id/drag_layer"
     android:background="@drawable/workspace_bg"
@@ -24,7 +24,7 @@
     android:layout_height="match_parent">
 
     <!-- The workspace contains 5 screens of cells -->
-    <com.android.launcher2.Workspace
+    <com.cyanogenmod.trebuchet.Workspace
         android:id="@+id/workspace"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -36,7 +36,7 @@
         launcher:cellCountX="@integer/cell_count_x"
         launcher:cellCountY="@integer/cell_count_y"
         launcher:pageSpacing="@dimen/workspace_page_spacing">
-    </com.android.launcher2.Workspace>
+    </com.cyanogenmod.trebuchet.Workspace>
 
     <include
         android:id="@+id/dock_divider"
@@ -85,4 +85,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />
-</com.android.launcher2.DragLayer>
+</com.cyanogenmod.trebuchet.DragLayer>
