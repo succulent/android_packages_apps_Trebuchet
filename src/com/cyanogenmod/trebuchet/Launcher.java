@@ -156,7 +156,7 @@ public final class Launcher extends Activity
 
     static final String EXTRA_SHORTCUT_DUPLICATE = "duplicate";
 
-    static final int SCREEN_COUNT = 5;
+    static final int MAX_SCREEN_COUNT = 9;
     static final int DEFAULT_SCREEN = 2;
 
     private static final String PREFERENCES = "launcher.preferences";
@@ -2104,6 +2104,33 @@ public final class Launcher extends Activity
         }
     }
 
+    public void onLongClickAppsTab(View v) {
+        final PopupMenu popupMenu = new PopupMenu(this, v);
+        final Menu menu = popupMenu.getMenu();
+        dismissAllAppsSortCling(null);
+        popupMenu.inflate(R.menu.apps_tab);
+        AppsCustomizePagedView.SortMode sortMode = mAppsCustomizeContent.getSortMode();
+        if (sortMode == AppsCustomizePagedView.SortMode.Title) {
+            menu.findItem(R.id.apps_sort_title).setChecked(true);
+        } else if (sortMode == AppsCustomizePagedView.SortMode.InstallDate) {
+            menu.findItem(R.id.apps_sort_install_date).setChecked(true);
+        }
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.apps_sort_title:
+                            mAppsCustomizeContent.setSortMode(AppsCustomizePagedView.SortMode.Title);
+                            break;
+                        case R.id.apps_sort_install_date:
+                            mAppsCustomizeContent.setSortMode(AppsCustomizePagedView.SortMode.InstallDate);
+                            break;
+                    }
+                    return true;
+                }
+        });
+        popupMenu.show();
+    }
+
     public void onClickOverflowMenuButton(View v) {
         final PopupMenu popupMenu = new PopupMenu(this, v);
         final Menu menu = popupMenu.getMenu();
@@ -3776,7 +3803,7 @@ public final class Launcher extends Activity
         // disable clings when running in a test harness
         if(ActivityManager.isRunningInTestHarness()) return false;
 
-        return true;
+        return false;
     }
     private Cling initCling(int clingId, int[] positionData, boolean animate, int delay) {
         Cling cling = (Cling) findViewById(clingId);
@@ -3864,6 +3891,16 @@ public final class Launcher extends Activity
             removeCling(R.id.all_apps_cling);
         }
     }
+    public void showFirstRunAllAppsSortCling() {
+        // Enable the clings only if they have not been dismissed before
+        SharedPreferences prefs =
+            getSharedPreferences(PreferencesProvider.PREFERENCES_KEY, Context.MODE_PRIVATE);
+        if (isClingsEnabled() && !prefs.getBoolean(Cling.ALLAPPS_SORT_CLING_DISMISSED_KEY, false)) {
+            initCling(R.id.all_apps_sort_cling, null, true, 0);
+        } else {
+            removeCling(R.id.all_apps_sort_cling);
+        }
+    }
     public Cling showFirstRunFoldersCling() {
         // Enable the clings only if they have not been dismissed before
         if (isClingsEnabled() &&
@@ -3888,6 +3925,10 @@ public final class Launcher extends Activity
     public void dismissAllAppsCling(View v) {
         Cling cling = (Cling) findViewById(R.id.all_apps_cling);
         dismissCling(cling, Cling.ALLAPPS_CLING_DISMISSED_KEY, DISMISS_CLING_DURATION);
+    }
+    public void dismissAllAppsSortCling(View v) {
+        Cling cling = (Cling) findViewById(R.id.all_apps_sort_cling);
+        dismissCling(cling, Cling.ALLAPPS_SORT_CLING_DISMISSED_KEY, DISMISS_CLING_DURATION);
     }
     public void dismissFolderCling(View v) {
         Cling cling = (Cling) findViewById(R.id.folder_cling);

@@ -31,12 +31,28 @@
                     launcher:pickerTitle2="@string/preferences_interface_homescreen_general_grid_columns_title"
                     launcher:defaultValue1="6"
                     launcher:defaultValue2="6"
-                    launcher:max1="6"
+                    launcher:max1="10"
                     launcher:min1="1"
-                    launcher:max2="6"
+                    launcher:max2="10"
                     launcher:min2="1" />
                 <CheckBoxPreference android:key="ui_homescreen_general_hide_icon_labels"
                     android:title="@string/preferences_interface_homescreen_general_hide_icon_labels_summary" />
             </PreferenceCategory>
-
+            <PreferenceCategory android:title="@string/preferences_interface_homescreen_scrolling_category">
+                <CheckBoxPreference android:key="ui_homescreen_scrolling_scroll_wallpaper"
+                    android:title="@string/preferences_interface_homescreen_scrolling_scroll_wallpaper_title"
+                    android:summary="@string/preferences_interface_homescreen_scrolling_scroll_wallpaper_summary"
+                    android:defaultValue="true" />
+            </PreferenceCategory>
+            <PreferenceCategory android:title="@string/preferences_interface_homescreen_indicator_category">
+                <CheckBoxPreference android:key="ui_homescreen_indicator_enable"
+                    android:title="@string/preferences_interface_homescreen_indicator_enable_title"
+                    android:summary="@string/preferences_interface_homescreen_indicator_enable_summary"
+                    android:defaultValue="true" />
+                <CheckBoxPreference android:key="ui_homescreen_indicator_fade"
+                    android:title="@string/preferences_interface_homescreen_indicator_fade_title"
+                    android:summary="@string/preferences_interface_homescreen_indicator_fade_summary"
+                    android:defaultValue="true"
+                    android:dependency="ui_homescreen_indicator_enable" />
+            </PreferenceCategory>
 </PreferenceScreen>

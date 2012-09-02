@@ -17,6 +17,7 @@
 package com.cyanogenmod.trebuchet.preference;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -24,15 +25,17 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.cyanogenmod.trebuchet.R;
 import com.cyanogenmod.trebuchet.LauncherApplication;
+import com.cyanogenmod.trebuchet.LauncherModel;
 
 public class HomescreenFragmentActivity extends PreferenceFragment {
 
     private static final String PREF_ENABLED = "1";
-    private static final String TAG = "Launcher2_Homescreen";
+    private static final String TAG = "Trebuchet_Homescreen";
 
     private NumberPickerPreference mHomescreens;
     private NumberPickerPreference mDefaultHomescreen;
@@ -75,14 +78,20 @@ public class HomescreenFragmentActivity extends PreferenceFragment {
         mHomescreens.setSummary(Integer.toString(homescreens));
         mDefaultHomescreen.setSummary(Integer.toString(defaultScreen));
 
-        String hg = mPrefs.getString(Preferences.HOMESCREEN_GRID, "6|6");
+        String hg = mPrefs.getString(Preferences.HOMESCREEN_GRID,
+                LauncherApplication.isScreenLarge() ? "0|0" : "6|6");
         mHomescreenGrid.setSummary(hg.equals("0|0") ?
                 getActivity().getString(R.string.preferences_auto_number_picker) :
                 hg.replace("|", " x "));
-        if (LauncherApplication.isScreenLarge()) {
-            mHomescreenGrid.setMax1(7);
-            mHomescreenGrid.setMax2(8);
-        }
+
+        Resources r = getActivity().getResources();
+        int cellWidth = r.getDimensionPixelSize(R.dimen.workspace_cell_width);
+        int cellHeight = r.getDimensionPixelSize(R.dimen.workspace_cell_height);
+        DisplayMetrics displayMetrics = r.getDisplayMetrics();
+        final float smallestScreenDim = r.getConfiguration().smallestScreenWidthDp *
+                displayMetrics.density;
+        mHomescreenGrid.setMax1((int) (smallestScreenDim / cellHeight));
+        mHomescreenGrid.setMax2((int) (smallestScreenDim / cellWidth));
     }
 
     public static void restore(Context context) {

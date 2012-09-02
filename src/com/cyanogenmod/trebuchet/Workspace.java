@@ -263,6 +263,9 @@ public class Workspace extends SmoothPagedView
     private int mDefaultHomescreen;
     private boolean mResizeAnyWidget;
     private boolean mHideIconLabels;
+    private boolean mScrollWallpaper;
+    private boolean mShowScrollingIndicator;
+    private boolean mFadeScrollingIndicator;
     private boolean mShowDockDivider;
 
     private final GestureDetector mGestureDetector;
@@ -365,6 +368,9 @@ public class Workspace extends SmoothPagedView
         }
         mResizeAnyWidget = PreferencesProvider.Interface.Homescreen.getResizeAnyWidget(context);
         mHideIconLabels = PreferencesProvider.Interface.Homescreen.getHideIconLabels(context);
+        mScrollWallpaper = PreferencesProvider.Interface.Homescreen.Scrolling.getScrollWallpaper(context);
+        mShowScrollingIndicator = PreferencesProvider.Interface.Homescreen.Indicator.getShowScrollingIndicator(context);
+        mFadeScrollingIndicator = PreferencesProvider.Interface.Homescreen.Indicator.getFadeScrollingIndicator(context);
         mShowDockDivider = PreferencesProvider.Interface.Homescreen.Indicator.getShowDockDivider(context);
 
         mLauncher = (Launcher) context;
@@ -493,11 +499,17 @@ public class Workspace extends SmoothPagedView
             // In this case, we will skip drawing background protection
         }
 
+        if (!mShowScrollingIndicator) {
+            disableScrollingIndicator();
+        }
+
         mWallpaperOffset = new WallpaperOffsetInterpolator();
         Display display = mLauncher.getWindowManager().getDefaultDisplay();
         display.getSize(mDisplaySize);
-        mWallpaperTravelWidth = (int) (mDisplaySize.x *
-                wallpaperTravelToScreenWidthRatio(mDisplaySize.x, mDisplaySize.y));
+        if (mScrollWallpaper) {
+            mWallpaperTravelWidth = (int) (mDisplaySize.x *
+                    wallpaperTravelToScreenWidthRatio(mDisplaySize.x, mDisplaySize.y));
+        }
 
         mMaxDistanceForFolderCreation = (0.55f * res.getDimensionPixelSize(R.dimen.app_icon_size));
         mFlingThresholdVelocity = (int) (FLING_THRESHOLD_VELOCITY * mDensity);
@@ -871,7 +883,9 @@ public class Workspace extends SmoothPagedView
     }
 
     protected void onPageEndMoving() {
-        super.onPageEndMoving();
+        if (mFadeScrollingIndicator) {
+            hideScrollingIndicator(false);
+        }
 
         if (isHardwareAccelerated()) {
             updateChildrenLayersEnabled();
@@ -893,7 +907,7 @@ public class Workspace extends SmoothPagedView
             }
 
             // Hide the scroll indicator as you pan the page
-            if (!mDragController.isDragging()) {
+            if (mFadeScrollingIndicator && !mDragController.isDragging()) {
                 hideScrollingIndicator(false);
             }
         }
@@ -915,6 +929,15 @@ public class Workspace extends SmoothPagedView
         super.notifyPageSwitchListener();
         Launcher.setScreen(mCurrentPage);
     };
+
+    @Override
+    protected void flashScrollingIndicator(boolean animated) {
+        if (mFadeScrollingIndicator) {
+            super.flashScrollingIndicator(animated);
+        } else {
+            showScrollingIndicator(true);
+        }
+    }
 
     // As a ratio of screen height, the total distance we want the parallax effect to span
     // horizontally
@@ -1011,6 +1034,13 @@ public class Workspace extends SmoothPagedView
         }
     }
 
+    private void centerWallpaperOffset() {
+        if (mWindowToken != null) {
+            mWallpaperManager.setWallpaperOffsetSteps(0.5f, 0);
+            mWallpaperManager.setWallpaperOffsets(mWindowToken, 0.5f, 0);
+        }
+    }
+
     public void updateWallpaperOffsetImmediately() {
         mUpdateWallpaperOffsetImmediately = true;
     }
@@ -1040,13 +1070,17 @@ public class Workspace extends SmoothPagedView
     @Override
     protected void updateCurrentPageScroll() {
         super.updateCurrentPageScroll();
-        computeWallpaperScrollRatio(mCurrentPage);
+        if (mScrollWallpaper) {
+            computeWallpaperScrollRatio(mCurrentPage);
+        }
     }
 
     @Override
     protected void snapToPage(int whichPage) {
         super.snapToPage(whichPage);
-        computeWallpaperScrollRatio(whichPage);
+        if (mScrollWallpaper) {
+            computeWallpaperScrollRatio(whichPage);
+        }
     }
 
     @Override
@@ -1193,7 +1227,9 @@ public class Workspace extends SmoothPagedView
     @Override
     public void computeScroll() {
         super.computeScroll();
-        syncWallpaperOffsetWithScroll();
+        if (mScrollWallpaper) {
+            syncWallpaperOffsetWithScroll();
+        }
     }
 
     void showOutlines() {
@@ -1369,17 +1405,19 @@ public class Workspace extends SmoothPagedView
         if (mOverScrollX < 0 || mOverScrollX > mMaxScrollX) {
             int index = mOverScrollX < 0 ? 0 : getChildCount() - 1;
             CellLayout cl = (CellLayout) getChildAt(index);
-            float scrollProgress = getScrollProgress(screenCenter, cl, index);
-            cl.setOverScrollAmount(Math.abs(scrollProgress), index == 0);
-            float rotation = - WORKSPACE_OVERSCROLL_ROTATION * scrollProgress;
-            cl.setRotationY(rotation);
-            setFadeForOverScroll(Math.abs(scrollProgress));
-            if (!mOverscrollTransformsSet) {
-                mOverscrollTransformsSet = true;
-                cl.setCameraDistance(mDensity * mCameraDistance);
-                cl.setPivotX(cl.getMeasuredWidth() * (index == 0 ? 0.75f : 0.25f));
-                cl.setPivotY(cl.getMeasuredHeight() * 0.5f);
-                cl.setOverscrollTransformsDirty(true);
+            if (getChildCount() > 1) {
+                float scrollProgress = getScrollProgress(screenCenter, cl, index);
+                cl.setOverScrollAmount(Math.abs(scrollProgress), index == 0);
+                float rotation = - WORKSPACE_OVERSCROLL_ROTATION * scrollProgress;
+                cl.setRotationY(rotation);
+                setFadeForOverScroll(Math.abs(scrollProgress));
+                if (!mOverscrollTransformsSet) {
+                    mOverscrollTransformsSet = true;
+                    cl.setCameraDistance(mDensity * mCameraDistance);
+                    cl.setPivotX(cl.getMeasuredWidth() * (index == 0 ? 0.75f : 0.25f));
+                    cl.setPivotY(cl.getMeasuredHeight() * 0.5f);
+                    cl.setOverscrollTransformsDirty(true);
+                }
             }
         } else {
             if (mOverscrollFade != 0) {
@@ -1419,7 +1457,9 @@ public class Workspace extends SmoothPagedView
 
     @Override
     protected void onDraw(Canvas canvas) {
-        updateWallpaperOffsets();
+        if (mScrollWallpaper) {
+            updateWallpaperOffsets();
+        }
 
         // Draw the background gradient if necessary
         if (mBackground != null && mBackgroundAlpha > 0.0f && mDrawBackground) {
@@ -3881,6 +3921,6 @@ public class Workspace extends SmoothPagedView
 
         cancelScrollingIndicatorAnimations();
         if (dockDivider != null && mShowDockDivider) dockDivider.setAlpha(reducedFade);
-        scrollIndicator.setAlpha(1 - fade);
+        if (scrollIndicator != null && mShowScrollingIndicator) scrollIndicator.setAlpha(1 - fade);
     }
 }
