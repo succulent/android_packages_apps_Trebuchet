@@ -317,6 +317,7 @@ public final class Launcher extends Activity
     private int mHomescreenSwipeUp;
     private int mHomescreenSwipeDown;
 	private boolean mShowAppsButton;
+	private boolean mShowSearchDivider;
 
     private StatusBarManager mStatusBarManager;
 
@@ -385,6 +386,7 @@ public final class Launcher extends Activity
         mHideIconLabels = PreferencesProvider.Interface.Homescreen.getHideIconLabels(this);
         mAutoRotate = PreferencesProvider.Interface.General.getAutoRotate(this, true);
 		mShowAppsButton = PreferencesProvider.Interface.Dock.getShowAppsButton(this);
+		mShowSearchDivider = PreferencesProvider.Interface.Homescreen.getShowSearchBackground(this);
 
         if (PROFILE_STARTUP) {
             android.os.Debug.startMethodTracing(
@@ -970,7 +972,7 @@ public final class Launcher extends Activity
         mSearchDropTargetBar = (SearchDropTargetBar) mDragLayer.findViewById(R.id.qsb_bar);
 
         // Hide the search divider if we are hiding search bar
-        if ((!mShowSearchBar || !mShowDockDivider || !mShowHotseat)
+        if ((!mShowSearchBar || !mShowSearchDivider)
 				&& getCurrentOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
             ((View) findViewById(R.id.qsb_divider)).setVisibility(View.GONE);
         }
@@ -2956,7 +2958,7 @@ public final class Launcher extends Activity
 
     void hideDockDivider() {
         if (mQsbDivider != null && mDockDivider != null) {
-            if (mShowSearchBar) {
+            if (mShowSearchDivider) {
                 mQsbDivider.setVisibility(View.INVISIBLE);
             }
             if (mShowDockDivider) {
@@ -2967,7 +2969,7 @@ public final class Launcher extends Activity
 
     void showDockDivider(boolean animated) {
         if (mQsbDivider != null && mDockDivider != null) {
-            if (mShowSearchBar) {
+            if (mShowSearchDivider) {
                 mQsbDivider.setVisibility(View.VISIBLE);
             }
             if (mShowDockDivider) {
