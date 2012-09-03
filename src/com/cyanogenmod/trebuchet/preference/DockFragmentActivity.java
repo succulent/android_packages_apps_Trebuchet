@@ -17,6 +17,7 @@
 package com.cyanogenmod.trebuchet.preference;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -26,6 +27,7 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.cyanogenmod.trebuchet.R;
@@ -42,8 +44,6 @@ public class DockFragmentActivity extends PreferenceFragment {
     private CheckBoxPreference mShowDock;
     private CheckBoxPreference mShowDockDivider;
     private CheckBoxPreference mShowDockAppsButton;
-    private CheckBoxPreference mShowAppsButton;
-    private ListPreference mAppsButtonPosition;
 
     private SharedPreferences mPrefs;
     private Context mContext;
@@ -78,12 +78,6 @@ public class DockFragmentActivity extends PreferenceFragment {
 
         mShowDockDivider = (CheckBoxPreference)
                 prefSet.findPreference(Preferences.SHOW_DOCK_DIVIDER);
-
-        mShowAppsButton = (CheckBoxPreference)
-                prefSet.findPreference(Preferences.SHOW_APPS_BUTTON);
-
-        mAppsButtonPosition = (ListPreference)
-                prefSet.findPreference(Preferences.APPS_BUTTON_POSITION);
     }
 
     public void onResume() {
@@ -106,12 +100,16 @@ public class DockFragmentActivity extends PreferenceFragment {
 
         if (!mShowDock.isChecked()) {
             mShowDockDivider.setChecked(false);
-        } else {
-            mShowAppsButton.setChecked(false);
         }
-        mAppsButtonPosition.setEnabled(mShowAppsButton.isChecked());
+
+        Resources r = getActivity().getResources();
+        int cellWidth = r.getDimensionPixelSize(R.dimen.hotseat_cell_width);
+        DisplayMetrics displayMetrics = r.getDisplayMetrics();
+        final float smallestScreenDim = r.getConfiguration().smallestScreenWidthDp *
+                displayMetrics.density;
+
         if (LauncherApplication.isScreenLarge()) {
-            mHotseatPositions.setMaxValue(9);
+            mHotseatPositions.setMaxValue((int) (smallestScreenDim / cellWidth));
         }
     }
 
@@ -119,16 +117,7 @@ public class DockFragmentActivity extends PreferenceFragment {
         if (preference == mShowDock) {
             if (!mShowDock.isChecked()) {
                 mShowDockDivider.setChecked(false);
-            } else {
-                mShowAppsButton.setChecked(false);
             }
-            mAppsButtonPosition.setEnabled(mShowAppsButton.isChecked());
-            return true;
-        } else if (preference == mShowAppsButton) {
-            if (mShowAppsButton.isChecked()) {
-                mShowDock.setChecked(!mShowAppsButton.isChecked());
-            }
-            mAppsButtonPosition.setEnabled(mShowAppsButton.isChecked());
             return true;
         }
         return false;

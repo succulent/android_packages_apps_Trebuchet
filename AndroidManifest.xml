@@ -76,8 +76,7 @@
             android:clearTaskOnLaunch="true"
             android:stateNotNeeded="true"
             android:theme="@style/Theme"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="user">
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.HOME" />
@@ -111,14 +110,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.cyanogenmod.trebuchet.preference.Preferences"
-            android:label="@string/preferences_title">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.cyanogenmod.category.LAUNCHER_PREFERENCES" />
-            </intent-filter>
-        </activity>
-
         <!-- Intent received used to prepopulate the default workspace. -->
         <receiver
             android:name="com.cyanogenmod.trebuchet.PreloadReceiver"
@@ -128,6 +119,13 @@
             </intent-filter>
         </receiver>
 
+        <activity android:name="com.cyanogenmod.trebuchet.preference.Preferences"
+            android:label="@string/preferences_title">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.cyanogenmod.category.LAUNCHER_PREFERENCES" />
+            </intent-filter>
+        </activity>
         <!-- Intent received used to install shortcuts from other applications -->
         <receiver
             android:name="com.cyanogenmod.trebuchet.InstallShortcutReceiver"

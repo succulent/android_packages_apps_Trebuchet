@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<?xml version="1.0" encoding="utf-8"?>
+<!--
 /*
 * Copyright (C) 2011 The Android Open Source Project
 *
@@ -15,11 +15,14 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
- -->
+-->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="delete_target_label" msgid="4155210680095864979"></string>
-    <string name="delete_target_uninstall_label" msgid="1839407506844917298"></string>
-    <string name="info_target_label" msgid="1424400595004570393"></string>
+<resources>
+<!-- Workspace -->
+    <style name="QSBBar">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">@dimen/qsb_bar_height</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">left|center_vertical</item>
+    </style>
 </resources>

@@ -27,7 +27,9 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 
+import com.cyanogenmod.trebuchet.LauncherApplication;
 import com.cyanogenmod.trebuchet.R;
+import com.cyanogenmod.trebuchet.preference.PreferencesProvider;
 
 /*
  * Ths bar will manage the transition between the QSB search bar and the delete drop
@@ -42,6 +44,8 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
     private ObjectAnimator mQSBSearchBarAnim;
     private static final AccelerateInterpolator sAccelerateInterpolator =
             new AccelerateInterpolator();
+
+    private boolean mShowQSBSearchBar;
 
     private boolean mIsSearchBarHidden;
     private View mQSBSearchBar;
@@ -60,6 +64,8 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
 
     public SearchDropTargetBar(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+
+        mShowQSBSearchBar = PreferencesProvider.Interface.Homescreen.getShowSearchBar(context);
     }
 
     public void setup(Launcher launcher, DragController dragController) {
@@ -96,6 +102,7 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
         super.onFinishInflate();
 
         // Get the individual components
+        mQSBSearchBar = findViewById(R.id.qsb_search_bar);
         mDropTargetBar = findViewById(R.id.drag_target_bar);
         mInfoDropTarget = (ButtonDropTarget) mDropTargetBar.findViewById(R.id.info_target_text);
         mDeleteDropTarget = (ButtonDropTarget) mDropTargetBar.findViewById(R.id.delete_target_text);
@@ -104,24 +111,34 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
         mInfoDropTarget.setSearchDropTargetBar(this);
         mDeleteDropTarget.setSearchDropTargetBar(this);
 
-        mEnableDropDownDropTargets =
-            getResources().getBoolean(R.bool.config_useDropTargetDownTransition);
+        mEnableDropDownDropTargets = !LauncherApplication.isScreenLandscape(getContext());
+            //getResources().getBoolean(R.bool.config_useDropTargetDownTransition);
+
+        if (!mShowQSBSearchBar) {
+            mQSBSearchBar.setVisibility(View.GONE);
+        }
 
         // Create the various fade animations
-        if (true) {
+        if (mEnableDropDownDropTargets) {
             mDropTargetBar.setTranslationY(-mBarHeight);
             mDropTargetBarAnim = ObjectAnimator.ofFloat(mDropTargetBar, "translationY",
                     -mBarHeight, 0f);
+            mQSBSearchBarAnim = ObjectAnimator.ofFloat(mQSBSearchBar, "translationY", 0,
+                    -mBarHeight);
         } else {
             mDropTargetBar.setAlpha(0f);
             mDropTargetBarAnim = ObjectAnimator.ofFloat(mDropTargetBar, "alpha", 0f, 1f);
+            mQSBSearchBarAnim = ObjectAnimator.ofFloat(mQSBSearchBar, "alpha", 1f, 0f);
         }
         setupAnimation(mDropTargetBarAnim, mDropTargetBar);
+        setupAnimation(mQSBSearchBarAnim, mQSBSearchBar);
     }
 
     public void finishAnimations() {
         prepareStartAnimation(mDropTargetBar);
         mDropTargetBarAnim.reverse();
+        prepareStartAnimation(mQSBSearchBar);
+        mQSBSearchBarAnim.reverse();
     }
 
     /*
@@ -129,10 +146,36 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
      */
     public void showSearchBar(boolean animated) {
         if (!mIsSearchBarHidden) return;
+        if (mShowQSBSearchBar) {
+            if (animated) {
+                prepareStartAnimation(mQSBSearchBar);
+                mQSBSearchBarAnim.reverse();
+            } else {
+                mQSBSearchBarAnim.cancel();
+                if (mEnableDropDownDropTargets) {
+                    mQSBSearchBar.setTranslationY(0);
+                } else {
+                    mQSBSearchBar.setAlpha(1f);
+                }
+            }
+        }
         mIsSearchBarHidden = false;
     }
     public void hideSearchBar(boolean animated) {
         if (mIsSearchBarHidden) return;
+        if (mShowQSBSearchBar) {
+            if (animated) {
+                prepareStartAnimation(mQSBSearchBar);
+                mQSBSearchBarAnim.start();
+            } else {
+                mQSBSearchBarAnim.cancel();
+                if (mEnableDropDownDropTargets) {
+                    mQSBSearchBar.setTranslationY(-mBarHeight);
+                } else {
+                    mQSBSearchBar.setAlpha(0f);
+                }
+            }
+        }
         mIsSearchBarHidden = true;
     }
 
@@ -154,7 +197,9 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
         // Animate out the QSB search bar, and animate in the drop target bar
         prepareStartAnimation(mDropTargetBar);
         mDropTargetBarAnim.start();
-        if (!mIsSearchBarHidden) {
+        if (!mIsSearchBarHidden && mShowQSBSearchBar) {
+            prepareStartAnimation(mQSBSearchBar);
+            mQSBSearchBarAnim.start();
         }
     }
 
@@ -168,7 +213,9 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
             // Restore the QSB search bar, and animate out the drop target bar
             prepareStartAnimation(mDropTargetBar);
             mDropTargetBarAnim.reverse();
-            if (!mIsSearchBarHidden) {
+            if (!mIsSearchBarHidden && mShowQSBSearchBar) {
+                prepareStartAnimation(mQSBSearchBar);
+                mQSBSearchBarAnim.reverse();
             }
         } else {
             mDeferOnDragEnd = false;

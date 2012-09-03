@@ -11,6 +11,9 @@
                 <CheckBoxPreference android:key="ui_homescreen_general_resize_any_widget"
                     android:title="@string/preferences_interface_homescreen_general_resize_any_widget_title"
                     android:defaultValue="true" />
+                <CheckBoxPreference android:key="ui_homescreen_general_search"
+                    android:title="@string/preferences_interface_homescreen_general_search_title"
+                    android:defaultValue="true" />
                 <com.cyanogenmod.trebuchet.preference.NumberPickerPreference android:key="ui_homescreen_screens"
                     android:title="@string/preferences_interface_homescreen_general_screens_title"
                     android:summary="@string/preferences_interface_homescreen_general_screens_summary"
@@ -41,17 +44,14 @@
             <PreferenceCategory android:title="@string/preferences_interface_homescreen_scrolling_category">
                 <CheckBoxPreference android:key="ui_homescreen_scrolling_scroll_wallpaper"
                     android:title="@string/preferences_interface_homescreen_scrolling_scroll_wallpaper_title"
-                    android:summary="@string/preferences_interface_homescreen_scrolling_scroll_wallpaper_summary"
                     android:defaultValue="true" />
             </PreferenceCategory>
             <PreferenceCategory android:title="@string/preferences_interface_homescreen_indicator_category">
                 <CheckBoxPreference android:key="ui_homescreen_indicator_enable"
                     android:title="@string/preferences_interface_homescreen_indicator_enable_title"
-                    android:summary="@string/preferences_interface_homescreen_indicator_enable_summary"
                     android:defaultValue="true" />
                 <CheckBoxPreference android:key="ui_homescreen_indicator_fade"
                     android:title="@string/preferences_interface_homescreen_indicator_fade_title"
-                    android:summary="@string/preferences_interface_homescreen_indicator_fade_summary"
                     android:defaultValue="true"
                     android:dependency="ui_homescreen_indicator_enable" />
             </PreferenceCategory>

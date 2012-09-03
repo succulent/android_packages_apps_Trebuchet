@@ -4,10 +4,10 @@
     <bool name="is_large_screen">false</bool>
     <bool name="allow_rotation">false</bool>
 
-    <bool name="config_cyanogenmod">false</bool>
-
 <!-- DragController -->
     <integer name="config_flingToDeleteMinVelocity">-1500</integer>
+
+    <bool name="config_cyanogenmod">false</bool>
 
 <!-- AllApps/Customize/AppsCustomize -->
     <!-- The alpha of the AppsCustomize bg in spring loaded mode -->
@@ -77,6 +77,13 @@
     <integer name="folder_max_count_x">4</integer>
     <integer name="folder_max_count_y">4</integer>
     <integer name="folder_max_num_items">16</integer>
+
+    <!-- Workspace grid size -->
+    <integer name="config_maxWorkspaceRows">7</integer>
+    <integer name="config_maxWorkspaceColumns">7</integer>
+
+    <!-- Allow tablets to set grid size in settings, false disables -->
+    <bool name="config_workspaceTabletGrid">false</bool>
 
     <integer name="cell_count_x">4</integer>
     <integer name="cell_count_y">4</integer>

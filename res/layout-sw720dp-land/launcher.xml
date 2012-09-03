@@ -27,17 +27,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <include layout="@layout/qsb_bar"
-        android:id="@+id/qsb_bar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/qsb_bar_height"
-        android:layout_gravity="top" />
-
-    <include layout="@layout/apps_bar"
-        android:id="@+id/apps_bar"
-        android:layout_width="match_parent"
+    <include
+        android:id="@+id/qsb_divider"
+        layout="@layout/workspace_divider"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="bottom" />
+        android:layout_marginLeft="@dimen/qsb_bar_height"
+        android:layout_gravity="left" />
 
     <include
         android:id="@+id/dock_divider"
@@ -70,6 +66,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />
+
+    <include
+        android:id="@+id/qsb_bar"
+        layout="@layout/qsb_bar" />
 
     <include layout="@layout/folder_cling"
         android:id="@+id/folder_cling"

@@ -47,6 +47,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.ContentObserver;
@@ -189,11 +190,11 @@ public final class Launcher extends Activity
     // Type: parcelable
     private static final String RUNTIME_STATE_PENDING_ADD_WIDGET_INFO = "launcher.add_widget_info";
 
-    private static final String TOOLBAR_ICON_METADATA_NAME = "com.cyanogenmod.trebuchet.toolbar_icon";
+    private static final String TOOLBAR_ICON_METADATA_NAME = "com.android.launcher.toolbar_icon";
     private static final String TOOLBAR_SEARCH_ICON_METADATA_NAME =
-            "com.cyanogenmod.trebuchet.toolbar_search_icon";
+            "com.android.launcher.toolbar_search_icon";
     private static final String TOOLBAR_VOICE_SEARCH_ICON_METADATA_NAME =
-            "com.cyanogenmod.trebuchet.toolbar_voice_search_icon";
+            "com.android.launcher.toolbar_voice_search_icon";
 
     /** The different states that Launcher can be in. */
     private enum State { WORKSPACE, APPS_CUSTOMIZE, APPS_CUSTOMIZE_SPRING_LOADED };
@@ -304,6 +305,7 @@ public final class Launcher extends Activity
     private BubbleTextView mWaitingForResume;
 
     // Preferences
+    private boolean mShowSearchBar;
     private boolean mShowDockDivider;
     private boolean mHideIconLabels;
     private boolean mAutoRotate;
@@ -314,8 +316,6 @@ public final class Launcher extends Activity
     private int mHomescreenDoubleTap;
     private int mHomescreenSwipeUp;
     private int mHomescreenSwipeDown;
-    private boolean mShowAppsButton;
-    private int mAppsButtonPosition;
 
     private StatusBarManager mStatusBarManager;
 
@@ -370,6 +370,7 @@ public final class Launcher extends Activity
         mAppWidgetHost.startListening();
 
         // Preferences
+        mShowSearchBar = PreferencesProvider.Interface.Homescreen.getShowSearchBar(this);
         mShowWallpaper = PreferencesProvider.Interface.Drawer.Background
                 .getBackgroundShowWallpaper(this);
         mHomescreenDoubleTap = PreferencesProvider.Interface.Gestures.getHomescreenDoubleTap(this);
@@ -382,8 +383,6 @@ public final class Launcher extends Activity
                 .getShowDockDivider(this);
         mHideIconLabels = PreferencesProvider.Interface.Homescreen.getHideIconLabels(this);
         mAutoRotate = PreferencesProvider.Interface.General.getAutoRotate(this, true);
-        mShowAppsButton = PreferencesProvider.Interface.Dock.getShowAppsButton(this);
-        mAppsButtonPosition = PreferencesProvider.Interface.Dock.getAppsButtonPosition(this);
 
         if (PROFILE_STARTUP) {
             android.os.Debug.startMethodTracing(
@@ -434,41 +433,28 @@ public final class Launcher extends Activity
     }
 
     private void updateGlobalIcons() {
-        //boolean searchVisible = false;
-        //boolean voiceVisible = false;
+        boolean searchVisible = false;
+        boolean voiceVisible = false;
         // If we have a saved version of these external icons, we load them up immediately
         int coi = getCurrentOrientationIndexForGlobalIcons();
-        if (//sGlobalSearchIcon[coi] == null || sVoiceSearchIcon[coi] == null ||
+        if (sGlobalSearchIcon[coi] == null || sVoiceSearchIcon[coi] == null ||
                 sAppMarketIcon[coi] == null) {
             updateAppMarketIcon();
-            //searchVisible = updateGlobalSearchIcon();
-            //voiceVisible = updateVoiceSearchIcon(searchVisible);
+            searchVisible = updateGlobalSearchIcon();
+            voiceVisible = updateVoiceSearchIcon(searchVisible);
         }
-        //if (sGlobalSearchIcon[coi] != null) {
-             //updateGlobalSearchIcon(sGlobalSearchIcon[coi]);
-             //searchVisible = true;
-        //}
-        //if (sVoiceSearchIcon[coi] != null) {
-            //updateVoiceSearchIcon(sVoiceSearchIcon[coi]);
-            //voiceVisible = true;
-        //}
+        if (sGlobalSearchIcon[coi] != null) {
+             updateGlobalSearchIcon(sGlobalSearchIcon[coi]);
+             searchVisible = true;
+        }
+        if (sVoiceSearchIcon[coi] != null) {
+            updateVoiceSearchIcon(sVoiceSearchIcon[coi]);
+            voiceVisible = true;
+        }
         if (sAppMarketIcon[coi] != null) {
             updateAppMarketIcon(sAppMarketIcon[coi]);
         }
-        //mSearchDropTargetBar.onSearchPackagesChanged(searchVisible, voiceVisible);
-
-        syncOrientation();
-    }
-
-    private void syncOrientation() {
-        final UiModeManager uiModeManager =
-                (UiModeManager) getSystemService(Context.UI_MODE_SERVICE);
-        if (mAutoRotate || uiModeManager.getCurrentModeType() !=
-                Configuration.UI_MODE_TYPE_NORMAL) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-        } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
-        }
+        mSearchDropTargetBar.onSearchPackagesChanged(searchVisible, voiceVisible);
     }
 
     private void checkForLocaleChange() {
@@ -939,6 +925,7 @@ public final class Launcher extends Activity
 
         mDragLayer = (DragLayer) findViewById(R.id.drag_layer);
         mWorkspace = (Workspace) mDragLayer.findViewById(R.id.workspace);
+        mQsbDivider = (ImageView) findViewById(R.id.qsb_divider);
         mDockDivider = (ImageView) findViewById(R.id.dock_divider);
 
         // Setup the drag layer
@@ -980,52 +967,14 @@ public final class Launcher extends Activity
         // Get the search/delete bar
         mSearchDropTargetBar = (SearchDropTargetBar) mDragLayer.findViewById(R.id.qsb_bar);
 
-        if (mShowDockDivider && !mShowHotseat) mShowDockDivider = false;
-
-        // Hide the dock dividers and set up padding if necessary
-        if (!mShowDockDivider && mDockDivider != null) {
-            mDockDivider.setVisibility(View.GONE);
+        // Hide the search divider if we are hiding search bar
+        if ((!mShowSearchBar || !mShowDockDivider || !mShowHotseat)
+				&& getCurrentOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
+            ((View) findViewById(R.id.qsb_divider)).setVisibility(View.GONE);
         }
 
-        LinearLayout appsBar = (LinearLayout) findViewById(R.id.apps_bar);
-        if (appsBar != null) {
-            appsBar.setVisibility(mShowAppsButton && !mShowHotseat ? View.VISIBLE : View.GONE);
-            int gravity = 0;
-            switch (mAppsButtonPosition) {
-                case 0:
-                    gravity = Gravity.TOP | Gravity.LEFT;
-                    break;
-                case 1:
-                    gravity = Gravity.TOP | Gravity.RIGHT;
-                    break;
-                case 2:
-                    gravity = Gravity.BOTTOM | Gravity.RIGHT;
-                    break;
-                case 3:
-                    gravity = Gravity.BOTTOM | Gravity.LEFT;
-                    break;
-                case 4:
-                    gravity = LauncherApplication.isScreenLandscape(this) ?
-                            Gravity.RIGHT | Gravity.CENTER_VERTICAL :
-                            Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
-                    break;
-                case 5:
-                    gravity = LauncherApplication.isScreenLandscape(this) ?
-                            Gravity.LEFT | Gravity.CENTER_VERTICAL :
-                            Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
-                    break;
-                case 6:
-                    gravity = LauncherApplication.isScreenLandscape(this) ?
-                            Gravity.LEFT | Gravity.CENTER_VERTICAL :
-                            Gravity.TOP | Gravity.CENTER_HORIZONTAL;
-                    break;
-                case 7:
-                    gravity = LauncherApplication.isScreenLandscape(this) ?
-                            Gravity.RIGHT | Gravity.CENTER_VERTICAL :
-                            Gravity.TOP | Gravity.CENTER_HORIZONTAL;
-                    break;
-            }
-            appsBar.setGravity(gravity);
+        if (!mShowDockDivider || !mShowHotseat) {
+            ((View) findViewById(R.id.dock_divider)).setVisibility(View.GONE);
         }
 
         // Setup AppsCustomize
@@ -1059,22 +1008,16 @@ public final class Launcher extends Activity
             mSearchDropTargetBar.setup(this, dragController);
         }
 
-        boolean appsButtonTop = mAppsButtonPosition < 2 || mAppsButtonPosition > 5;
-        boolean appsButtonLeft = mAppsButtonPosition == 0 || mAppsButtonPosition == 3 ||
-                mAppsButtonPosition == 5 || mAppsButtonPosition == 6;
-
         if (LauncherApplication.isScreenLandscape(getApplicationContext())) {
-            mWorkspace.setPadding(mShowAppsButton && appsButtonLeft ?
+            mWorkspace.setPadding(mShowSearchBar ?
                     getResources().getDimensionPixelSize(R.dimen.qsb_bar_height) : 0,
                     0, mShowHotseat ? getResources().getDimensionPixelSize(
-                    R.dimen.button_bar_height) : (mShowAppsButton && !appsButtonLeft ?
-                    getResources().getDimensionPixelSize(R.dimen.qsb_bar_height) : 0), 0);
+                    R.dimen.button_bar_height) : 0, 0);
         } else {
-            mWorkspace.setPadding(0, mShowAppsButton && appsButtonTop ?
+            mWorkspace.setPadding(0, mShowSearchBar ?
                     getResources().getDimensionPixelSize(R.dimen.qsb_bar_height) : 0,
                     0, mShowHotseat ? getResources().getDimensionPixelSize(
-                    R.dimen.button_bar_height) : (mShowAppsButton && !appsButtonTop ?
-                    getResources().getDimensionPixelSize(R.dimen.qsb_bar_height) : 0));
+                    R.dimen.button_bar_height) : 0);
             View indicator = findViewById(R.id.paged_view_indicator);
             FrameLayout.LayoutParams dividerMargins = new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
@@ -2164,6 +2107,26 @@ public final class Launcher extends Activity
         }
     }
 
+    void startShortcutUninstallActivity(ShortcutInfo shortcutInfo) {
+        PackageManager pm = getPackageManager();
+        ResolveInfo resolveInfo = pm.resolveActivity(shortcutInfo.intent, 0);
+        if ((resolveInfo.activityInfo.applicationInfo.flags &
+                android.content.pm.ApplicationInfo.FLAG_SYSTEM) != 0) {
+            // System applications cannot be installed. For now, show a toast explaining that.
+            // We may give them the option of disabling apps this way.
+            int messageId = R.string.uninstall_system_app_text;
+            Toast.makeText(this, messageId, Toast.LENGTH_SHORT).show();
+        } else {
+            String packageName = shortcutInfo.intent.getComponent().getPackageName();
+            String className = shortcutInfo.intent.getComponent().getClassName();
+            Intent intent = new Intent(
+                    Intent.ACTION_DELETE, Uri.fromParts("package", packageName, className));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                    Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+            startActivity(intent);
+        }
+    }
+
     boolean startActivity(View v, Intent intent, Object tag) {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
@@ -2990,14 +2953,39 @@ public final class Launcher extends Activity
     }
 
     void hideDockDivider() {
-        if (mDockDivider != null) {
-            mDockDivider.setAlpha(0f);
+        if (mQsbDivider != null && mDockDivider != null) {
+            if (mShowSearchBar) {
+                mQsbDivider.setVisibility(View.INVISIBLE);
+            }
+            if (mShowDockDivider) {
+                mDockDivider.setVisibility(View.INVISIBLE);
+            }
         }
     }
 
     void showDockDivider(boolean animated) {
-        if (mDockDivider != null) {
-            mDockDivider.setAlpha(1f);
+        if (mQsbDivider != null && mDockDivider != null) {
+            if (mShowSearchBar) {
+                mQsbDivider.setVisibility(View.VISIBLE);
+            }
+            if (mShowDockDivider) {
+                mDockDivider.setVisibility(View.VISIBLE);
+            }
+            if (mDividerAnimator != null) {
+                mDividerAnimator.cancel();
+                mQsbDivider.setAlpha(1f);
+                mDockDivider.setAlpha(1f);
+                mDividerAnimator = null;
+            }
+            if (animated) {
+                mDividerAnimator = new AnimatorSet();
+                if (mShowSearchBar && mShowDockDivider) {
+                    mDividerAnimator.playTogether(ObjectAnimator.ofFloat(mQsbDivider, "alpha", 1f),
+                            ObjectAnimator.ofFloat(mDockDivider, "alpha", 1f));
+                }
+                mDividerAnimator.setDuration(mSearchDropTargetBar.getTransitionInDuration());
+                mDividerAnimator.start();
+            }
         }
     }
 
@@ -3055,10 +3043,14 @@ public final class Launcher extends Activity
         }
     }
 
+    public int getCurrentOrientation() {
+        return getResources().getConfiguration().orientation;
+    }
+
     /** Maps the current orientation to an index for referencing orientation correct global icons */
     private int getCurrentOrientationIndexForGlobalIcons() {
         // default - 0, landscape - 1
-        switch (getResources().getConfiguration().orientation) {
+        switch (getCurrentOrientation()) {
         case Configuration.ORIENTATION_LANDSCAPE:
             return 1;
         default:
@@ -3162,15 +3154,15 @@ public final class Launcher extends Activity
     private boolean updateGlobalSearchIcon() {
         final View searchButtonContainer = findViewById(R.id.search_button_container);
         final ImageView searchButton = (ImageView) findViewById(R.id.search_button);
-        final View searchDivider = findViewById(R.id.search_divider);
+        //final View searchDivider = findViewById(R.id.search_divider);
         final View voiceButtonContainer = findViewById(R.id.voice_button_container);
         final View voiceButton = findViewById(R.id.voice_button);
-        //final View voiceButtonProxy = findViewById(R.id.voice_button_proxy);
+        final View voiceButtonProxy = findViewById(R.id.voice_button_proxy);
 
         final SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         ComponentName activityName = searchManager.getGlobalSearchActivity();
-        if (activityName != null) {
+        if (activityName != null && mShowSearchBar) {
             int coi = getCurrentOrientationIndexForGlobalIcons();
             sGlobalSearchIcon[coi] = updateButtonWithIconFromExternalActivity(
                     R.id.search_button, activityName, R.drawable.ic_home_search_normal_holo,
@@ -3181,21 +3173,21 @@ public final class Launcher extends Activity
                         TOOLBAR_ICON_METADATA_NAME);
             }
 
-            if (searchDivider != null) searchDivider.setVisibility(View.VISIBLE);
+            //if (searchDivider != null) searchDivider.setVisibility(View.VISIBLE);
             if (searchButtonContainer != null) searchButtonContainer.setVisibility(View.VISIBLE);
             searchButton.setVisibility(View.VISIBLE);
             invalidatePressedFocusedStates(searchButtonContainer, searchButton);
             return true;
         } else {
             // We disable both search and voice search when there is no global search provider
-            if (searchDivider != null) searchDivider.setVisibility(View.GONE);
+            //if (searchDivider != null) searchDivider.setVisibility(View.GONE);
             if (searchButtonContainer != null) searchButtonContainer.setVisibility(View.GONE);
             if (voiceButtonContainer != null) voiceButtonContainer.setVisibility(View.GONE);
             searchButton.setVisibility(View.GONE);
             voiceButton.setVisibility(View.GONE);
-            //if (voiceButtonProxy != null) {
-                //voiceButtonProxy.setVisibility(View.GONE);
-            //}
+            if (voiceButtonProxy != null) {
+                voiceButtonProxy.setVisibility(View.GONE);
+            }
             return false;
         }
     }
@@ -3208,10 +3200,10 @@ public final class Launcher extends Activity
     }
 
     private boolean updateVoiceSearchIcon(boolean searchVisible) {
-        final View searchDivider = findViewById(R.id.search_divider);
+        //final View searchDivider = findViewById(R.id.search_divider);
         final View voiceButtonContainer = findViewById(R.id.voice_button_container);
         final View voiceButton = findViewById(R.id.voice_button);
-        //final View voiceButtonProxy = findViewById(R.id.voice_button_proxy);
+        final View voiceButtonProxy = findViewById(R.id.voice_button_proxy);
 
         // We only show/update the voice search icon if the search icon is enabled as well
         final SearchManager searchManager =
@@ -3242,21 +3234,21 @@ public final class Launcher extends Activity
                         R.id.voice_button, activityName, R.drawable.ic_home_voice_search_holo,
                         TOOLBAR_ICON_METADATA_NAME);
             }
-            if (searchDivider != null) searchDivider.setVisibility(View.VISIBLE);
+            //if (searchDivider != null) searchDivider.setVisibility(View.VISIBLE);
             if (voiceButtonContainer != null) voiceButtonContainer.setVisibility(View.VISIBLE);
             voiceButton.setVisibility(View.VISIBLE);
-            //if (voiceButtonProxy != null) {
-            //    voiceButtonProxy.setVisibility(View.VISIBLE);
-            //}
+            if (voiceButtonProxy != null) {
+                voiceButtonProxy.setVisibility(View.VISIBLE);
+            }
             invalidatePressedFocusedStates(voiceButtonContainer, voiceButton);
             return true;
         } else {
-            if (searchDivider != null) searchDivider.setVisibility(View.GONE);
+            //if (searchDivider != null) searchDivider.setVisibility(View.GONE);
             if (voiceButtonContainer != null) voiceButtonContainer.setVisibility(View.GONE);
             voiceButton.setVisibility(View.GONE);
-            //if (voiceButtonProxy != null) {
-            //    voiceButtonProxy.setVisibility(View.GONE);
-            //}
+            if (voiceButtonProxy != null) {
+                voiceButtonProxy.setVisibility(View.GONE);
+            }
             return false;
         }
     }
@@ -3653,9 +3645,9 @@ public final class Launcher extends Activity
 
     @Override
     public void bindSearchablesChanged() {
-        //boolean searchVisible = updateGlobalSearchIcon();
-        //boolean voiceVisible = updateVoiceSearchIcon(searchVisible);
-        //mSearchDropTargetBar.onSearchPackagesChanged(searchVisible, voiceVisible);
+        boolean searchVisible = updateGlobalSearchIcon();
+        boolean voiceVisible = updateVoiceSearchIcon(searchVisible);
+        mSearchDropTargetBar.onSearchPackagesChanged(searchVisible, voiceVisible);
     }
 
     /**
@@ -3775,7 +3767,7 @@ public final class Launcher extends Activity
         boolean forceEnableRotation = "true".equalsIgnoreCase(SystemProperties.get(
                 FORCE_ENABLE_ROTATION_PROPERTY, "false"));
         boolean enableRotation = forceEnableRotation ||
-                getResources().getBoolean(R.bool.allow_rotation);
+                getResources().getBoolean(R.bool.allow_rotation) || mAutoRotate;
         return enableRotation;
     }
     public void lockScreenOrientation() {
@@ -3795,6 +3787,8 @@ public final class Launcher extends Activity
                     }
                 }, mRestoreScreenOrientationDelay);
             }
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
         }
     }
 
@@ -3829,6 +3823,7 @@ public final class Launcher extends Activity
     }
     private void dismissCling(final Cling cling, final String flag, int duration) {
         if (cling != null) {
+            cling.dismiss();
             ObjectAnimator anim = ObjectAnimator.ofFloat(cling, "alpha", 0f);
             anim.setDuration(duration);
             anim.addListener(new AnimatorListenerAdapter() {

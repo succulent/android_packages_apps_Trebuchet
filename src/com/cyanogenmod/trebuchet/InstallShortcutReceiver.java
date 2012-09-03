@@ -25,7 +25,6 @@ import android.content.pm.PackageManager;
 import android.os.Debug;
 import android.widget.Toast;
 
-import com.cyanogenmod.trebuchet.preference.PreferencesProvider;
 import com.cyanogenmod.trebuchet.R;
 
 import java.util.ArrayList;
@@ -128,13 +127,6 @@ public class InstallShortcutReceiver extends BroadcastReceiver {
         final Intent intent = pendingInfo.launchIntent;
         final String name = pendingInfo.name;
 
-        int numberHomescreens = PreferencesProvider.Interface.Homescreen.getNumberHomescreens(context);
-        int defaultHomescreen = PreferencesProvider.Interface.Homescreen.getDefaultHomescreen(context,
-                numberHomescreens / 2);
-        if (defaultHomescreen >= numberHomescreens) {
-            defaultHomescreen = numberHomescreens / 2;
-        }
-
         // Lock on the app so that we don't try and get the items while apps are being added
         LauncherApplication app = (LauncherApplication) context.getApplicationContext();
         final int[] result = {INSTALL_SHORTCUT_SUCCESSFUL};
@@ -145,10 +137,10 @@ public class InstallShortcutReceiver extends BroadcastReceiver {
 
             // Try adding to the workspace screens incrementally, starting at the default or center
             // screen and alternating between +1, -1, +2, -2, etc. (using ~ ceil(i/2f)*(-1)^(i-1))
-            final int screen = defaultHomescreen;
-            for (int i = 0; i < (2 * numberHomescreens) + 1 && !found; ++i) {
+            final int screen = Launcher.DEFAULT_SCREEN;
+            for (int i = 0; i < (2 * Launcher.MAX_SCREEN_COUNT) + 1 && !found; ++i) {
                 int si = screen + (int) ((i / 2f) + 0.5f) * ((i % 2 == 1) ? 1 : -1);
-                if (0 <= si && si < numberHomescreens) {
+                if (0 <= si && si < Launcher.MAX_SCREEN_COUNT) {
                     found = installShortcut(context, data, items, name, intent, si, exists, sp,
                             result);
                 }

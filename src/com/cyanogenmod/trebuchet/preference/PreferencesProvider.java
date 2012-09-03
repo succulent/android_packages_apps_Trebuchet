@@ -68,7 +68,7 @@ public final class PreferencesProvider {
             }
             public static boolean getShowSearchBar(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getBoolean("ui_homescreen_general_search", false);
+                return preferences.getBoolean("ui_homescreen_general_search", true);
             }
             public static boolean getResizeAnyWidget(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
@@ -170,7 +170,8 @@ public final class PreferencesProvider {
         public static class Dock {
             public static boolean getShowHotseat(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getBoolean("ui_homescreen_general_show_hotseat", true);
+                return preferences.getBoolean("ui_homescreen_general_show_hotseat",
+						LauncherApplication.isScreenLarge() ? false : true);
             }
             public static int getHotseatApps(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);

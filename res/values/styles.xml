@@ -190,4 +190,9 @@
     </style>
     <style name="CustomClingText">
     </style>
+    <style name="SearchButton.Voice">
+        <item name="android:paddingLeft">18dp</item>
+        <item name="android:paddingRight">18dp</item>
+    </style>
+
 </resources>

@@ -26,13 +26,5 @@
                     launcher:maxExternal="ui_hotseat_apps"
                     launcher:max="7"
                     launcher:min="1" />
-                <CheckBoxPreference android:key="ui_show_apps_button"
-                    android:defaultValue="false"
-                    android:title="@string/preferences_interface_dock_apps_button_title" />
-                <ListPreference android:key="ui_apps_button_position"
-                    android:defaultValue="1"
-                    android:entries="@array/preferences_interface_apps_bar_entries"
-                    android:entryValues="@array/preferences_interface_apps_bar_values"
-                    android:title="@string/preferences_interface_dock_apps_button_position_title" />
 
 </PreferenceScreen>

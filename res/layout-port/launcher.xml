@@ -49,13 +49,11 @@
         android:paddingRight="@dimen/workspace_right_padding"
         android:paddingTop="@dimen/workspace_top_padding"
         android:paddingBottom="@dimen/workspace_bottom_padding"
-        launcher:defaultScreen="2"
         launcher:cellCountX="@integer/cell_count_x"
         launcher:cellCountY="@integer/cell_count_y"
         launcher:pageSpacing="@dimen/workspace_page_spacing"
         launcher:scrollIndicatorPaddingLeft="@dimen/workspace_divider_padding_left"
-        launcher:scrollIndicatorPaddingRight="@dimen/workspace_divider_padding_right">
-    </com.cyanogenmod.trebuchet.Workspace>
+        launcher:scrollIndicatorPaddingRight="@dimen/workspace_divider_padding_right" />
 
     <include layout="@layout/hotseat"
         android:id="@+id/hotseat"
@@ -63,17 +61,19 @@
         android:layout_height="@dimen/button_bar_height_plus_padding"
         android:layout_gravity="bottom" />
 
-    <include layout="@layout/apps_bar"
-        android:id="@+id/apps_bar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_gravity="bottom" />
-
     <include
         android:id="@+id/qsb_bar"
         layout="@layout/qsb_bar" />
+
+    <com.cyanogenmod.trebuchet.DrawableStateProxyView
+        android:id="@+id/voice_button_proxy"
+        android:layout_width="80dp"
+        android:layout_height="@dimen/qsb_bar_height"
+        android:layout_gravity="top|right"
+        android:clickable="true"
+        android:onClick="onClickVoiceButton"
+        android:importantForAccessibility="no"
+        launcher:sourceViewId="@+id/voice_button" />
 
     <include layout="@layout/apps_customize_pane"
         android:id="@+id/apps_customize_pane"
