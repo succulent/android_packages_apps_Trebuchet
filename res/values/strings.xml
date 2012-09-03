@@ -372,7 +372,7 @@ s -->
 
     <!-- Dock -->
     <string name="preferences_interface_dock_title">Dock</string>
-    <string name="preferences_interface_dock_apps_button_title">Tablet drawer button</string>
+    <string name="preferences_interface_dock_apps_button_title">All apps button</string>
     <string name="preferences_interface_dock_apps_button_position_title">Tablet drawer button position</string>
 
     <!-- Icons -->

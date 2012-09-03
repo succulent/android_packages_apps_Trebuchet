@@ -316,6 +316,7 @@ public final class Launcher extends Activity
     private int mHomescreenDoubleTap;
     private int mHomescreenSwipeUp;
     private int mHomescreenSwipeDown;
+	private boolean mShowAppsButton;
 
     private StatusBarManager mStatusBarManager;
 
@@ -383,6 +384,7 @@ public final class Launcher extends Activity
                 .getShowDockDivider(this);
         mHideIconLabels = PreferencesProvider.Interface.Homescreen.getHideIconLabels(this);
         mAutoRotate = PreferencesProvider.Interface.General.getAutoRotate(this, true);
+		mShowAppsButton = PreferencesProvider.Interface.Dock.getShowAppsButton(this);
 
         if (PROFILE_STARTUP) {
             android.os.Debug.startMethodTracing(
@@ -998,6 +1000,7 @@ public final class Launcher extends Activity
                     return false;
                 }
             });
+			if (!mShowAppsButton) mAllAppsButton.setVisibility(View.GONE);
         }
         // Setup the drag controller (drop targets have to be added in reverse order in priority)
         dragController.setDragScoller(mWorkspace);
@@ -1025,7 +1028,6 @@ public final class Launcher extends Activity
             dividerMargins.gravity = Gravity.BOTTOM;
             if (!mShowDockDivider || !mShowHotseat) indicator.setLayoutParams(dividerMargins);
         }
-
     }
 
     /**

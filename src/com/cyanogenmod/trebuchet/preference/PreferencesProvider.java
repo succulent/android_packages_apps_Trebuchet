@@ -191,7 +191,7 @@ public final class PreferencesProvider {
             }
             public static boolean getShowAppsButton(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getBoolean("ui_show_apps_button", false);
+                return preferences.getBoolean("ui_show_apps_button", true);
             }
             public static int getAppsButtonPosition(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);

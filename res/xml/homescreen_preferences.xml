@@ -14,6 +14,10 @@
                 <CheckBoxPreference android:key="ui_homescreen_general_search"
                     android:title="@string/preferences_interface_homescreen_general_search_title"
                     android:defaultValue="true" />
+                <CheckBoxPreference android:key="ui_show_apps_button"
+                    android:title="@string/preferences_interface_dock_apps_button_title"
+					android:dependency="ui_homescreen_general_search"
+                    android:defaultValue="true" />
                 <com.cyanogenmod.trebuchet.preference.NumberPickerPreference android:key="ui_homescreen_screens"
                     android:title="@string/preferences_interface_homescreen_general_screens_title"
                     android:summary="@string/preferences_interface_homescreen_general_screens_summary"
