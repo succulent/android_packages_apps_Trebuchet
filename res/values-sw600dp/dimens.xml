@@ -65,10 +65,10 @@
     <dimen name="app_widget_preview_label_margin_left">@dimen/app_widget_preview_padding_left</dimen>
     <dimen name="app_widget_preview_label_margin_right">@dimen/app_widget_preview_padding_right</dimen>
 <!-- Workspace cell size -->
-    <dimen name="workspace_cell_width_land">126dp</dimen>
-    <dimen name="workspace_cell_width_port">96dp</dimen>
+    <dimen name="workspace_cell_width_land">88dp</dimen>
+    <dimen name="workspace_cell_width_port">88dp</dimen>
     <dimen name="workspace_cell_height_land">88dp</dimen>
-    <dimen name="workspace_cell_height_port">120dp</dimen>
+    <dimen name="workspace_cell_height_port">88dp</dimen>
     <dimen name="workspace_width_gap_land">0dp</dimen>
     <dimen name="workspace_width_gap_port">0dp</dimen>
     <dimen name="workspace_height_gap_land">0dp</dimen>

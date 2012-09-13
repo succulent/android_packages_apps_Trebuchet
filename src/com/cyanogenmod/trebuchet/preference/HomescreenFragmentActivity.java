@@ -65,6 +65,12 @@ public class HomescreenFragmentActivity extends PreferenceFragment {
 
         mHomescreenGrid = (AutoDoubleNumberPickerPreference)
                 prefSet.findPreference(Preferences.HOMESCREEN_GRID);
+
+        if (!LauncherApplication.isScreenLarge()) {
+            PreferenceCategory general = (PreferenceCategory) getPreferenceScreen()
+                    .findPreference("ui_homescreen_general");
+            general.removePreference(findPreference("ui_show_apps_button"));
+        }
     }
 
     public void onResume() {
@@ -92,12 +98,6 @@ public class HomescreenFragmentActivity extends PreferenceFragment {
                 displayMetrics.density;
         mHomescreenGrid.setMax1((int) (smallestScreenDim / cellHeight));
         mHomescreenGrid.setMax2((int) (smallestScreenDim / cellWidth));
-
-		if (!LauncherApplication.isScreenLarge()) {
-			PreferenceCategory general = (PreferenceCategory) getPreferenceScreen()
-					.findPreference("ui_homescreen_general");
-			general.removePreference(findPreference("ui_show_apps_button"));
-		}
     }
 
     public static void restore(Context context) {
