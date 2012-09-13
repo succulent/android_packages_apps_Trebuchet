@@ -26,6 +26,7 @@ import android.os.Debug;
 import android.widget.Toast;
 
 import com.cyanogenmod.trebuchet.R;
+import com.cyanogenmod.trebuchet.preference.PreferencesProvider;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -34,7 +35,7 @@ import java.util.Set;
 
 public class InstallShortcutReceiver extends BroadcastReceiver {
     public static final String ACTION_INSTALL_SHORTCUT =
-            "com.cyanogenmod.trebuchet.action.INSTALL_SHORTCUT";
+            "com.android.launcher.action.INSTALL_SHORTCUT";
     public static final String NEW_APPS_PAGE_KEY = "apps.new.page";
     public static final String NEW_APPS_LIST_KEY = "apps.new.list";
 
@@ -137,10 +138,12 @@ public class InstallShortcutReceiver extends BroadcastReceiver {
 
             // Try adding to the workspace screens incrementally, starting at the default or center
             // screen and alternating between +1, -1, +2, -2, etc. (using ~ ceil(i/2f)*(-1)^(i-1))
-            final int screen = Launcher.DEFAULT_SCREEN;
-            for (int i = 0; i < (2 * Launcher.MAX_SCREEN_COUNT) + 1 && !found; ++i) {
+            final int screenCount = PreferencesProvider.Interface.Homescreen.getNumberHomescreens(context);
+            final int screenDefault = PreferencesProvider.Interface.Homescreen.getDefaultHomescreen(context, screenCount / 2);
+            final int screen = (screenDefault >= screenCount) ? screenCount / 2 : screenDefault;
+            for (int i = 0; i < (2 * screenCount) + 1 && !found; ++i) {
                 int si = screen + (int) ((i / 2f) + 0.5f) * ((i % 2 == 1) ? 1 : -1);
-                if (0 <= si && si < Launcher.MAX_SCREEN_COUNT) {
+                if (0 <= si && si < screenCount) {
                     found = installShortcut(context, data, items, name, intent, si, exists, sp,
                             result);
                 }
