@@ -105,12 +105,11 @@ public class DockFragmentActivity extends PreferenceFragment {
         Resources r = getActivity().getResources();
         int cellWidth = r.getDimensionPixelSize(R.dimen.hotseat_cell_width);
         DisplayMetrics displayMetrics = r.getDisplayMetrics();
-        final float smallestScreenDim = r.getConfiguration().smallestScreenWidthDp *
-                displayMetrics.density;
+        final float screenWidth = r.getConfiguration().screenWidthDp * displayMetrics.density;
+        final float screenHeight = r.getConfiguration().screenHeightDp * displayMetrics.density;
+        final float smallestScreenDim = screenHeight > screenWidth ? screenWidth : screenHeight;
 
-        if (LauncherApplication.isScreenLarge()) {
-            mHotseatPositions.setMaxValue((int) (smallestScreenDim / cellWidth));
-        }
+        mHotseatPositions.setMaxValue((int) (smallestScreenDim / cellWidth));
     }
 
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {

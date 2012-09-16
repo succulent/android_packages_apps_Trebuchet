@@ -65,12 +65,6 @@ public class HomescreenFragmentActivity extends PreferenceFragment {
 
         mHomescreenGrid = (AutoDoubleNumberPickerPreference)
                 prefSet.findPreference(Preferences.HOMESCREEN_GRID);
-
-        if (!LauncherApplication.isScreenLarge()) {
-            PreferenceCategory general = (PreferenceCategory) getPreferenceScreen()
-                    .findPreference("ui_homescreen_general");
-            general.removePreference(findPreference("ui_show_apps_button"));
-        }
     }
 
     public void onResume() {
@@ -85,18 +79,22 @@ public class HomescreenFragmentActivity extends PreferenceFragment {
         mDefaultHomescreen.setSummary(Integer.toString(defaultScreen));
 
         String hg = mPrefs.getString(Preferences.HOMESCREEN_GRID,
-                LauncherApplication.isScreenLarge() ? "0|0" : "6|6");
-        mHomescreenGrid.setSummary(hg.equals("0|0") ?
-                getActivity().getString(R.string.preferences_auto_number_picker) :
-                hg.replace("|", " x "));
+                LauncherModel.getCellCountY() + "|" + LauncherModel.getCellCountX());
+        mHomescreenGrid.setSummary(hg.replace("|", " x "));
 
         Resources r = getActivity().getResources();
         int cellWidth = r.getDimensionPixelSize(R.dimen.workspace_cell_width);
         int cellHeight = r.getDimensionPixelSize(R.dimen.workspace_cell_height);
         DisplayMetrics displayMetrics = r.getDisplayMetrics();
-        final float smallestScreenDim = r.getConfiguration().smallestScreenWidthDp *
-                displayMetrics.density;
-        mHomescreenGrid.setMax1((int) (smallestScreenDim / cellHeight));
+        final float screenWidth = r.getConfiguration().screenWidthDp * displayMetrics.density;
+        final float screenHeight = r.getConfiguration().screenHeightDp * displayMetrics.density;
+        final float smallestScreenDim = screenHeight > screenWidth ? screenWidth : screenHeight;
+        int buttonBarHeight = (PreferencesProvider.Interface.Dock.getShowHotseat(mContext) ?
+                mContext.getResources().getDimensionPixelSize(R.dimen.button_bar_height_plus_padding) : 0) +
+                ((PreferencesProvider.Interface.Homescreen.getShowSearchBar(mContext)
+                || PreferencesProvider.Interface.Dock.getShowAppsButton(mContext)) ?
+                mContext.getResources().getDimensionPixelSize(R.dimen.qsb_bar_height) : 0);
+        mHomescreenGrid.setMax1((int) ((smallestScreenDim - buttonBarHeight) / cellHeight));
         mHomescreenGrid.setMax2((int) (smallestScreenDim / cellWidth));
     }
 

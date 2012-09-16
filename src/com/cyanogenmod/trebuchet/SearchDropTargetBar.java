@@ -46,9 +46,11 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
             new AccelerateInterpolator();
 
     private boolean mShowQSBSearchBar;
+    private boolean mShowSearch;
+    private boolean mShowAllApps;
 
     private boolean mIsSearchBarHidden;
-    private View mQSBSearchBar;
+    public View mQSBSearchBar;
     private View mDropTargetBar;
     private ButtonDropTarget mInfoDropTarget;
     private ButtonDropTarget mDeleteDropTarget;
@@ -65,7 +67,9 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
     public SearchDropTargetBar(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        mShowQSBSearchBar = PreferencesProvider.Interface.Homescreen.getShowSearchBar(context);
+        mShowSearch = PreferencesProvider.Interface.Homescreen.getShowSearchBar(context);
+        mShowAllApps = PreferencesProvider.Interface.Dock.getShowAppsButton(context);
+        mShowQSBSearchBar = mShowAllApps || mShowSearch;
     }
 
     public void setup(Launcher launcher, DragController dragController) {
@@ -111,8 +115,7 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
         mInfoDropTarget.setSearchDropTargetBar(this);
         mDeleteDropTarget.setSearchDropTargetBar(this);
 
-        mEnableDropDownDropTargets = !LauncherApplication.isScreenLandscape(getContext());
-            //getResources().getBoolean(R.bool.config_useDropTargetDownTransition);
+        mEnableDropDownDropTargets = true;
 
         if (!mShowQSBSearchBar) {
             mQSBSearchBar.setVisibility(View.GONE);

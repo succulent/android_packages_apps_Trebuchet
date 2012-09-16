@@ -52,12 +52,6 @@ public class InfoDropTarget extends ButtonDropTarget {
         mHoverColor = r.getColor(R.color.info_target_hover_tint);
         mDrawable = (TransitionDrawable) getCurrentDrawable();
         mDrawable.setCrossFadeEnabled(true);
-
-        // Remove the text in the Phone UI in landscape
-        int orientation = getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            setText("");
-        }
     }
 
     private boolean isFromAllApps(DragSource source) {

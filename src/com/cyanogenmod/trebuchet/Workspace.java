@@ -305,16 +305,22 @@ public class Workspace extends SmoothPagedView
         int cellWidth = res.getDimensionPixelSize(R.dimen.workspace_cell_width);
         int cellHeight = res.getDimensionPixelSize(R.dimen.workspace_cell_height);
         DisplayMetrics displayMetrics = res.getDisplayMetrics();
-        final float smallestScreenDim = res.getConfiguration().smallestScreenWidthDp *
-                displayMetrics.density;
+        final float screenWidth = res.getConfiguration().screenWidthDp * displayMetrics.density;
+        final float screenHeight = res.getConfiguration().screenHeightDp * displayMetrics.density;
+        final float smallestScreenDim = screenHeight > screenWidth ? screenWidth : screenHeight;
+        int buttonBarHeight = (PreferencesProvider.Interface.Dock.getShowHotseat(context) ?
+                res.getDimensionPixelSize(R.dimen.button_bar_height_plus_padding) : 0) +
+                ((PreferencesProvider.Interface.Homescreen.getShowSearchBar(context)
+                || PreferencesProvider.Interface.Dock.getShowAppsButton(context)) ?
+                res.getDimensionPixelSize(R.dimen.qsb_bar_height) : 0);
 
         int cellCountX = (int) (smallestScreenDim / cellWidth);
-        int cellCountY = (int) (smallestScreenDim / cellHeight);
+        int cellCountY = (int) ((smallestScreenDim - buttonBarHeight) / cellHeight);
 
         TypedArray a = context.obtainStyledAttributes(attrs,
                 R.styleable.Workspace, defStyle, 0);
 
-        if (LauncherApplication.isScreenLarge()) {
+        if (false) {
             // Determine number of rows/columns dynamically
             // TODO: This code currently fails on tablets with an aspect ratio < 1.3.
             // Around that ratio we should make cells the same size in portrait and
@@ -343,8 +349,8 @@ public class Workspace extends SmoothPagedView
         mCameraDistance = res.getInteger(R.integer.config_cameraDistance);
 
         // if the value is manually specified, use that instead
-        cellCountX = a.getInt(R.styleable.Workspace_cellCountX, cellCountX);
-        cellCountY = a.getInt(R.styleable.Workspace_cellCountY, cellCountY);
+        //cellCountX = a.getInt(R.styleable.Workspace_cellCountX, cellCountX);
+        //cellCountY = a.getInt(R.styleable.Workspace_cellCountY, cellCountY);
         a.recycle();
 
         int countX = PreferencesProvider.Interface.Homescreen.getCellCountX(context, cellCountX);
@@ -697,7 +703,7 @@ public class Workspace extends SmoothPagedView
 
         // Only allow tap to next page on large devices, where there's significant margin outside
         // the active workspace
-        return LauncherApplication.isScreenLarge() && hitsPage(current - 1, x, y);
+        return hitsPage(current - 1, x, y);
     }
 
     @Override
@@ -708,7 +714,7 @@ public class Workspace extends SmoothPagedView
 
         // Only allow tap to next page on large devices, where there's significant margin outside
         // the active workspace
-        return LauncherApplication.isScreenLarge() && hitsPage(current + 1, x, y);
+        return hitsPage(current + 1, x, y);
     }
 
     /**
@@ -866,12 +872,6 @@ public class Workspace extends SmoothPagedView
             }
         }
 
-        // Only show page outlines as we pan if we are on large screen
-        if (LauncherApplication.isScreenLarge()) {
-            //showOutlines();
-            mIsStaticWallpaper = mWallpaperManager.getWallpaperInfo() == null;
-        }
-
         // If we are not fading in adjacent screens, we still need to restore the alpha in case the
         // user scrolls while we are transitioning (should not affect dispatchDraw optimizations)
         if (!mWorkspaceFadeInAdjacentScreens) {
@@ -903,11 +903,6 @@ public class Workspace extends SmoothPagedView
                 mDragController.forceMoveEvent();
             }
         } else {
-            // If we are not mid-dragging, hide the page outlines if we are on a large screen
-            if (LauncherApplication.isScreenLarge()) {
-                //hideOutlines();
-            }
-
             // Hide the scroll indicator as you pan the page
             if (mFadeScrollingIndicator && !mDragController.isDragging()) {
                 hideScrollingIndicator(false);
@@ -979,15 +974,9 @@ public class Workspace extends SmoothPagedView
         final int maxDim = Math.max(displayMetrics.widthPixels, displayMetrics.heightPixels);
         final int minDim = Math.min(displayMetrics.widthPixels, displayMetrics.heightPixels);
 
-        // We need to ensure that there is enough extra space in the wallpaper for the intended
-        // parallax effects
-        if (LauncherApplication.isScreenLarge()) {
-            mWallpaperWidth = (int) (maxDim * wallpaperTravelToScreenWidthRatio(maxDim, minDim));
-            mWallpaperHeight = maxDim;
-        } else {
-            mWallpaperWidth = Math.max((int) (minDim * WALLPAPER_SCREENS_SPAN), maxDim);
-            mWallpaperHeight = maxDim;
-        }
+        mWallpaperWidth = Math.max((int) (minDim * WALLPAPER_SCREENS_SPAN), maxDim);
+        mWallpaperHeight = maxDim;
+
         new Thread("setWallpaperDimension") {
             public void run() {
                 mWallpaperManager.suggestDesiredDimensions(mWallpaperWidth, mWallpaperHeight);
@@ -1014,19 +1003,7 @@ public class Workspace extends SmoothPagedView
         float scrollProgress =
             adjustedScrollX / (float) scrollRange;
 
-        if (LauncherApplication.isScreenLarge() && mIsStaticWallpaper) {
-            // The wallpaper travel width is how far, from left to right, the wallpaper will move
-            // at this orientation. On tablets in portrait mode we don't move all the way to the
-            // edges of the wallpaper, or otherwise the parallax effect would be too strong.
-            int wallpaperTravelWidth = Math.min(mWallpaperTravelWidth, mWallpaperWidth);
-
-            float offsetInDips = wallpaperTravelWidth * scrollProgress +
-                (mWallpaperWidth - wallpaperTravelWidth) / 2; // center it
-            float offset = offsetInDips / (float) mWallpaperWidth;
-            return offset;
-        } else {
-            return scrollProgress;
-        }
+        return scrollProgress;
     }
 
     private void syncWallpaperOffsetWithScroll() {
@@ -1179,18 +1156,8 @@ public class Workspace extends SmoothPagedView
             boolean jumpToFinalValue = Math.abs(hOffsetDelta) < UPDATE_THRESHOLD &&
                 Math.abs(vOffsetDelta) < UPDATE_THRESHOLD;
 
-            // Don't have any lag between workspace and wallpaper on non-large devices
-            if (!LauncherApplication.isScreenLarge() || jumpToFinalValue) {
-                mHorizontalWallpaperOffset = mFinalHorizontalWallpaperOffset;
-                mVerticalWallpaperOffset = mFinalVerticalWallpaperOffset;
-            } else {
-                float percentToCatchUpVertical =
-                    Math.min(1.0f, timeSinceLastUpdate * fractionToCatchUpIn1MsVertical);
-                float percentToCatchUpHorizontal =
-                    Math.min(1.0f, timeSinceLastUpdate * fractionToCatchUpIn1MsHorizontal);
-                mHorizontalWallpaperOffset += percentToCatchUpHorizontal * hOffsetDelta;
-                mVerticalWallpaperOffset += percentToCatchUpVertical * vOffsetDelta;
-            }
+            mHorizontalWallpaperOffset = mFinalHorizontalWallpaperOffset;
+            mVerticalWallpaperOffset = mFinalVerticalWallpaperOffset;
 
             mLastWallpaperOffsetUpdateTime = System.currentTimeMillis();
             return true;
@@ -2512,12 +2479,6 @@ public class Workspace extends SmoothPagedView
         CellLayout layout = getCurrentDropLayout();
         setCurrentDropLayout(layout);
         setCurrentDragOverlappingLayout(layout);
-
-        // Because we don't have space in the Phone UI (the CellLayouts run to the edge) we
-        // don't need to show the outlines
-        if (LauncherApplication.isScreenLarge()) {
-            //showOutlines();
-        }
     }
 
     static Rect getCellLayoutMetrics(Launcher launcher, int orientation) {
@@ -3921,12 +3882,10 @@ public class Workspace extends SmoothPagedView
         mOverscrollFade = fade;
         float reducedFade = 0.5f + 0.5f * (1 - fade);
         final ViewGroup parent = (ViewGroup) getParent();
-        final ImageView qsbDivider = (ImageView) (parent.findViewById(R.id.qsb_divider));
         final ImageView dockDivider = (ImageView) (parent.findViewById(R.id.dock_divider));
         final View scrollIndicator = getScrollingIndicator();
 
         cancelScrollingIndicatorAnimations();
-        if (qsbDivider != null && mShowSearchBar) qsbDivider.setAlpha(reducedFade);
         if (dockDivider != null && mShowDockDivider) dockDivider.setAlpha(reducedFade);
         if (scrollIndicator != null && mShowScrollingIndicator) scrollIndicator.setAlpha(1 - fade);
     }

@@ -18,7 +18,7 @@
 -->
 
 <resources>
-<!-- Search Bar -->
+<!-- Search Bar
     <style name="QSBBar">
         <item name="android:orientation">vertical</item>
         <item name="android:layout_width">@dimen/qsb_bar_height</item>
@@ -63,7 +63,7 @@
         <item name="android:shadowDx">0.0</item>
         <item name="android:shadowDy">1.0</item>
         <item name="android:shadowRadius">4.0</item>
-    </style>
+    </style> -->
 
 <!-- AppsCustomize -->
     <style name="TabIndicator.AppsCustomize">

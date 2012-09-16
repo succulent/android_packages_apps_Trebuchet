@@ -188,8 +188,8 @@ public class CellLayout extends ViewGroup {
                 a.getDimensionPixelSize(R.styleable.CellLayout_cellWidth, 10);
         mCellHeight = mOriginalCellHeight =
                 a.getDimensionPixelSize(R.styleable.CellLayout_cellHeight, 10);
-        mCellWidth = getMaxCellWidth(!LauncherApplication.isScreenLandscape(context));
-        mCellHeight = getMaxCellHeight(!LauncherApplication.isScreenLandscape(context));
+        mCellWidth = getMaxCellWidth(true);
+        mCellHeight = getMaxCellHeight(true);
         mWidthGap = mOriginalWidthGap = a.getDimensionPixelSize(R.styleable.CellLayout_widthGap, 0);
         mHeightGap = mOriginalHeightGap = a.getDimensionPixelSize(R.styleable.CellLayout_heightGap, 0);
         mMaxGap = a.getDimensionPixelSize(R.styleable.CellLayout_maxGap, 0);
@@ -565,7 +565,7 @@ public class CellLayout extends ViewGroup {
     public void setIsHotseat(boolean isHotseat) {
         mIsHotseat = isHotseat;
         if (isHotseat) {
-            mCellWidth = mOriginalCellWidth;
+            //mCellWidth = mOriginalCellWidth;
             mCellHeight = mOriginalCellHeight;
         }
     }
@@ -930,16 +930,18 @@ public class CellLayout extends ViewGroup {
     private int getMaxCellWidth(boolean portrait) {
         int width = (int) (getResources().getConfiguration().screenWidthDp * LauncherApplication.getScreenDensity()) - (portrait ?
                 0 : (PreferencesProvider.Interface.Dock.getShowHotseat(getContext()) ?
-                getResources().getDimensionPixelSize(R.dimen.button_bar_height) : 0) +
-                (PreferencesProvider.Interface.Homescreen.getShowSearchBar(getContext()) ?
+                getResources().getDimensionPixelSize(R.dimen.button_bar_height_plus_padding) : 0) +
+                ((PreferencesProvider.Interface.Homescreen.getShowSearchBar(getContext())
+                || PreferencesProvider.Interface.Dock.getShowAppsButton(getContext())) ?
                 getResources().getDimensionPixelSize(R.dimen.qsb_bar_height) : 0));
         return width / mCountX;
     }
 
     private int getMaxCellHeight(boolean portrait) {
         int buttonBarHeight = (PreferencesProvider.Interface.Dock.getShowHotseat(getContext()) ?
-                getResources().getDimensionPixelSize(R.dimen.button_bar_height) : 0) +
-                (PreferencesProvider.Interface.Homescreen.getShowSearchBar(getContext()) ?
+                getResources().getDimensionPixelSize(R.dimen.button_bar_height_plus_padding) : 0) +
+                ((PreferencesProvider.Interface.Homescreen.getShowSearchBar(getContext())
+                || PreferencesProvider.Interface.Dock.getShowAppsButton(getContext())) ?
                 getResources().getDimensionPixelSize(R.dimen.qsb_bar_height) : 0);
         int height = (int) (getResources().getConfiguration().screenHeightDp * LauncherApplication.getScreenDensity())
                 - (portrait ? buttonBarHeight : 0);

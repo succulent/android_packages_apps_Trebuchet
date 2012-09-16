@@ -65,16 +65,6 @@
         android:id="@+id/qsb_bar"
         layout="@layout/qsb_bar" />
 
-    <com.cyanogenmod.trebuchet.DrawableStateProxyView
-        android:id="@+id/voice_button_proxy"
-        android:layout_width="80dp"
-        android:layout_height="@dimen/qsb_bar_height"
-        android:layout_gravity="top|right"
-        android:clickable="true"
-        android:onClick="onClickVoiceButton"
-        android:importantForAccessibility="no"
-        launcher:sourceViewId="@+id/voice_button" />
-
     <include layout="@layout/apps_customize_pane"
         android:id="@+id/apps_customize_pane"
         android:layout_width="match_parent"

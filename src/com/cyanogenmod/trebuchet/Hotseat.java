@@ -38,7 +38,6 @@ public class Hotseat extends FrameLayout {
     private int mCellCountX;
     private int mCellCountY;
     private int mAllAppsButtonRank;
-    private boolean mIsLandscape;
     private static boolean mShowAllAppsHotseat;
     private boolean mShowHotseat;
 
@@ -60,8 +59,6 @@ public class Hotseat extends FrameLayout {
         mCellCountX = a.getInt(R.styleable.Hotseat_cellCountX, -1);
         mCellCountY = a.getInt(R.styleable.Hotseat_cellCountY, -1);
         mAllAppsButtonRank = context.getResources().getInteger(R.integer.hotseat_all_apps_index);
-        mIsLandscape = context.getResources().getConfiguration().orientation ==
-            Configuration.ORIENTATION_LANDSCAPE;
         mShowAllAppsHotseat =
                 PreferencesProvider.Interface.Dock.getShowAllAppsHotseat(context);
         mShowHotseat =
@@ -81,14 +78,14 @@ public class Hotseat extends FrameLayout {
 
     /* Get the orientation invariant order of the item in the hotseat for persistence. */
     int getOrderInHotseat(int x, int y) {
-        return mIsLandscape ? (mContent.getCountY() - y - 1) : x;
+        return x;
     }
     /* Get the orientation specific coordinates given an invariant order in the hotseat. */
     int getCellXFromOrder(int rank) {
-        return mIsLandscape ? 0 : rank;
+        return rank;
     }
     int getCellYFromOrder(int rank) {
-        return mIsLandscape ? (mContent.getCountY() - (rank + 1)) : 0;
+        return 0;
     }
     public boolean isAllAppsButtonRank(int rank) {
         return mShowAllAppsHotseat ? rank == mAllAppsButtonRank : false;
@@ -109,9 +106,7 @@ public class Hotseat extends FrameLayout {
         if (allAppsRank == 0) mAllAppsButtonRank = (int) prefCount / 2;
         else mAllAppsButtonRank = allAppsRank - 1;
 
-        // Set the cell count vertically in landscape, horizontally in portrait
-        if (mIsLandscape) mCellCountY = prefCount;
-        else mCellCountX = prefCount;
+        mCellCountX = prefCount;
 
         mContent = (CellLayout) findViewById(R.id.layout);
         mContent.setGridSize(mCellCountX, mCellCountY);

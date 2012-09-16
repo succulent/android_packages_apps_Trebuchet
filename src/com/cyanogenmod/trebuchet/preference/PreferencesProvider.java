@@ -82,6 +82,10 @@ public final class PreferencesProvider {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return preferences.getBoolean("ui_search_background", true);
             }
+            public static boolean getSearchHideDropDown(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("ui_search_hide_drop_down", true);
+            }
             public static class Scrolling {
                 public static boolean getScrollWallpaper(Context context) {
                     final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
@@ -170,8 +174,7 @@ public final class PreferencesProvider {
         public static class Dock {
             public static boolean getShowHotseat(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getBoolean("ui_homescreen_general_show_hotseat",
-						LauncherApplication.isScreenLarge() ? false : true);
+                return preferences.getBoolean("ui_homescreen_general_show_hotseat", true);
             }
             public static int getHotseatApps(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
