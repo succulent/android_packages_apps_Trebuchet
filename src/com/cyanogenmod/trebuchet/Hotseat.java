@@ -40,6 +40,7 @@ public class Hotseat extends FrameLayout {
     private int mAllAppsButtonRank;
     private static boolean mShowAllAppsHotseat;
     private boolean mShowHotseat;
+    private boolean mShowLandRightDock;
 
     private Context mContext;
 
@@ -63,6 +64,10 @@ public class Hotseat extends FrameLayout {
                 PreferencesProvider.Interface.Dock.getShowAllAppsHotseat(context);
         mShowHotseat =
                 PreferencesProvider.Interface.Dock.getShowHotseat(context);
+        mShowLandRightDock =
+                PreferencesProvider.Interface.Dock.getShowLandRightDock(context) &&
+                context.getResources().getConfiguration().orientation ==
+                Configuration.ORIENTATION_LANDSCAPE;
 
         mContext = context;
     }
@@ -78,14 +83,14 @@ public class Hotseat extends FrameLayout {
 
     /* Get the orientation invariant order of the item in the hotseat for persistence. */
     int getOrderInHotseat(int x, int y) {
-        return x;
+        return mShowLandRightDock ? (mContent.getCountY() - y - 1) : x;
     }
     /* Get the orientation specific coordinates given an invariant order in the hotseat. */
     int getCellXFromOrder(int rank) {
-        return rank;
+        return mShowLandRightDock ? 0 : rank;
     }
     int getCellYFromOrder(int rank) {
-        return 0;
+        return mShowLandRightDock ? (mContent.getCountY() - (rank + 1)) : 0;
     }
     public boolean isAllAppsButtonRank(int rank) {
         return mShowAllAppsHotseat ? rank == mAllAppsButtonRank : false;
@@ -106,7 +111,8 @@ public class Hotseat extends FrameLayout {
         if (allAppsRank == 0) mAllAppsButtonRank = (int) prefCount / 2;
         else mAllAppsButtonRank = allAppsRank - 1;
 
-        mCellCountX = prefCount;
+        if (mShowLandRightDock) mCellCountY = prefCount;
+        else mCellCountX = prefCount;
 
         mContent = (CellLayout) findViewById(R.id.layout);
         mContent.setGridSize(mCellCountX, mCellCountY);

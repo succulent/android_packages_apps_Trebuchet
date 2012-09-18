@@ -317,7 +317,7 @@ s -->
     <string name="preferences_interface_homescreen_general_screen_padding_vertical_summary">Extra vertical spacing on the homescreen</string>
     <string name="preferences_interface_homescreen_general_screen_padding_horizontal_title">Horizontal padding</string>
     <string name="preferences_interface_homescreen_general_screen_padding_horizontal_summary">Extra horizontal spacing on the homescreen</string>
-    <string name="preferences_interface_homescreen_general_search_title">Search bar</string>
+    <string name="preferences_interface_homescreen_general_search_title">Search bar search and voice buttons</string>
     <string name="preferences_interface_homescreen_general_search_summary">Enable search bar</string>
     <string name="preferences_interface_homescreen_general_resize_any_widget_title">Resize any widget</string>
     <string name="preferences_interface_homescreen_general_resize_any_widget_summary">Allow resizing of widgets that normally aren\'t resizeable</string>
@@ -375,6 +375,7 @@ s -->
     <string name="preferences_interface_dock_title">Dock</string>
     <string name="preferences_interface_dock_apps_button_title">Search bar apps button</string>
     <string name="preferences_interface_dock_apps_button_position_title">Tablet drawer button position</string>
+    <string name="preferences_interface_right_land_dock_title">Dock on right in landscape</string>
 
     <!-- Icons -->
     <string name="preferences_interface_icons_title">Icons</string>

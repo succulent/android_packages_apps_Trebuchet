@@ -92,15 +92,20 @@ public class HomescreenFragmentActivity extends PreferenceFragment {
         final float screenWidth = r.getConfiguration().screenWidthDp * displayMetrics.density;
         final float screenHeight = r.getConfiguration().screenHeightDp * displayMetrics.density;
         final float smallestScreenDim = screenHeight > screenWidth ? screenWidth : screenHeight;
-        int buttonBarHeight = (PreferencesProvider.Interface.Dock.getShowHotseat(mContext) ?
-                mContext.getResources().getDimensionPixelSize(largeIcons ?
-                R.dimen.button_bar_height_plus_padding_large :
-                R.dimen.button_bar_height_plus_padding) : 0) +
+        boolean showHotseat = PreferencesProvider.Interface.Dock.getShowHotseat(mContext);
+        boolean showLandRightDock = PreferencesProvider.Interface.Dock.getShowLandRightDock(mContext);
+        int searchBarHeight = r.getDimensionPixelSize(R.dimen.qsb_bar_height);
+        int buttonBarHeightPlus = r.getDimensionPixelSize(largeIcons
+                ? R.dimen.button_bar_height_plus_padding_large :
+                R.dimen.button_bar_height_plus_padding);
+
+        int buttonBarHeight = (showHotseat && !showLandRightDock ? buttonBarHeightPlus : 0) +
                 ((PreferencesProvider.Interface.Homescreen.getShowSearchBar(mContext)
                 || PreferencesProvider.Interface.Dock.getShowAppsButton(mContext)) ?
-                mContext.getResources().getDimensionPixelSize(R.dimen.qsb_bar_height) : 0);
+                searchBarHeight : 0);
         mHomescreenGrid.setMax1((int) ((smallestScreenDim - buttonBarHeight) / cellHeight));
-        mHomescreenGrid.setMax2((int) (smallestScreenDim / cellWidth));
+        mHomescreenGrid.setMax2((int) ((smallestScreenDim - (showLandRightDock && showHotseat ?
+                buttonBarHeightPlus : 0)) / cellWidth));
     }
 
     public static void restore(Context context) {

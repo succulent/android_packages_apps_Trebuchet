@@ -24,6 +24,7 @@ import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -139,6 +140,7 @@ public class CellLayout extends ViewGroup {
     private ShortcutAndWidgetContainer mShortcutsAndWidgets;
 
     private boolean mIsHotseat = false;
+    private boolean mShowLandRightDock;
 
     public static final int MODE_DRAG_OVER = 0;
     public static final int MODE_ON_DROP = 1;
@@ -182,6 +184,11 @@ public class CellLayout extends ViewGroup {
         mLauncher = (Launcher) context;
 
         boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(context);
+
+        mShowLandRightDock =
+                PreferencesProvider.Interface.Dock.getShowLandRightDock(context) &&
+                context.getResources().getConfiguration().orientation ==
+                Configuration.ORIENTATION_LANDSCAPE;
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CellLayout, defStyle, 0);
         mCountX = LauncherModel.getCellCountX();
@@ -570,8 +577,8 @@ public class CellLayout extends ViewGroup {
     public void setIsHotseat(boolean isHotseat) {
         mIsHotseat = isHotseat;
         if (isHotseat) {
-            //mCellWidth = mOriginalCellWidth;
-            mCellHeight = mOriginalCellHeight;
+            if (mShowLandRightDock) mCellWidth = mOriginalCellWidth;
+            else mCellHeight = mOriginalCellHeight;
         }
     }
 
@@ -934,20 +941,17 @@ public class CellLayout extends ViewGroup {
 
     private int getMaxCellWidth(boolean portrait) {
         boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(getContext());
-        int width = (int) (getResources().getConfiguration().screenWidthDp * LauncherApplication.getScreenDensity()) - (portrait ?
+        int width = (int) (getResources().getConfiguration().screenWidthDp * LauncherApplication.getScreenDensity()) - (!mShowLandRightDock ?
                 0 : (PreferencesProvider.Interface.Dock.getShowHotseat(getContext()) ?
                 getResources().getDimensionPixelSize(largeIcons ?
                 R.dimen.button_bar_height_plus_padding_large :
-                R.dimen.button_bar_height_plus_padding) : 0) +
-                ((PreferencesProvider.Interface.Homescreen.getShowSearchBar(getContext())
-                || PreferencesProvider.Interface.Dock.getShowAppsButton(getContext())) ?
-                getResources().getDimensionPixelSize(R.dimen.qsb_bar_height) : 0));
+                R.dimen.button_bar_height_plus_padding) : 0));
         return width / mCountX;
     }
 
     private int getMaxCellHeight(boolean portrait) {
         boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(getContext());
-        int buttonBarHeight = (PreferencesProvider.Interface.Dock.getShowHotseat(getContext()) ?
+        int buttonBarHeight = (PreferencesProvider.Interface.Dock.getShowHotseat(getContext()) && !mShowLandRightDock ?
                 getResources().getDimensionPixelSize(largeIcons ?
                 R.dimen.button_bar_height_plus_padding_large :
                 R.dimen.button_bar_height_plus_padding) : 0) +

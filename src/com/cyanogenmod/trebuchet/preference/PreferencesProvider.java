@@ -198,11 +198,15 @@ public final class PreferencesProvider {
             }
             public static boolean getShowAppsButton(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getBoolean("ui_show_apps_button", true);
+                return preferences.getBoolean("ui_show_apps_button", false);
             }
             public static int getAppsButtonPosition(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return Integer.parseInt(preferences.getString("ui_apps_button_position", "1"));
+            }
+            public static boolean getShowLandRightDock(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("ui_land_right_dock", true);
             }
         }
 

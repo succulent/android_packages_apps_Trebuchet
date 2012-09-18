@@ -5,6 +5,10 @@
 
                 <CheckBoxPreference android:key="ui_homescreen_general_show_hotseat"
                     android:title="@string/preferences_interface_homescreen_general_show_hotseat_title" />
+                <CheckBoxPreference android:key="ui_land_right_dock"
+                    android:dependency="ui_homescreen_general_show_hotseat"
+                    android:defaultValue="true"
+                    android:title="@string/preferences_interface_right_land_dock_title" />
                 <CheckBoxPreference android:key="ui_homescreen_indicator_background"
                     android:dependency="ui_homescreen_general_show_hotseat"
                     android:title="@string/preferences_interface_homescreen_indicator_background_title" />

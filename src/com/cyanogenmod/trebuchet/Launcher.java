@@ -317,6 +317,7 @@ public final class Launcher extends Activity
     private int mHomescreenSwipeDown;
     private boolean mShowAppsButton;
     private boolean mShowSearchBackground;
+    private boolean mShowLandRightDock;
 
     private StatusBarManager mStatusBarManager;
 
@@ -387,6 +388,9 @@ public final class Launcher extends Activity
         mShowAppsButton = PreferencesProvider.Interface.Dock.getShowAppsButton(this);
         mShowSearchBackground = PreferencesProvider.Interface.Homescreen.getShowSearchBackground(this);
         mShowSearchBar = PreferencesProvider.Interface.Homescreen.getShowSearchBar(this);
+        mShowLandRightDock = PreferencesProvider.Interface.Dock.getShowLandRightDock(this) &&
+                getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE
+                && mShowHotseat;
 
         if (PROFILE_STARTUP) {
             android.os.Debug.startMethodTracing(
@@ -1030,34 +1034,45 @@ public final class Launcher extends Activity
 
         boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(this);
 
-        mWorkspace.setPadding(0, mShowSearchBar || mShowAppsButton ?
-                getResources().getDimensionPixelSize(R.dimen.qsb_bar_height) : 0,
-                0, mShowHotseat ? getResources().getDimensionPixelSize(largeIcons ?
-                R.dimen.button_bar_height_plus_padding_large :
-                R.dimen.button_bar_height_plus_padding) : 0);
+        int searchBarHeight = getResources().getDimensionPixelSize(R.dimen.qsb_bar_height);
+        int buttonBarHeight = getResources().getDimensionPixelSize(largeIcons
+                ? R.dimen.button_bar_height_large : R.dimen.button_bar_height);
+        int buttonBarHeightPlus = getResources().getDimensionPixelSize(largeIcons
+                ? R.dimen.button_bar_height_plus_padding_large :
+                R.dimen.button_bar_height_plus_padding);
+        int paddingRight = getResources().getDimensionPixelSize(R.dimen.workspace_divider_padding_right);
+        int paddingLeft = getResources().getDimensionPixelSize(R.dimen.workspace_divider_padding_left);
+        int paddingTop = getResources().getDimensionPixelSize(R.dimen.workspace_divider_padding_top);
+        int paddingBottom = getResources().getDimensionPixelSize(R.dimen.workspace_divider_padding_bottom);
+
+        mWorkspace.setPadding(0, mShowSearchBar || mShowAppsButton ? searchBarHeight : 0,
+                mShowLandRightDock ? buttonBarHeightPlus : 0, mShowHotseat && !mShowLandRightDock ?
+                buttonBarHeightPlus : 0);
 
         View indicator = findViewById(R.id.paged_view_indicator);
         FrameLayout.LayoutParams dividerMargins = new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-        dividerMargins.setMargins(0, 0, 0, !mShowDockDivider || !mShowHotseat ? 0 :
-                getResources().getDimensionPixelSize(largeIcons ?
-                R.dimen.button_bar_height_large :
-                R.dimen.button_bar_height));
+        dividerMargins.setMargins(0, 0, 0, !mShowDockDivider || !mShowHotseat ||
+                mShowLandRightDock ? 0 : buttonBarHeight);
         dividerMargins.gravity = Gravity.BOTTOM;
         indicator.setLayoutParams(dividerMargins);
 
-        FrameLayout.LayoutParams hotseatMargins = new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(
-                largeIcons ? R.dimen.button_bar_height_plus_padding_large :
-                R.dimen.button_bar_height_plus_padding));
-        hotseatMargins.gravity = Gravity.BOTTOM;
+        FrameLayout.LayoutParams hotseatMargins = new FrameLayout.LayoutParams(mShowLandRightDock ?
+                buttonBarHeightPlus : FrameLayout.LayoutParams.MATCH_PARENT, mShowLandRightDock ?
+                FrameLayout.LayoutParams.MATCH_PARENT : buttonBarHeightPlus);
+        hotseatMargins.gravity = mShowLandRightDock ? Gravity.RIGHT : Gravity.BOTTOM;
+        mHotseat.setPadding(0, mShowLandRightDock ? searchBarHeight : 0, 0, 0);
         if (mShowHotseat) mHotseat.setLayoutParams(hotseatMargins);
 
         FrameLayout.LayoutParams hotseatDividerMargins = new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-        hotseatDividerMargins.setMargins(0, 0, 0, getResources().getDimensionPixelSize(largeIcons ?
-                R.dimen.button_bar_height_large : R.dimen.button_bar_height));
-        hotseatDividerMargins.gravity = Gravity.BOTTOM;
+                mShowLandRightDock ? FrameLayout.LayoutParams.WRAP_CONTENT :
+                FrameLayout.LayoutParams.MATCH_PARENT, mShowLandRightDock ?
+                FrameLayout.LayoutParams.MATCH_PARENT : FrameLayout.LayoutParams.WRAP_CONTENT);
+        hotseatDividerMargins.setMargins(0, 0, mShowLandRightDock ? buttonBarHeightPlus : 0,
+                !mShowLandRightDock ? buttonBarHeight : 0);
+        hotseatDividerMargins.gravity = mShowLandRightDock ? Gravity.RIGHT : Gravity.BOTTOM;
+        mDockDivider.setPadding(paddingLeft, paddingTop + (mShowLandRightDock ? (mShowSearchBar ||
+                mShowAppsButton ? searchBarHeight : 0) : 0), paddingRight, paddingBottom);
         if (mShowDockDivider) mDockDivider.setLayoutParams(hotseatDividerMargins);
 
         if (!mShowSearchBackground) mSearchDropTargetBar.mQSBSearchBar.setBackgroundDrawable(null);

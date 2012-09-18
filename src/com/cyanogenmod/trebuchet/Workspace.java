@@ -30,6 +30,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -265,6 +266,7 @@ public class Workspace extends SmoothPagedView
     private boolean mShowScrollingIndicator;
     private boolean mFadeScrollingIndicator;
     private boolean mShowDockDivider;
+    private boolean mShowLandRightDock;
 
     private final GestureDetector mGestureDetector;
     private Runnable mSwipeUpCallback = null;
@@ -302,6 +304,11 @@ public class Workspace extends SmoothPagedView
         mFadeInAdjacentScreens = false;
         mWallpaperManager = WallpaperManager.getInstance(context);
 
+        mShowLandRightDock =
+                PreferencesProvider.Interface.Dock.getShowLandRightDock(context) &&
+                context.getResources().getConfiguration().orientation ==
+                Configuration.ORIENTATION_LANDSCAPE;
+
         boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(context);
         int cellWidth = res.getDimensionPixelSize(largeIcons ? R.dimen.workspace_cell_width_large :
                 R.dimen.workspace_cell_width);
@@ -311,14 +318,16 @@ public class Workspace extends SmoothPagedView
         final float screenWidth = res.getConfiguration().screenWidthDp * displayMetrics.density;
         final float screenHeight = res.getConfiguration().screenHeightDp * displayMetrics.density;
         final float smallestScreenDim = screenHeight > screenWidth ? screenWidth : screenHeight;
-        int buttonBarHeight = (PreferencesProvider.Interface.Dock.getShowHotseat(context) ?
+        int buttonBarHeight = (PreferencesProvider.Interface.Dock.getShowHotseat(context) && !mShowLandRightDock ?
                 res.getDimensionPixelSize(largeIcons ? R.dimen.button_bar_height_plus_padding_large :
                 R.dimen.button_bar_height_plus_padding) : 0) +
                 ((PreferencesProvider.Interface.Homescreen.getShowSearchBar(context)
                 || PreferencesProvider.Interface.Dock.getShowAppsButton(context)) ?
                 res.getDimensionPixelSize(R.dimen.qsb_bar_height) : 0);
 
-        int cellCountX = (int) (smallestScreenDim / cellWidth);
+        int cellCountX = (int) ((smallestScreenDim - (mShowLandRightDock ?
+                res.getDimensionPixelSize(largeIcons ? R.dimen.button_bar_height_plus_padding_large :
+                R.dimen.button_bar_height_plus_padding) : 0)) / cellWidth);
         int cellCountY = (int) ((smallestScreenDim - buttonBarHeight) / cellHeight);
 
         mSpringLoadedShrinkFactor =
