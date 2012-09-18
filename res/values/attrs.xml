@@ -66,6 +66,10 @@
         <attr name="cellWidth" format="dimension"  />
         <!-- The height of a single cell -->
         <attr name="cellHeight" format="dimension"  />
+        <!-- The width of a single cell -->
+        <attr name="cellWidthLarge" format="dimension"  />
+        <!-- The height of a single cell -->
+        <attr name="cellHeightLarge" format="dimension"  />
         <!-- An override for the width and height gap to allow users to specify
              a specific size for the page using spacing instead of resolving the
              spacing from the width of the page -->

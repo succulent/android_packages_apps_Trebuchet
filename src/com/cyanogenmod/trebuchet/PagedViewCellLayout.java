@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewDebug;
 import android.view.ViewGroup;
 
+import com.cyanogenmod.trebuchet.preference.PreferencesProvider;
 import com.cyanogenmod.trebuchet.R;
 
 /**
@@ -62,10 +63,13 @@ public class PagedViewCellLayout extends ViewGroup implements Page {
 
         // setup default cell parameters
         Resources resources = context.getResources();
+        boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(context);
         mOriginalCellWidth = mCellWidth =
-            resources.getDimensionPixelSize(R.dimen.apps_customize_cell_width);
+            resources.getDimensionPixelSize(largeIcons ? R.dimen.apps_customize_cell_width_large :
+            R.dimen.apps_customize_cell_width);
         mOriginalCellHeight = mCellHeight =
-            resources.getDimensionPixelSize(R.dimen.apps_customize_cell_height);
+            resources.getDimensionPixelSize(largeIcons ? R.dimen.apps_customize_cell_height_large :
+            R.dimen.apps_customize_cell_height);
         mCellCountX = LauncherModel.getCellCountX();
         mCellCountY = LauncherModel.getCellCountY();
         mOriginalWidthGap = mOriginalHeightGap = mWidthGap = mHeightGap = -1;

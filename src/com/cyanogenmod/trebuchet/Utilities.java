@@ -35,6 +35,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PaintDrawable;
 import android.util.DisplayMetrics;
 
+import com.cyanogenmod.trebuchet.preference.PreferencesProvider;
 import com.cyanogenmod.trebuchet.R;
 
 /**
@@ -238,7 +239,10 @@ final class Utilities {
         final DisplayMetrics metrics = resources.getDisplayMetrics();
         final float density = metrics.density;
 
-        sIconWidth = sIconHeight = (int) resources.getDimension(R.dimen.app_icon_size);
+        boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(context);
+
+        sIconWidth = sIconHeight = (int) resources.getDimension(largeIcons ?
+                R.dimen.app_icon_size_large : R.dimen.app_icon_size);
         sIconTextureWidth = sIconTextureHeight = sIconWidth;
 
         sBlurPaint.setMaskFilter(new BlurMaskFilter(5 * density, BlurMaskFilter.Blur.NORMAL));

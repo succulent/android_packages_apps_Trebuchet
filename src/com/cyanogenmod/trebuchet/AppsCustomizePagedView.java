@@ -368,7 +368,9 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         // Save the default widget preview background
         Resources resources = context.getResources();
         mDefaultWidgetBackground = resources.getDrawable(R.drawable.default_widget_preview_holo);
-        mAppIconSize = resources.getDimensionPixelSize(R.dimen.app_icon_size);
+        boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(context);
+        mAppIconSize = resources.getDimensionPixelSize(largeIcons ? R.dimen.app_icon_size_large :
+                R.dimen.app_icon_size);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AppsCustomizePagedView, 0, 0);
         mMaxAppCellCountX = a.getInt(R.styleable.AppsCustomizePagedView_maxAppCellCountX, -1);

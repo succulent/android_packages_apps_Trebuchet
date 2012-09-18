@@ -183,7 +183,9 @@ public class FolderIcon extends LinearLayout implements FolderListener {
             // We need to reload the static values when configuration changes in case they are
             // different in another configuration
             if (sStaticValuesDirty) {
-                sPreviewSize = res.getDimensionPixelSize(R.dimen.folder_preview_size);
+                boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(launcher);
+                sPreviewSize = res.getDimensionPixelSize(largeIcons ?
+                        R.dimen.folder_preview_size_large : R.dimen.folder_preview_size);
                 sPreviewPadding = res.getDimensionPixelSize(R.dimen.folder_preview_padding);
                 sSharedOuterRingDrawable = res.getDrawable(R.drawable.portal_ring_outer_holo);
                 sSharedInnerRingDrawable = res.getDrawable(R.drawable.portal_ring_inner_holo);

@@ -342,6 +342,7 @@ s -->
     <string name="preferences_interface_homescreen_general_show_hotseat_allapps_title">All apps button in dock</string>
     <string name="preferences_interface_homescreen_search_background_title">Search bar background</string>
     <string name="preferences_interface_homescreen_general_hotseat_all_apps">All apps button position in dock</string>
+    <string name="preferences_interface_homescreen_general_large_icons_title">Large app icons</string>
 
     <!-- Drawer -->
     <string name="preferences_interface_drawer_title">Drawer</string>

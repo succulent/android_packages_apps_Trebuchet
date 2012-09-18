@@ -103,7 +103,9 @@ public class DockFragmentActivity extends PreferenceFragment {
         }
 
         Resources r = getActivity().getResources();
-        int cellWidth = r.getDimensionPixelSize(R.dimen.hotseat_cell_width);
+        boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(mContext);
+        int cellWidth = r.getDimensionPixelSize(largeIcons ? R.dimen.hotseat_cell_width_large :
+                R.dimen.hotseat_cell_width);
         DisplayMetrics displayMetrics = r.getDisplayMetrics();
         final float screenWidth = r.getConfiguration().screenWidthDp * displayMetrics.density;
         final float screenHeight = r.getConfiguration().screenHeightDp * displayMetrics.density;

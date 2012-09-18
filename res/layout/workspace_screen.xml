@@ -28,6 +28,8 @@
 
     launcher:cellWidth="@dimen/workspace_cell_width"
     launcher:cellHeight="@dimen/workspace_cell_height"
+    launcher:cellWidthLarge="@dimen/workspace_cell_width_large"
+    launcher:cellHeightLarge="@dimen/workspace_cell_height_large"
     launcher:widthGap="@dimen/workspace_width_gap"
     launcher:heightGap="@dimen/workspace_height_gap"
     launcher:maxGap="@dimen/workspace_max_gap" />

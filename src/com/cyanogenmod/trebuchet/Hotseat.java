@@ -127,8 +127,11 @@ public class Hotseat extends FrameLayout {
             LayoutInflater inflater = LayoutInflater.from(context);
             BubbleTextView allAppsButton = (BubbleTextView)
                     inflater.inflate(R.layout.application, mContent, false);
+            boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(context);
             allAppsButton.setCompoundDrawablesWithIntrinsicBounds(null,
-                    context.getResources().getDrawable(R.drawable.all_apps_button_icon), null, null);
+                    context.getResources().getDrawable(largeIcons ?
+                    R.drawable.all_apps_button_icon_large : R.drawable.all_apps_button_icon),
+                    null, null);
             allAppsButton.setContentDescription(context.getString(R.string.all_apps_button_label));
             allAppsButton.setOnTouchListener(new View.OnTouchListener() {
                 @Override

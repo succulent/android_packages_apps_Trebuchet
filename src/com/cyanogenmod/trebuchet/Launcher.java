@@ -1028,18 +1028,37 @@ public final class Launcher extends Activity
             mSearchDropTargetBar.setup(this, dragController);
         }
 
-        if (true) {
-            mWorkspace.setPadding(0, mShowSearchBar || mShowAppsButton ?
-                    getResources().getDimensionPixelSize(R.dimen.qsb_bar_height) : 0,
-                    0, mShowHotseat ? getResources().getDimensionPixelSize(
-                    R.dimen.button_bar_height_plus_padding) : 0);
-            View indicator = findViewById(R.id.paged_view_indicator);
-            FrameLayout.LayoutParams dividerMargins = new FrameLayout.LayoutParams(
-                    FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-            dividerMargins.setMargins(0, 0, 0, 0);
-            dividerMargins.gravity = Gravity.BOTTOM;
-            if (!mShowDockDivider || !mShowHotseat) indicator.setLayoutParams(dividerMargins);
-        }
+        boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(this);
+
+        mWorkspace.setPadding(0, mShowSearchBar || mShowAppsButton ?
+                getResources().getDimensionPixelSize(R.dimen.qsb_bar_height) : 0,
+                0, mShowHotseat ? getResources().getDimensionPixelSize(largeIcons ?
+                R.dimen.button_bar_height_plus_padding_large :
+                R.dimen.button_bar_height_plus_padding) : 0);
+
+        View indicator = findViewById(R.id.paged_view_indicator);
+        FrameLayout.LayoutParams dividerMargins = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+        dividerMargins.setMargins(0, 0, 0, !mShowDockDivider || !mShowHotseat ? 0 :
+                getResources().getDimensionPixelSize(largeIcons ?
+                R.dimen.button_bar_height_large :
+                R.dimen.button_bar_height));
+        dividerMargins.gravity = Gravity.BOTTOM;
+        indicator.setLayoutParams(dividerMargins);
+
+        FrameLayout.LayoutParams hotseatMargins = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(
+                largeIcons ? R.dimen.button_bar_height_plus_padding_large :
+                R.dimen.button_bar_height_plus_padding));
+        hotseatMargins.gravity = Gravity.BOTTOM;
+        if (mShowHotseat) mHotseat.setLayoutParams(hotseatMargins);
+
+        FrameLayout.LayoutParams hotseatDividerMargins = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+        hotseatDividerMargins.setMargins(0, 0, 0, getResources().getDimensionPixelSize(largeIcons ?
+                R.dimen.button_bar_height_large : R.dimen.button_bar_height));
+        hotseatDividerMargins.gravity = Gravity.BOTTOM;
+        if (mShowDockDivider) mDockDivider.setLayoutParams(hotseatDividerMargins);
 
         if (!mShowSearchBackground) mSearchDropTargetBar.mQSBSearchBar.setBackgroundDrawable(null);
     }
@@ -1172,7 +1191,7 @@ public final class Launcher extends Activity
         // to ensure that it gets the full amount of space that it has requested
         int requiredWidth = minWidth + padding.left + padding.right;
         int requiredHeight = minHeight + padding.top + padding.bottom;
-        return CellLayout.rectToCell(context.getResources(), requiredWidth, requiredHeight, null);
+        return CellLayout.rectToCell(context, requiredWidth, requiredHeight, null);
     }
 
     static int[] getSpanForWidget(Context context, AppWidgetProviderInfo info) {
@@ -1841,10 +1860,11 @@ public final class Launcher extends Activity
         LauncherModel.addItemToDatabase(Launcher.this, folderInfo, container, screen, cellX, cellY,
                 false);
         sFolders.put(folderInfo.id, folderInfo);
-
+        boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(this);
         // Create the view
         FolderIcon newFolder =
-            FolderIcon.fromXml(R.layout.folder_icon, this, layout, folderInfo, mIconCache);
+                FolderIcon.fromXml(largeIcons ? R.layout.folder_icon_large : R.layout.folder_icon,
+                this, layout, folderInfo, mIconCache);
         if (mHideIconLabels) {
             newFolder.setTextVisible(false);
         }
@@ -3447,7 +3467,9 @@ public final class Launcher extends Activity
                     }
                     break;
                 case LauncherSettings.Favorites.ITEM_TYPE_FOLDER:
-                    FolderIcon newFolder = FolderIcon.fromXml(R.layout.folder_icon, this,
+                    boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(this);
+                    FolderIcon newFolder = FolderIcon.fromXml(largeIcons ?
+                            R.layout.folder_icon_large : R.layout.folder_icon, this,
                             (ViewGroup) workspace.getChildAt(workspace.getCurrentPage()),
                             (FolderInfo) item, mIconCache);
                     if (!mHideIconLabels) {

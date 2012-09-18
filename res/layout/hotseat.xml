@@ -30,6 +30,8 @@
 
         launcher:cellWidth="@dimen/hotseat_cell_width"
         launcher:cellHeight="@dimen/hotseat_cell_height"
+        launcher:cellWidthLarge="@dimen/hotseat_cell_width_large"
+        launcher:cellHeightLarge="@dimen/hotseat_cell_height_large"
         launcher:widthGap="@dimen/hotseat_width_gap"
         launcher:heightGap="@dimen/hotseat_height_gap"
         launcher:maxGap="@dimen/workspace_max_gap" />

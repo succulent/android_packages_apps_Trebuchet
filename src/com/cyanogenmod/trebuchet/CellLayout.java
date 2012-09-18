@@ -181,13 +181,17 @@ public class CellLayout extends ViewGroup {
         setWillNotDraw(false);
         mLauncher = (Launcher) context;
 
+        boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(context);
+
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CellLayout, defStyle, 0);
         mCountX = LauncherModel.getCellCountX();
         mCountY = LauncherModel.getCellCountY();
         mCellWidth = mOriginalCellWidth =
-                a.getDimensionPixelSize(R.styleable.CellLayout_cellWidth, 10);
+                a.getDimensionPixelSize(largeIcons ? R.styleable.CellLayout_cellWidthLarge :
+                R.styleable.CellLayout_cellWidth, 10);
         mCellHeight = mOriginalCellHeight =
-                a.getDimensionPixelSize(R.styleable.CellLayout_cellHeight, 10);
+                a.getDimensionPixelSize(largeIcons ? R.styleable.CellLayout_cellHeightLarge :
+                R.styleable.CellLayout_cellHeight, 10);
         mCellWidth = getMaxCellWidth(true);
         mCellHeight = getMaxCellHeight(true);
         mWidthGap = mOriginalWidthGap = a.getDimensionPixelSize(R.styleable.CellLayout_widthGap, 0);
@@ -213,7 +217,8 @@ public class CellLayout extends ViewGroup {
                 res.getDimensionPixelSize(R.dimen.workspace_overscroll_drawable_padding);
 
         mReorderHintAnimationMagnitude = (REORDER_HINT_MAGNITUDE *
-                res.getDimensionPixelSize(R.dimen.app_icon_size));
+                res.getDimensionPixelSize(largeIcons ? R.dimen.app_icon_size_large :
+                R.dimen.app_icon_size));
 
         mNormalBackground.setFilterBitmap(true);
         mActiveGlowBackground.setFilterBitmap(true);
@@ -928,9 +933,12 @@ public class CellLayout extends ViewGroup {
     }
 
     private int getMaxCellWidth(boolean portrait) {
+        boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(getContext());
         int width = (int) (getResources().getConfiguration().screenWidthDp * LauncherApplication.getScreenDensity()) - (portrait ?
                 0 : (PreferencesProvider.Interface.Dock.getShowHotseat(getContext()) ?
-                getResources().getDimensionPixelSize(R.dimen.button_bar_height_plus_padding) : 0) +
+                getResources().getDimensionPixelSize(largeIcons ?
+                R.dimen.button_bar_height_plus_padding_large :
+                R.dimen.button_bar_height_plus_padding) : 0) +
                 ((PreferencesProvider.Interface.Homescreen.getShowSearchBar(getContext())
                 || PreferencesProvider.Interface.Dock.getShowAppsButton(getContext())) ?
                 getResources().getDimensionPixelSize(R.dimen.qsb_bar_height) : 0));
@@ -938,8 +946,11 @@ public class CellLayout extends ViewGroup {
     }
 
     private int getMaxCellHeight(boolean portrait) {
+        boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(getContext());
         int buttonBarHeight = (PreferencesProvider.Interface.Dock.getShowHotseat(getContext()) ?
-                getResources().getDimensionPixelSize(R.dimen.button_bar_height_plus_padding) : 0) +
+                getResources().getDimensionPixelSize(largeIcons ?
+                R.dimen.button_bar_height_plus_padding_large :
+                R.dimen.button_bar_height_plus_padding) : 0) +
                 ((PreferencesProvider.Interface.Homescreen.getShowSearchBar(getContext())
                 || PreferencesProvider.Interface.Dock.getShowAppsButton(getContext())) ?
                 getResources().getDimensionPixelSize(R.dimen.qsb_bar_height) : 0);
@@ -2708,14 +2719,18 @@ public class CellLayout extends ViewGroup {
      * @param result An array of length 2 in which to store the result (may be null).
      */
     public int[] rectToCell(int width, int height, int[] result) {
-        return rectToCell(getResources(), width, height, result);
+        return rectToCell(getContext(), width, height, result);
     }
 
-    public static int[] rectToCell(Resources resources, int width, int height, int[] result) {
+    public static int[] rectToCell(Context context, int width, int height, int[] result) {
         // Always assume we're working with the smallest span to make sure we
         // reserve enough space in both orientations.
-        int actualWidth = resources.getDimensionPixelSize(R.dimen.workspace_cell_width);
-        int actualHeight = resources.getDimensionPixelSize(R.dimen.workspace_cell_height);
+        Resources resources = context.getResources();
+        boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(context);
+        int actualWidth = resources.getDimensionPixelSize(largeIcons ?
+                R.dimen.workspace_cell_width_large : R.dimen.workspace_cell_width);
+        int actualHeight = resources.getDimensionPixelSize(largeIcons ?
+                R.dimen.workspace_cell_height_large : R.dimen.workspace_cell_height);
         int smallerSize = Math.min(actualWidth, actualHeight);
 
         // Always round up to next largest cell

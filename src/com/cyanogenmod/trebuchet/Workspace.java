@@ -302,14 +302,18 @@ public class Workspace extends SmoothPagedView
         mFadeInAdjacentScreens = false;
         mWallpaperManager = WallpaperManager.getInstance(context);
 
-        int cellWidth = res.getDimensionPixelSize(R.dimen.workspace_cell_width);
-        int cellHeight = res.getDimensionPixelSize(R.dimen.workspace_cell_height);
+        boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(context);
+        int cellWidth = res.getDimensionPixelSize(largeIcons ? R.dimen.workspace_cell_width_large :
+                R.dimen.workspace_cell_width);
+        int cellHeight = res.getDimensionPixelSize(largeIcons ? R.dimen.workspace_cell_height_large :
+                R.dimen.workspace_cell_height);
         DisplayMetrics displayMetrics = res.getDisplayMetrics();
         final float screenWidth = res.getConfiguration().screenWidthDp * displayMetrics.density;
         final float screenHeight = res.getConfiguration().screenHeightDp * displayMetrics.density;
         final float smallestScreenDim = screenHeight > screenWidth ? screenWidth : screenHeight;
         int buttonBarHeight = (PreferencesProvider.Interface.Dock.getShowHotseat(context) ?
-                res.getDimensionPixelSize(R.dimen.button_bar_height_plus_padding) : 0) +
+                res.getDimensionPixelSize(largeIcons ? R.dimen.button_bar_height_plus_padding_large :
+                R.dimen.button_bar_height_plus_padding) : 0) +
                 ((PreferencesProvider.Interface.Homescreen.getShowSearchBar(context)
                 || PreferencesProvider.Interface.Dock.getShowAppsButton(context)) ?
                 res.getDimensionPixelSize(R.dimen.qsb_bar_height) : 0);
@@ -317,47 +321,20 @@ public class Workspace extends SmoothPagedView
         int cellCountX = (int) (smallestScreenDim / cellWidth);
         int cellCountY = (int) ((smallestScreenDim - buttonBarHeight) / cellHeight);
 
-        TypedArray a = context.obtainStyledAttributes(attrs,
-                R.styleable.Workspace, defStyle, 0);
-
-        if (false) {
-            // Determine number of rows/columns dynamically
-            // TODO: This code currently fails on tablets with an aspect ratio < 1.3.
-            // Around that ratio we should make cells the same size in portrait and
-            // landscape
-            TypedArray actionBarSizeTypedArray =
-                context.obtainStyledAttributes(new int[] { android.R.attr.actionBarSize });
-            final float actionBarHeight = actionBarSizeTypedArray.getDimension(0, 0f);
-            final float systemBarHeight = res.getDimension(R.dimen.status_bar_height);
-
-            cellCountX = 1;
-            while (CellLayout.widthInPortrait(res, cellCountX + 1) <= smallestScreenDim) {
-                cellCountX++;
-            }
-
-            cellCountY = 1;
-            while (actionBarHeight + CellLayout.heightInLandscape(res, cellCountY + 1)
-                <= smallestScreenDim - systemBarHeight) {
-                cellCountY++;
-            }
-        }
-
         mSpringLoadedShrinkFactor =
             res.getInteger(R.integer.config_workspaceSpringLoadShrinkPercentage) / 100.0f;
         mSpringLoadedPageSpacing =
                 res.getDimensionPixelSize(R.dimen.workspace_spring_loaded_page_spacing);
         mCameraDistance = res.getInteger(R.integer.config_cameraDistance);
 
-        // if the value is manually specified, use that instead
-        //cellCountX = a.getInt(R.styleable.Workspace_cellCountX, cellCountX);
-        //cellCountY = a.getInt(R.styleable.Workspace_cellCountY, cellCountY);
-        a.recycle();
-
         int countX = PreferencesProvider.Interface.Homescreen.getCellCountX(context, cellCountX);
         int countY = PreferencesProvider.Interface.Homescreen.getCellCountY(context, cellCountY);
 
-        if (countX > 0) {
+        if (countX > 0 && countX <= cellCountX) {
             cellCountX = countX;
+        }
+
+        if (countY > 0 && countY <= cellCountY) {
             cellCountY = countY;
         }
 
@@ -519,7 +496,10 @@ public class Workspace extends SmoothPagedView
                     wallpaperTravelToScreenWidthRatio(mDisplaySize.x, mDisplaySize.y));
         }
 
-        mMaxDistanceForFolderCreation = (0.55f * res.getDimensionPixelSize(R.dimen.app_icon_size));
+        boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(context);
+
+        mMaxDistanceForFolderCreation = (0.55f * res.getDimensionPixelSize(largeIcons ?
+                R.dimen.app_icon_size_large : R.dimen.app_icon_size));
         mFlingThresholdVelocity = (int) (FLING_THRESHOLD_VELOCITY * mDensity);
     }
 
@@ -2000,8 +1980,10 @@ public class Workspace extends SmoothPagedView
 
         Point dragVisualizeOffset = null;
         Rect dragRect = null;
+        boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(getContext());
         if (child instanceof BubbleTextView || child instanceof PagedViewIcon) {
-            int iconSize = r.getDimensionPixelSize(R.dimen.app_icon_size);
+            int iconSize = r.getDimensionPixelSize(largeIcons ? R.dimen.app_icon_size_large :
+                    R.dimen.app_icon_size);
             int iconPaddingTop = r.getDimensionPixelSize(R.dimen.app_icon_padding_top);
             int top = child.getPaddingTop();
             int left = (bmpWidth - iconSize) / 2;
@@ -2014,7 +1996,8 @@ public class Workspace extends SmoothPagedView
                     iconPaddingTop - DRAG_BITMAP_PADDING / 2);
             dragRect = new Rect(left, top, right, bottom);
         } else if (child instanceof FolderIcon) {
-            int previewSize = r.getDimensionPixelSize(R.dimen.folder_preview_size);
+            int previewSize = r.getDimensionPixelSize(largeIcons ? R.dimen.folder_preview_size_large
+                    : R.dimen.folder_preview_size);
             dragRect = new Rect(0, 0, child.getWidth(), previewSize);
         }
 
@@ -3192,7 +3175,9 @@ public class Workspace extends SmoothPagedView
                         (ShortcutInfo) info);
                 break;
             case LauncherSettings.Favorites.ITEM_TYPE_FOLDER:
-                view = FolderIcon.fromXml(R.layout.folder_icon, mLauncher, cellLayout,
+                boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(mContext);
+                view = FolderIcon.fromXml(largeIcons ? R.layout.folder_icon_large :
+                        R.layout.folder_icon, mLauncher, cellLayout,
                         (FolderInfo) info, mIconCache);
                 if (mHideIconLabels) {
                     ((FolderIcon) view).setTextVisible(false);
@@ -3540,8 +3525,7 @@ public class Workspace extends SmoothPagedView
     @Override
     public boolean onEnterScrollArea(int x, int y, int direction) {
         // Ignore the scroll area if we are dragging over the hot seat
-        boolean isPortrait = !LauncherApplication.isScreenLandscape(getContext());
-        if (mLauncher.getHotseat() != null && isPortrait) {
+        if (mLauncher.getHotseat() != null) {
             Rect r = new Rect();
             mLauncher.getHotseat().getHitRect(r);
             if (r.contains(x, y)) {
