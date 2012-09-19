@@ -88,7 +88,7 @@ public final class PreferencesProvider {
             }
             public static boolean getLargeIconSize(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getBoolean("ui_large_icons", true);
+                return preferences.getString("ui_large_icons", "0").equals("0");
             }
             public static class Scrolling {
                 public static boolean getScrollWallpaper(Context context) {
@@ -206,7 +206,7 @@ public final class PreferencesProvider {
             }
             public static boolean getShowLandRightDock(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getBoolean("ui_land_right_dock", true);
+                return preferences.getString("ui_land_right_dock", "0").equals("0");
             }
         }
 

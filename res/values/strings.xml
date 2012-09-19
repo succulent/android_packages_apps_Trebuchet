@@ -342,7 +342,7 @@ s -->
     <string name="preferences_interface_homescreen_general_show_hotseat_allapps_title">All apps button in dock</string>
     <string name="preferences_interface_homescreen_search_background_title">Search bar background</string>
     <string name="preferences_interface_homescreen_general_hotseat_all_apps">All apps button position in dock</string>
-    <string name="preferences_interface_homescreen_general_large_icons_title">Large app icons</string>
+    <string name="preferences_interface_homescreen_general_large_icons_title">Homescreen icon size</string>
 
     <!-- Drawer -->
     <string name="preferences_interface_drawer_title">Drawer</string>
@@ -375,7 +375,7 @@ s -->
     <string name="preferences_interface_dock_title">Dock</string>
     <string name="preferences_interface_dock_apps_button_title">Search bar apps button</string>
     <string name="preferences_interface_dock_apps_button_position_title">Tablet drawer button position</string>
-    <string name="preferences_interface_right_land_dock_title">Dock on right in landscape</string>
+    <string name="preferences_interface_right_land_dock_title">Dock landscape position</string>
 
     <!-- Icons -->
     <string name="preferences_interface_icons_title">Icons</string>

@@ -55,4 +55,22 @@
         <item>6</item>
         <item>7</item>
     </string-array>
+
+    <string-array name="preferences_interface_homescreen_icon_size_entries">
+        <item>64 pixels</item>
+        <item>48 pixels</item>
+    </string-array>
+    <string-array name="preferences_interface_homescreen_icon_size_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="preferences_interface_land_dock_position_entries">
+        <item>Right</item>
+        <item>Bottom</item>
+    </string-array>
+    <string-array name="preferences_interface_land_dock_position_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
 </resources>

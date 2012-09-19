@@ -44,9 +44,11 @@
                     launcher:min1="1"
                     launcher:max2="10"
                     launcher:min2="1" />
-                <CheckBoxPreference android:key="ui_large_icons"
+                <ListPreference android:key="ui_large_icons"
                     android:title="@string/preferences_interface_homescreen_general_large_icons_title"
-                    android:defaultValue="true" />
+                    android:entries="@array/preferences_interface_homescreen_icon_size_entries"
+                    android:entryValues="@array/preferences_interface_homescreen_icon_size_values"
+                    android:defaultValue="0" />
                 <CheckBoxPreference android:key="ui_homescreen_general_hide_icon_labels"
                     android:title="@string/preferences_interface_homescreen_general_hide_icon_labels_summary" />
             </PreferenceCategory>
