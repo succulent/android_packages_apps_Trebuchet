@@ -32,6 +32,7 @@ import android.util.Log;
 
 import com.cyanogenmod.trebuchet.R;
 import com.cyanogenmod.trebuchet.LauncherApplication;
+import com.cyanogenmod.trebuchet.LauncherModel;
 
 public class DockFragmentActivity extends PreferenceFragment {
 
@@ -101,7 +102,7 @@ public class DockFragmentActivity extends PreferenceFragment {
         if (!mShowDock.isChecked()) {
             mShowDockDivider.setChecked(false);
         }
-
+/*
         Resources r = getActivity().getResources();
         boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(mContext);
         int cellWidth = r.getDimensionPixelSize(largeIcons ? R.dimen.hotseat_cell_width_large :
@@ -111,7 +112,8 @@ public class DockFragmentActivity extends PreferenceFragment {
         final float screenHeight = r.getConfiguration().screenHeightDp * displayMetrics.density;
         final float smallestScreenDim = screenHeight > screenWidth ? screenWidth : screenHeight;
 
-        mHotseatPositions.setMaxValue((int) (smallestScreenDim / cellWidth));
+        mHotseatPositions.setMaxValue((int) (smallestScreenDim / cellWidth));*/
+        mHotseatPositions.setMaxValue(LauncherModel.getCellCountX());
     }
 
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {

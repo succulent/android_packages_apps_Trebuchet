@@ -46,11 +46,14 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Parcelable;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
+import android.view.IWindowManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -266,7 +269,6 @@ public class Workspace extends SmoothPagedView
     private boolean mShowScrollingIndicator;
     private boolean mFadeScrollingIndicator;
     private boolean mShowDockDivider;
-    private boolean mShowLandRightDock;
 
     private final GestureDetector mGestureDetector;
     private Runnable mSwipeUpCallback = null;
@@ -304,10 +306,20 @@ public class Workspace extends SmoothPagedView
         mFadeInAdjacentScreens = false;
         mWallpaperManager = WallpaperManager.getInstance(context);
 
-        mShowLandRightDock =
-                PreferencesProvider.Interface.Dock.getShowLandRightDock(context) &&
-                context.getResources().getConfiguration().orientation ==
+        boolean hasNavBar = false;
+        IWindowManager windowManager = IWindowManager.Stub.asInterface(
+                ServiceManager.getService(Context.WINDOW_SERVICE));
+        try {
+            hasNavBar = windowManager.hasNavigationBar();
+        } catch (RemoteException e) {
+        }
+
+        boolean landscape = context.getResources().getConfiguration().orientation ==
                 Configuration.ORIENTATION_LANDSCAPE;
+        boolean showHotseat = PreferencesProvider.Interface.Dock.getShowHotseat(context);
+        boolean showLandRightDock = PreferencesProvider.Interface.Dock.getShowLandRightDock(context);
+        boolean showSearchBar = PreferencesProvider.Interface.Homescreen.getShowSearchBar(context);
+        boolean showAppsButton = PreferencesProvider.Interface.Dock.getShowAppsButton(context);
 
         boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(context);
         int cellWidth = res.getDimensionPixelSize(largeIcons ? R.dimen.workspace_cell_width_large :
@@ -318,17 +330,35 @@ public class Workspace extends SmoothPagedView
         final float screenWidth = res.getConfiguration().screenWidthDp * displayMetrics.density;
         final float screenHeight = res.getConfiguration().screenHeightDp * displayMetrics.density;
         final float smallestScreenDim = screenHeight > screenWidth ? screenWidth : screenHeight;
-        int buttonBarHeight = (PreferencesProvider.Interface.Dock.getShowHotseat(context) && !mShowLandRightDock ?
-                res.getDimensionPixelSize(largeIcons ? R.dimen.button_bar_height_plus_padding_large :
-                R.dimen.button_bar_height_plus_padding) : 0) +
+        int buttonBarHeightPlus = res.getDimensionPixelSize(largeIcons
+                ? R.dimen.button_bar_height_plus_padding_large :
+                R.dimen.button_bar_height_plus_padding);
+        int buttonBarHeight = (showHotseat && !showLandRightDock && landscape ? buttonBarHeightPlus :
+                 (!landscape && showHotseat ? buttonBarHeightPlus : 0)) +
                 ((PreferencesProvider.Interface.Homescreen.getShowSearchBar(context)
                 || PreferencesProvider.Interface.Dock.getShowAppsButton(context)) ?
                 res.getDimensionPixelSize(R.dimen.qsb_bar_height) : 0);
 
-        int cellCountX = (int) ((smallestScreenDim - (mShowLandRightDock ?
-                res.getDimensionPixelSize(largeIcons ? R.dimen.button_bar_height_plus_padding_large :
-                R.dimen.button_bar_height_plus_padding) : 0)) / cellWidth);
+        int cellCountX = (int) (smallestScreenDim / cellWidth);
         int cellCountY = (int) ((smallestScreenDim - buttonBarHeight) / cellHeight);
+        if (!landscape && showLandRightDock && showHotseat) {
+            if ((!hasNavBar && largeIcons && (showSearchBar || showAppsButton)) || (!hasNavBar && !largeIcons &&
+                    (!(showSearchBar || showAppsButton)))) cellCountY++;
+        }
+        if (!landscape && showHotseat && !showLandRightDock) {
+            cellCountY = cellCountY - (((!largeIcons && (showSearchBar || showAppsButton)) ||
+                    (!largeIcons && hasNavBar && !(showSearchBar || showAppsButton)) ||
+                    largeIcons && hasNavBar && (showSearchBar || showAppsButton)) ? 1 :
+                    (largeIcons && !(showSearchBar || showAppsButton) ? 1 : 0));
+        }
+        if (!landscape && !showHotseat && (((showSearchBar || showAppsButton) && !largeIcons) ||
+                ((!showSearchBar && !showAppsButton) && largeIcons) || (hasNavBar && !largeIcons &&
+                !(showSearchBar || showAppsButton)) || (largeIcons && hasNavBar &&
+                (showSearchBar || showAppsButton)))) {
+            cellCountY = cellCountY - 1;//((showSearchBar || showAppsButton) ? 1 : (largeIcons ? 1 : 0));
+        }
+
+        LauncherModel.updateMaxWorkspaceLayoutCells(cellCountX, cellCountY);
 
         mSpringLoadedShrinkFactor =
             res.getInteger(R.integer.config_workspaceSpringLoadShrinkPercentage) / 100.0f;
