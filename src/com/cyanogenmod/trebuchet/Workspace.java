@@ -333,8 +333,6 @@ public class Workspace extends SmoothPagedView
                 Settings.System.TABLET_MODE, 0);
         boolean fullscreen = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.FULLSCREEN_MODE, 0) == 1;
-        boolean barVisible = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.STATUS_BAR_TOGGLED, 0) == 0;
 
         final float screenWidth = res.getConfiguration().screenWidthDp * displayMetrics.density;
         final float screenHeight = res.getConfiguration().screenHeightDp * displayMetrics.density;
@@ -351,7 +349,7 @@ public class Workspace extends SmoothPagedView
                 res.getDimensionPixelSize(R.dimen.qsb_bar_height) : 0);
 
         int cellCountX = (int) (smallestScreenDim / cellWidth);
-        int cellCountY = (int) ((smallestScreenDim - buttonBarHeight - ((fullscreen || !barVisible)
+        int cellCountY = (int) ((smallestScreenDim - buttonBarHeight - (fullscreen
                 ? 0 : (tabletMode == 0 ? (hasNavBar ? (navigationBarHeight + systemBarHeight) :
                 systemBarHeight) : navigationBarHeight))) / cellHeight);
 
