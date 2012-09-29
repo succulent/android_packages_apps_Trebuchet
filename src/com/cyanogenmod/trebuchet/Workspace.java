@@ -338,9 +338,8 @@ public class Workspace extends SmoothPagedView
 
         final float screenWidth = res.getConfiguration().screenWidthDp * displayMetrics.density;
         final float screenHeight = res.getConfiguration().screenHeightDp * displayMetrics.density;
-        final float smallestScreenDim = tabletMode == 2 ? (screenHeight > screenWidth ? screenWidth
-                : screenHeight) : res.getConfiguration().smallestScreenWidthDp *
-                displayMetrics.density;
+        final float smallestScreenDim = (tabletMode == 2 ? 600 :
+                res.getConfiguration().smallestScreenWidthDp) * displayMetrics.density;
         final float systemBarHeight = res.getDimension(com.android.internal.R.dimen.status_bar_height);
         final float navigationBarHeight = res.getDimension(com.android.internal.R.dimen.navigation_bar_height);
         int buttonBarHeightPlus = res.getDimensionPixelSize(largeIcons
