@@ -394,6 +394,7 @@ s -->
     <string name="preferences_interface_gestures_swipe_down_title">Swipe down</string>
     <string name="preferences_interface_gestures_no_action">No action</string>
     <string name="preferences_interface_gestures_open_drawer">Open drawer</string>
+    <string name="preferences_interface_gestures_toggle_status_bar">Toggle status bar</string>
     <string name="preferences_interface_gestures_expand_status_bar">Expand status bar notifications</string>
     <string name="preferences_interface_gestures_preferences">Launch Trebuchet Settings</string>
     <string name="preferences_interface_gestures_launch_application">Launch activity</string>

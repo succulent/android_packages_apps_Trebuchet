@@ -3983,6 +3983,10 @@ public final class Launcher extends Activity
                 onClickAllAppsButton(null);
                 break;
             case 2:
+                StatusBarManager sbm = (StatusBarManager) getSystemService(Context.STATUS_BAR_SERVICE);
+                sbm.toggleVisibility();
+                break;
+            case 3:
                 try {
                     Object service  = getSystemService("statusbar");
                     Class<?> statusbarManager = Class.forName("android.app.StatusBarManager");
@@ -3991,18 +3995,18 @@ public final class Launcher extends Activity
                 } catch (Exception e) {
                 }
                 break;
-            case 3:
+            case 4:
                 Intent preferences = new Intent().setClass(this, Preferences.class);
                 preferences.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(preferences);
                 break;
-            case 4:
+            case 5:
                 Intent rocketLauncher = new Intent().setClass(this, RocketLauncher.class);
                 rocketLauncher.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
                         Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(rocketLauncher);
                 break;
-            case 5:
+            case 6:
                 SharedPreferences prefs =
                         getSharedPreferences(PreferencesProvider.PREFERENCES_KEY, Context.MODE_PRIVATE);
                 String shortcutUri = new String();

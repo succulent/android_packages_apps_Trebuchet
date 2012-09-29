@@ -166,6 +166,9 @@
     <dimen name="button_bar_height_large">70dip</dimen>
     <dimen name="button_bar_height_plus_padding_large">78dp</dimen>
 
+    <dimen name="button_bar_height_plus_small_padding_large">74dp</dimen>
+    <dimen name="button_bar_height_plus_small_padding">66dp</dimen>
+
 <!-- Folders -->
     <!-- The size of the image which sits behind the preview of the folder contents -->
     <dimen name="folder_preview_size_large">68dp</dimen>

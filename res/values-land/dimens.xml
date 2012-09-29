@@ -18,6 +18,10 @@
 <!-- QSB -->
 
 <!-- Workspace -->
+    <dimen name="app_icon_drawable_padding">0dp</dimen>
+    <dimen name="app_icon_drawable_padding_land">0dp</dimen>
+    <dimen name="app_icon_padding_top">0dp</dimen>
+
     <dimen name="hotseat_cell_width">60dp</dimen>
     <dimen name="hotseat_cell_height">58dp</dimen>
     <!-- We really want the page spacing to be the max of either the button bar

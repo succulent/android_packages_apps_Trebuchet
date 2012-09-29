@@ -341,8 +341,8 @@ public class Workspace extends SmoothPagedView
         final float systemBarHeight = res.getDimension(com.android.internal.R.dimen.status_bar_height);
         final float navigationBarHeight = res.getDimension(com.android.internal.R.dimen.navigation_bar_height);
         int buttonBarHeightPlus = res.getDimensionPixelSize(largeIcons
-                ? R.dimen.button_bar_height_plus_padding_large :
-                R.dimen.button_bar_height_plus_padding);
+                ? R.dimen.button_bar_height_plus_small_padding_large :
+                R.dimen.button_bar_height_plus_small_padding);
         int buttonBarHeight = (showHotseat ? buttonBarHeightPlus : 0) +
                 ((PreferencesProvider.Interface.Homescreen.getShowSearchBar(context)
                 || PreferencesProvider.Interface.Dock.getShowAppsButton(context)) ?
