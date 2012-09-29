@@ -381,6 +381,19 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
             a.getDimensionPixelSize(R.styleable.AppsCustomizePagedView_widgetCellHeightGap, 0);
         mWidgetCountX = a.getInt(R.styleable.AppsCustomizePagedView_widgetCountX, 2);
         mWidgetCountY = a.getInt(R.styleable.AppsCustomizePagedView_widgetCountY, 2);
+
+        int widgetCountX = PreferencesProvider.Interface.Drawer.getWidgetCountX(context, mWidgetCountX);
+        int widgetCountY = PreferencesProvider.Interface.Drawer.getWidgetCountY(context, mWidgetCountY);
+        if (LauncherApplication.isScreenLandscape(context)) {
+            widgetCountX = PreferencesProvider.Interface.Drawer.getWidgetCountXLand(context, mWidgetCountX);
+            widgetCountY = PreferencesProvider.Interface.Drawer.getWidgetCountYLand(context, mWidgetCountY);
+        }
+
+        if (widgetCountX > 0 && widgetCountY > 0) {
+            mWidgetCountX = widgetCountX;
+            mWidgetCountY = widgetCountY;
+        }
+
         mClingFocusedX = a.getInt(R.styleable.AppsCustomizePagedView_clingFocusedX, 0);
         mClingFocusedY = a.getInt(R.styleable.AppsCustomizePagedView_clingFocusedY, 0);
         a.recycle();
@@ -519,14 +532,31 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
     }
 
     protected void onDataReady(int width, int height) {
+        boolean isLandscape = getResources().getConfiguration().orientation ==
+                Configuration.ORIENTATION_LANDSCAPE;
         int maxCellCountX = Integer.MAX_VALUE;
         int maxCellCountY = Integer.MAX_VALUE;
+        maxCellCountX = (isLandscape ? LauncherModel.getCellCountX() :
+                LauncherModel.getCellCountY());
+        maxCellCountY = (isLandscape ? LauncherModel.getCellCountY() :
+                LauncherModel.getCellCountX());
         if (mMaxAppCellCountX > -1) {
             maxCellCountX = Math.min(maxCellCountX, mMaxAppCellCountX);
         }
         if (mMaxAppCellCountY > -1) {
             maxCellCountY = Math.min(maxCellCountY, mMaxAppCellCountY);
         }
+
+        int cellCountX = PreferencesProvider.Interface.Drawer.getCellCountX(getContext(), maxCellCountX);
+        int cellCountY = PreferencesProvider.Interface.Drawer.getCellCountY(getContext(), maxCellCountY);
+
+        if (isLandscape) {
+            cellCountX = PreferencesProvider.Interface.Drawer.getCellCountXLand(getContext(), maxCellCountX);
+            cellCountY = PreferencesProvider.Interface.Drawer.getCellCountYLand(getContext(), maxCellCountY);
+        }
+
+        if (cellCountX > 0) maxCellCountX = cellCountX;
+        if (cellCountY > 0) maxCellCountY = cellCountY;
 
         // Now that the data is ready, we can calculate the content width, the number of cells to
         // use for each page
@@ -2065,8 +2095,8 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
      * We load an extra page on each side to prevent flashes from scrolling and loading of the
      * widget previews in the background with the AsyncTasks.
      */
-    final static int sLookBehindPageCount = 2;
-    final static int sLookAheadPageCount = 2;
+    final static int sLookBehindPageCount = 3;
+    final static int sLookAheadPageCount = 3;
     protected int getAssociatedLowerPageBound(int page) {
         final int count = getChildCount();
         int windowSize = Math.min(count, sLookBehindPageCount + sLookAheadPageCount + 1);

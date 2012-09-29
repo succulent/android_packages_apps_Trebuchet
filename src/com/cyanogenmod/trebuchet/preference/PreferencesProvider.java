@@ -173,6 +173,78 @@ public final class PreferencesProvider {
                     return preferences.getBoolean("ui_drawer_hide_topbar", false);
                 }
             }
+            public static int getCellCountX(Context context, int def) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                String[] values = preferences.getString("ui_drawer_grid", "0|" + def).split("\\|");
+                try {
+                    return Integer.parseInt(values[1]);
+                } catch (NumberFormatException e) {
+                    return def;
+                }
+            }
+            public static int getCellCountY(Context context, int def) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                String[] values = preferences.getString("ui_drawer_grid", def + "|0").split("\\|");;
+                try {
+                    return Integer.parseInt(values[0]);
+                } catch (NumberFormatException e) {
+                    return def;
+                }
+            }
+            public static int getWidgetCountX(Context context, int def) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                String[] values = preferences.getString("ui_drawer_widgets", "0|" + def).split("\\|");
+                try {
+                    return Integer.parseInt(values[1]);
+                } catch (NumberFormatException e) {
+                    return def;
+                }
+            }
+            public static int getWidgetCountY(Context context, int def) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                String[] values = preferences.getString("ui_drawer_widgets", def + "|0").split("\\|");;
+                try {
+                    return Integer.parseInt(values[0]);
+                } catch (NumberFormatException e) {
+                    return def;
+                }
+            }
+            public static int getCellCountXLand(Context context, int def) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                String[] values = preferences.getString("ui_drawer_grid_land", "0|" + def).split("\\|");
+                try {
+                    return Integer.parseInt(values[1]);
+                } catch (NumberFormatException e) {
+                    return def;
+                }
+            }
+            public static int getCellCountYLand(Context context, int def) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                String[] values = preferences.getString("ui_drawer_grid_land", def + "|0").split("\\|");;
+                try {
+                    return Integer.parseInt(values[0]);
+                } catch (NumberFormatException e) {
+                    return def;
+                }
+            }
+            public static int getWidgetCountXLand(Context context, int def) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                String[] values = preferences.getString("ui_drawer_widgets_land", "0|" + def).split("\\|");
+                try {
+                    return Integer.parseInt(values[1]);
+                } catch (NumberFormatException e) {
+                    return def;
+                }
+            }
+            public static int getWidgetCountYLand(Context context, int def) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                String[] values = preferences.getString("ui_drawer_widgets_land", def + "|0").split("\\|");;
+                try {
+                    return Integer.parseInt(values[0]);
+                } catch (NumberFormatException e) {
+                    return def;
+                }
+            }
         }
 
         public static class Dock {

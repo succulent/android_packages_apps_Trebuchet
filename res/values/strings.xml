@@ -370,6 +370,12 @@ s -->
     <string name="preferences_interface_drawer_launch_home_title">Open with home button</string>
     <string name="preferences_interface_drawer_launch_home_page_title">Stay on same page</string>
     <string name="preferences_interface_drawer_dismiss_on_tap_title">Close on unhandled tap</string>
+    <string name="preferences_interface_drawer_grid_title">Portrait app grid size</string>
+    <string name="preferences_interface_drawer_grid_land_title">Landscape app grid size</string>
+    <string name="preferences_interface_drawer_grid_summary">Maximum number of rows/columns in the drawer</string>
+    <string name="preferences_interface_drawer_widget_grid_title">Portrait widget grid size</string>
+    <string name="preferences_interface_drawer_widget_grid_land_title">Landscape widget grid size</string>
+    <string name="preferences_interface_drawer_grid_category">Grid size</string>
 
     <!-- Dock -->
     <string name="preferences_interface_dock_title">Dock</string>

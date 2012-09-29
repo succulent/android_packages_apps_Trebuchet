@@ -48,6 +48,7 @@ import android.os.IBinder;
 import android.os.Parcelable;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -327,21 +328,35 @@ public class Workspace extends SmoothPagedView
         int cellHeight = res.getDimensionPixelSize(largeIcons ? R.dimen.workspace_cell_height_large :
                 R.dimen.workspace_cell_height);
         DisplayMetrics displayMetrics = res.getDisplayMetrics();
+
+        int tabletMode = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.TABLET_MODE, 0);
+        boolean fullscreen = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.FULLSCREEN_MODE, 0) == 1;
+        boolean barVisible = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_TOGGLED, 0) == 0;
+
         final float screenWidth = res.getConfiguration().screenWidthDp * displayMetrics.density;
         final float screenHeight = res.getConfiguration().screenHeightDp * displayMetrics.density;
-        final float smallestScreenDim = screenHeight > screenWidth ? screenWidth : screenHeight;
+        final float smallestScreenDim = tabletMode == 2 ? (screenHeight > screenWidth ? screenWidth
+                : screenHeight) : res.getConfiguration().smallestScreenWidthDp *
+                displayMetrics.density;
+        final float systemBarHeight = res.getDimension(com.android.internal.R.dimen.status_bar_height);
+        final float navigationBarHeight = res.getDimension(com.android.internal.R.dimen.navigation_bar_height);
         int buttonBarHeightPlus = res.getDimensionPixelSize(largeIcons
                 ? R.dimen.button_bar_height_plus_padding_large :
                 R.dimen.button_bar_height_plus_padding);
-        int buttonBarHeight = (showHotseat && !showLandRightDock && landscape ? buttonBarHeightPlus :
-                 (!landscape && showHotseat ? buttonBarHeightPlus : 0)) +
+        int buttonBarHeight = (showHotseat ? buttonBarHeightPlus : 0) +
                 ((PreferencesProvider.Interface.Homescreen.getShowSearchBar(context)
                 || PreferencesProvider.Interface.Dock.getShowAppsButton(context)) ?
                 res.getDimensionPixelSize(R.dimen.qsb_bar_height) : 0);
 
         int cellCountX = (int) (smallestScreenDim / cellWidth);
-        int cellCountY = (int) ((smallestScreenDim - buttonBarHeight) / cellHeight);
-        if (!landscape && showLandRightDock && showHotseat) {
+        int cellCountY = (int) ((smallestScreenDim - buttonBarHeight - ((fullscreen || !barVisible)
+                ? 0 : (tabletMode == 0 ? (hasNavBar ? (navigationBarHeight + systemBarHeight) :
+                systemBarHeight) : navigationBarHeight))) / cellHeight);
+
+/*        if (!landscape && showLandRightDock && showHotseat) {
             if ((!hasNavBar && largeIcons && (showSearchBar || showAppsButton)) || (!hasNavBar && !largeIcons &&
                     (!(showSearchBar || showAppsButton)))) cellCountY++;
         }
@@ -356,7 +371,7 @@ public class Workspace extends SmoothPagedView
                 !(showSearchBar || showAppsButton)) || (largeIcons && hasNavBar &&
                 (showSearchBar || showAppsButton)))) {
             cellCountY = cellCountY - 1;//((showSearchBar || showAppsButton) ? 1 : (largeIcons ? 1 : 0));
-        }
+        }*/
 
         LauncherModel.updateMaxWorkspaceLayoutCells(cellCountX, cellCountY);
 
@@ -1115,7 +1130,7 @@ public class Workspace extends SmoothPagedView
         float mFinalHorizontalWallpaperOffset = 0.0f;
         float mFinalVerticalWallpaperOffset = 0.5f;
         float mHorizontalWallpaperOffset = 0.0f;
-        float mVerticalWallpaperOffset = 0.0f;
+        float mVerticalWallpaperOffset = 0.5f;
         long mLastWallpaperOffsetUpdateTime;
         boolean mIsMovingFast;
         boolean mOverrideHorizontalCatchupConstant;

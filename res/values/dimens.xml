@@ -147,10 +147,10 @@
     <dimen name="workspace_bottom_padding_land">0dp</dimen>
 
 <!-- Workspace cell size -->
-    <dimen name="workspace_cell_width_land">58dp</dimen>
+    <dimen name="workspace_cell_width_land">64dp</dimen>
     <dimen name="workspace_cell_width_port">64dp</dimen>
-    <dimen name="workspace_cell_height_land">68dp</dimen>
-    <dimen name="workspace_cell_height_port">68dp</dimen>
+    <dimen name="workspace_cell_height_land">64dp</dimen>
+    <dimen name="workspace_cell_height_port">64dp</dimen>
     <dimen name="workspace_width_gap_land">0dp</dimen>
     <dimen name="workspace_width_gap_port">0dp</dimen>
     <dimen name="workspace_height_gap_land">0dp</dimen>
@@ -177,10 +177,10 @@
     <dimen name="apps_customize_cell_height_large">108dp</dimen>
 
 <!-- Workspace cell size -->
-    <dimen name="workspace_cell_width_land_large">74dp</dimen>
+    <dimen name="workspace_cell_width_land_large">82dp</dimen>
     <dimen name="workspace_cell_width_port_large">82dp</dimen>
-    <dimen name="workspace_cell_height_land_large">84dp</dimen>
-    <dimen name="workspace_cell_height_port_large">84dp</dimen>
+    <dimen name="workspace_cell_height_land_large">82dp</dimen>
+    <dimen name="workspace_cell_height_port_large">82dp</dimen>
 
 
     <dimen name="workspace_icon_text_size_large">12sp</dimen>
