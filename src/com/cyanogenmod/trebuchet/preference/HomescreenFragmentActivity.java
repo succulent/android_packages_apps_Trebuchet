@@ -81,7 +81,8 @@ public class HomescreenFragmentActivity extends PreferenceFragment {
 
         String hg = mPrefs.getString(Preferences.HOMESCREEN_GRID,
                 LauncherModel.getCellCountY() + "|" + LauncherModel.getCellCountX());
-        mHomescreenGrid.setSummary(hg.replace("|", " x "));
+        String[] gridArray = hg.split("\\|");
+        mHomescreenGrid.setSummary(gridArray[1] + " x " + gridArray[0]);
 /*
         Resources r = getActivity().getResources();
         boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(mContext);

@@ -60,6 +60,10 @@ public class Preferences extends Activity {
     public static final String SHOW_DOCK_APPS_BUTTON = "ui_homescreen_general_show_hotseat_allapps";
     public static final String SHOW_APPS_BUTTON = "ui_show_apps_button";
     public static final String APPS_BUTTON_POSITION = "ui_apps_button_position";
+    public static final String PORT_APP_GRID = "ui_drawer_grid";
+    public static final String LAND_APP_GRID = "ui_drawer_grid_land";
+    public static final String PORT_WIDGET_GRID = "ui_drawer_widgets";
+    public static final String LAND_WIDGET_GRID = "ui_drawer_widgets_land";
 
     private SharedPreferences mPrefs;
 

@@ -50,13 +50,13 @@
         android:layout_weight="1">
 
         <TextView
-            android:id="@+id/picker_title_1"
+            android:id="@+id/picker_title_2"
             android:textAppearance="?android:textAppearanceMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <NumberPicker
-            android:id="@+id/number_picker_1"
+            android:id="@+id/number_picker_2"
             android:layout_centerInParent="true"
             android:layout_width="50dip"
             android:layout_height="match_parent" />
@@ -71,13 +71,13 @@
         android:layout_weight="1">
 
         <TextView
-            android:id="@+id/picker_title_2"
+            android:id="@+id/picker_title_1"
             android:textAppearance="?android:textAppearanceMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <NumberPicker
-            android:id="@+id/number_picker_2"
+            android:id="@+id/number_picker_1"
             android:layout_centerInParent="true"
             android:layout_width="50dip"
             android:layout_height="match_parent" />

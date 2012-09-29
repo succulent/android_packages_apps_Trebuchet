@@ -536,10 +536,10 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
                 Configuration.ORIENTATION_LANDSCAPE;
         int maxCellCountX = Integer.MAX_VALUE;
         int maxCellCountY = Integer.MAX_VALUE;
-        maxCellCountX = (isLandscape ? LauncherModel.getCellCountX() :
-                LauncherModel.getCellCountY());
-        maxCellCountY = (isLandscape ? LauncherModel.getCellCountY() :
-                LauncherModel.getCellCountX());
+        maxCellCountX = (isLandscape ? LauncherModel.getMaxCellCountX() :
+                LauncherModel.getMaxCellCountY());
+        maxCellCountY = (isLandscape ? LauncherModel.getMaxCellCountY() :
+                LauncherModel.getMaxCellCountX());
         if (mMaxAppCellCountX > -1) {
             maxCellCountX = Math.min(maxCellCountX, mMaxAppCellCountX);
         }
