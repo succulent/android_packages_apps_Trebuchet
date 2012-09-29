@@ -343,7 +343,7 @@ public class Workspace extends SmoothPagedView
         int buttonBarHeightPlus = res.getDimensionPixelSize(largeIcons
                 ? R.dimen.button_bar_height_plus_small_padding_large :
                 R.dimen.button_bar_height_plus_small_padding);
-        int buttonBarHeight = (showHotseat ? buttonBarHeightPlus : 0) +
+        int buttonBarHeight = (showHotseat && !showLandRightDock ? buttonBarHeightPlus : 0) +
                 ((PreferencesProvider.Interface.Homescreen.getShowSearchBar(context)
                 || PreferencesProvider.Interface.Dock.getShowAppsButton(context)) ?
                 res.getDimensionPixelSize(R.dimen.qsb_bar_height) : 0);
