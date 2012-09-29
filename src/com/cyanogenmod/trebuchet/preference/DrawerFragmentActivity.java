@@ -74,8 +74,15 @@ public class DrawerFragmentActivity extends PreferenceFragment {
     public void onResume() {
         super.onResume();
 
-        Resources r = getActivity().getResources();
         boolean landscape = LauncherApplication.isScreenLandscape(getActivity());
+
+        mLandscapeAppGrid.setEnabled(landscape);
+        mLandscapeWidgetGrid.setEnabled(landscape);
+        mPortraitAppGrid.setEnabled(!landscape);
+        mPortraitWidgetGrid.setEnabled(!landscape);
+
+        Resources r = getActivity().getResources();
+
         boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(getActivity());
         int cellWidth = r.getDimensionPixelSize(largeIcons ? R.dimen.apps_customize_cell_width_large :
                 R.dimen.apps_customize_cell_width);
@@ -107,20 +114,20 @@ public class DrawerFragmentActivity extends PreferenceFragment {
         String pag = mPrefs.getString(Preferences.PORT_APP_GRID,
                 cellCountYPort + "|" + cellCountXPort);
         String[] gridArray = pag.split("\\|");
-        mPortraitAppGrid.setSummary(gridArray[1] + " x " + gridArray[0]);
+        mPortraitAppGrid.setSummary(landscape ? "" : (gridArray[1] + " x " + gridArray[0]));
 
         pag = mPrefs.getString(Preferences.LAND_APP_GRID,
                 cellCountYLand + "|" + cellCountXLand);
         gridArray = pag.split("\\|");
-        mLandscapeAppGrid.setSummary(gridArray[1] + " x " + gridArray[0]);
+        mLandscapeAppGrid.setSummary(landscape ? (gridArray[1] + " x " + gridArray[0]) : "");
 
         pag = mPrefs.getString(Preferences.PORT_WIDGET_GRID, "3|2");
         gridArray = pag.split("\\|");
-        mPortraitWidgetGrid.setSummary(gridArray[1] + " x " + gridArray[0]);
+        mPortraitWidgetGrid.setSummary(landscape ? "" : (gridArray[1] + " x " + gridArray[0]));
 
         pag = mPrefs.getString(Preferences.LAND_WIDGET_GRID, "2|3");
         gridArray = pag.split("\\|");
-        mLandscapeWidgetGrid.setSummary(gridArray[1] + " x " + gridArray[0]);
+        mLandscapeWidgetGrid.setSummary(landscape ? (gridArray[1] + " x " + gridArray[0]) : "");
     }
 
     public static void restore(Context context) {
