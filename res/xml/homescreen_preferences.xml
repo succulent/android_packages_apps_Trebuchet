@@ -5,6 +5,9 @@
 
             <PreferenceCategory android:title="@string/preferences_interface_homescreen_general_category"
                 android:key="ui_homescreen_general">
+                <CheckBoxPreference android:key="ui_workspace_background"
+                    android:title="@string/preferences_interface_workspace_background_title"
+                    android:defaultValue="true" />
                 <CheckBoxPreference android:key="ui_general_orientation"
                     android:title="@string/preferences_interface_general_orientation_title"
                     android:defaultValue="true" />

@@ -30,6 +30,10 @@ public final class PreferencesProvider {
 
     public static class Interface {
         public static class Homescreen {
+            public static boolean getWorkspaceBackground(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getBoolean("ui_workspace_background", true);
+            }
             public static int getNumberHomescreens(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return preferences.getInt("ui_homescreen_screens", 5);

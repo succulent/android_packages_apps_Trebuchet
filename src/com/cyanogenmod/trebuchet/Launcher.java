@@ -938,6 +938,10 @@ public final class Launcher extends Activity
         // Setup the drag layer
         mDragLayer.setup(this, dragController);
 
+        if (!PreferencesProvider.Interface.Homescreen.getWorkspaceBackground(this)) {
+            mDragLayer.setBackgroundResource(0);
+        }
+
         // Setup the hotseat
         mHotseat = (Hotseat) findViewById(R.id.hotseat);
         if (mHotseat != null) {
