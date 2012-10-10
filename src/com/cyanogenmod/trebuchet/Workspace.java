@@ -52,6 +52,7 @@ import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.IWindowManager;
@@ -113,6 +114,8 @@ public class Workspace extends SmoothPagedView
     private final WallpaperManager mWallpaperManager;
     private IBinder mWindowToken;
     private static final float WALLPAPER_SCREENS_SPAN = 2f;
+
+    private int mDefaultPage;
 
     /**
      * CellInfo for the cell that is currently being dragged
@@ -235,6 +238,9 @@ public class Workspace extends SmoothPagedView
     private int mDragMode = DRAG_MODE_NONE;
     private int mLastReorderX = -1;
     private int mLastReorderY = -1;
+
+    private SparseArray<Parcelable> mSavedStates;
+    private final ArrayList<Integer> mRestoredPages = new ArrayList<Integer>();
 
     // These variables are used for storing the initial and final values during workspace animations
     private int mSavedScrollX;
@@ -514,7 +520,7 @@ public class Workspace extends SmoothPagedView
      */
     protected void initWorkspace() {
         Context context = getContext();
-        mCurrentPage = mDefaultHomescreen;
+        mCurrentPage = mDefaultPage;
         Launcher.setScreen(mCurrentPage);
         LauncherApplication app = (LauncherApplication)context.getApplicationContext();
         mIconCache = app.getIconCache();
@@ -1471,6 +1477,14 @@ public class Workspace extends SmoothPagedView
         }
 
         super.onDraw(canvas);
+
+        // Call back to LauncherModel to finish binding after the first draw
+        post(new Runnable() {
+            @Override
+            public void run() {
+                mLauncher.getModel().bindRemainingSynchronousPages();
+            }
+        });
     }
 
     boolean isDrawingBackgroundGradient() {
@@ -3552,6 +3566,32 @@ public class Workspace extends SmoothPagedView
     }
 
     @Override
+    protected void dispatchRestoreInstanceState(SparseArray<Parcelable> container) {
+        // We don't dispatch restoreInstanceState to our children using this code path.
+        // Some pages will be restored immediately as their items are bound immediately, and 
+        // others we will need to wait until after their items are bound.
+        mSavedStates = container;
+    }
+
+    public void restoreInstanceStateForChild(int child) {
+        if (mSavedStates != null) {
+            mRestoredPages.add(child);
+            CellLayout cl = (CellLayout) getChildAt(child);
+            cl.restoreInstanceState(mSavedStates);
+        }
+    }
+
+    public void restoreInstanceStateForRemainingPages() {
+        int count = getChildCount();
+        for (int i = 0; i < count; i++) {
+            if (!mRestoredPages.contains(i)) {
+                restoreInstanceStateForChild(i);
+            }
+        }
+        mRestoredPages.clear();
+    }
+
+    @Override
     public void scrollLeft() {
         if (!isSmall() && !mIsSwitchingState) {
             super.scrollLeft();
@@ -3884,12 +3924,12 @@ public class Workspace extends SmoothPagedView
     void moveToDefaultScreen(boolean animate) {
         if (!isSmall()) {
             if (animate) {
-                snapToPage(mDefaultHomescreen);
+                snapToPage(mDefaultPage);
             } else {
-                setCurrentPage(mDefaultHomescreen);
+                setCurrentPage(mDefaultPage);
             }
         }
-        getChildAt(mDefaultHomescreen).requestFocus();
+        getChildAt(mDefaultPage).requestFocus();
     }
 
     @Override
