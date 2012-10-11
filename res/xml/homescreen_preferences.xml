@@ -23,6 +23,11 @@
                 <CheckBoxPreference android:key="ui_show_apps_button"
                     android:title="@string/preferences_interface_dock_apps_button_title"
                     android:defaultValue="false" />
+                <ListPreference android:key="ui_land_left_search"
+                    android:entries="@array/preferences_interface_land_search_position_entries"
+                    android:entryValues="@array/preferences_interface_land_search_position_values"
+                    android:defaultValue="0"
+                    android:title="@string/preferences_interface_left_land_search_title" />
                 <com.cyanogenmod.trebuchet.preference.NumberPickerPreference android:key="ui_homescreen_screens"
                     android:title="@string/preferences_interface_homescreen_general_screens_title"
                     android:summary="@string/preferences_interface_homescreen_general_screens_summary"

@@ -30,6 +30,10 @@ public final class PreferencesProvider {
 
     public static class Interface {
         public static class Homescreen {
+            public static boolean getShowLandLeftSearch(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getString("ui_land_left_search", "0").equals("1");
+            }
             public static boolean getWorkspaceBackground(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return preferences.getBoolean("ui_workspace_background", true);

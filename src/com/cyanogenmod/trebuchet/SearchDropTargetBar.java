@@ -20,12 +20,14 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import com.cyanogenmod.trebuchet.LauncherApplication;
 import com.cyanogenmod.trebuchet.R;
@@ -48,9 +50,10 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
     private boolean mShowQSBSearchBar;
     private boolean mShowSearch;
     private boolean mShowAllApps;
+    private boolean mShowLandLeftSearch;
 
     private boolean mIsSearchBarHidden;
-    public View mQSBSearchBar;
+    public RelativeLayout mQSBSearchBar;
     private View mDropTargetBar;
     private ButtonDropTarget mInfoDropTarget;
     private ButtonDropTarget mDeleteDropTarget;
@@ -69,6 +72,8 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
 
         mShowSearch = PreferencesProvider.Interface.Homescreen.getShowSearchBar(context);
         mShowAllApps = PreferencesProvider.Interface.Dock.getShowAppsButton(context);
+        mShowLandLeftSearch = PreferencesProvider.Interface.Homescreen.getShowLandLeftSearch(context) &&
+                getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         mShowQSBSearchBar = mShowAllApps || mShowSearch;
     }
 
@@ -106,7 +111,7 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
         super.onFinishInflate();
 
         // Get the individual components
-        mQSBSearchBar = findViewById(R.id.qsb_search_bar);
+        mQSBSearchBar = (RelativeLayout) findViewById(R.id.qsb_search_bar);
         mDropTargetBar = findViewById(R.id.drag_target_bar);
         mInfoDropTarget = (ButtonDropTarget) mDropTargetBar.findViewById(R.id.info_target_text);
         mDeleteDropTarget = (ButtonDropTarget) mDropTargetBar.findViewById(R.id.delete_target_text);
@@ -115,7 +120,7 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
         mInfoDropTarget.setSearchDropTargetBar(this);
         mDeleteDropTarget.setSearchDropTargetBar(this);
 
-        mEnableDropDownDropTargets = true;
+        mEnableDropDownDropTargets = !mShowLandLeftSearch;
 
         if (!mShowQSBSearchBar) {
             mQSBSearchBar.setVisibility(View.GONE);

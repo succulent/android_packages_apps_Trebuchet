@@ -418,4 +418,6 @@ s -->
     <string name="position_center_top_right">Centered on top in portrait and right in landscape</string>
 
     <string name="preferences_interface_workspace_background_title">Workspace background shading</string>
+
+    <string name="preferences_interface_left_land_search_title">Search bar landscape position</string>
 </resources>

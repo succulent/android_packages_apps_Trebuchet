@@ -350,8 +350,10 @@ public class Workspace extends SmoothPagedView
                 ? R.dimen.button_bar_height_plus_small_padding_large :
                 R.dimen.button_bar_height_plus_small_padding);
         int buttonBarHeight = (showHotseat && !showLandRightDock ? buttonBarHeightPlus : 0) +
-                ((PreferencesProvider.Interface.Homescreen.getShowSearchBar(context)
-                || PreferencesProvider.Interface.Dock.getShowAppsButton(context)) ?
+                ((PreferencesProvider.Interface.Homescreen.getShowSearchBar(context) ||
+                PreferencesProvider.Interface.Dock.getShowAppsButton(context)) &&
+                !(PreferencesProvider.Interface.Homescreen.getShowLandLeftSearch(context) &&
+                getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) ?
                 res.getDimensionPixelSize(R.dimen.qsb_bar_height) : 0);
 
         int cellCountX = (int) (smallestScreenDim / cellWidth);

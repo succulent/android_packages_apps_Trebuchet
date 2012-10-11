@@ -328,6 +328,7 @@ public final class Launcher extends Activity
     private boolean mShowAppsButton;
     private boolean mShowSearchBackground;
     private boolean mShowLandRightDock;
+    private boolean mShowLandLeftSearch;
 
     private StatusBarManager mStatusBarManager;
 
@@ -401,6 +402,9 @@ public final class Launcher extends Activity
         mShowLandRightDock = PreferencesProvider.Interface.Dock.getShowLandRightDock(this) &&
                 getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE
                 && mShowHotseat;
+        mShowLandLeftSearch = PreferencesProvider.Interface.Homescreen.getShowLandLeftSearch(this) &&
+                getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE
+                && (mShowSearchBar || mShowAppsButton);
 
         // If we are getting an onCreate, we can actually preempt onResume and unset mPaused here,
         // this also ensures that any synchronous binding below doesn't re-trigger another
@@ -413,7 +417,7 @@ public final class Launcher extends Activity
         }
 
         checkForLocaleChange();
-        setContentView(R.layout.launcher);
+        setContentView(mShowLandLeftSearch ? R.layout.launcher_landscape : R.layout.launcher);
         setupViews();
         showFirstRunWorkspaceCling();
 
@@ -1013,7 +1017,8 @@ public final class Launcher extends Activity
         }
 
         // Get the search/delete bar
-        mSearchDropTargetBar = (SearchDropTargetBar) mDragLayer.findViewById(R.id.qsb_bar);
+        mSearchDropTargetBar = (SearchDropTargetBar) mDragLayer.findViewById(mShowLandLeftSearch ?
+                R.id.qsb_bar_landscape : R.id.qsb_bar);
 
         if (!mShowDockDivider || !mShowHotseat) {
             ((View) findViewById(R.id.dock_divider)).setVisibility(View.GONE);
@@ -1057,9 +1062,11 @@ public final class Launcher extends Activity
                 RelativeLayout.LayoutParams voiceParams = new RelativeLayout.LayoutParams(
                         RelativeLayout.LayoutParams.WRAP_CONTENT,
                         RelativeLayout.LayoutParams.WRAP_CONTENT);
-                voiceParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                voiceParams.addRule(mShowLandLeftSearch ? RelativeLayout.ALIGN_PARENT_LEFT :
+                        RelativeLayout.ALIGN_PARENT_RIGHT);
+                if (mShowLandLeftSearch) voiceParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM); 
                 voiceButton.setLayoutParams(voiceParams);
-                voiceButton.setPadding(0, 0, 6, 0);
+                voiceButton.setPadding(mShowLandLeftSearch ? 8 : 0, 0, mShowLandLeftSearch ? 0 : 6, 0);
                 searchDivider.setVisibility(View.GONE);
             }
         }
@@ -1086,7 +1093,7 @@ public final class Launcher extends Activity
         int paddingTop = getResources().getDimensionPixelSize(R.dimen.workspace_divider_padding_top);
         int paddingBottom = getResources().getDimensionPixelSize(R.dimen.workspace_divider_padding_bottom);
 
-        mWorkspace.setPadding(0, mShowSearchBar || mShowAppsButton ? searchBarHeight : 0,
+        mWorkspace.setPadding(mShowLandLeftSearch ? searchBarHeight : 0, (mShowSearchBar || mShowAppsButton) && !mShowLandLeftSearch ? searchBarHeight : 0,
                 mShowLandRightDock ? buttonBarHeightPlus : 0, mShowHotseat && !mShowLandRightDock ?
                 buttonBarHeightPlus : 0);
 
@@ -1102,18 +1109,18 @@ public final class Launcher extends Activity
                 buttonBarHeightPlus : FrameLayout.LayoutParams.MATCH_PARENT, mShowLandRightDock ?
                 FrameLayout.LayoutParams.MATCH_PARENT : buttonBarHeightPlus);
         hotseatMargins.gravity = mShowLandRightDock ? Gravity.RIGHT : Gravity.BOTTOM;
-        mHotseat.setPadding(0, mShowLandRightDock ? searchBarHeight : 0, 0, 0);
+        mHotseat.setPadding(mShowLandLeftSearch && !mShowLandRightDock ? searchBarHeight : 0, mShowLandRightDock && !mShowLandLeftSearch ? searchBarHeight : 0, 0, 0);
         if (mShowHotseat) mHotseat.setLayoutParams(hotseatMargins);
 
         FrameLayout.LayoutParams hotseatDividerMargins = new FrameLayout.LayoutParams(
                 mShowLandRightDock ? FrameLayout.LayoutParams.WRAP_CONTENT :
                 FrameLayout.LayoutParams.MATCH_PARENT, mShowLandRightDock ?
                 FrameLayout.LayoutParams.MATCH_PARENT : FrameLayout.LayoutParams.WRAP_CONTENT);
-        hotseatDividerMargins.setMargins(0, 0, mShowLandRightDock ? buttonBarHeightPlus : 0,
+        hotseatDividerMargins.setMargins(mShowLandLeftSearch ? searchBarHeight : 0, 0, mShowLandRightDock ? buttonBarHeightPlus : 0,
                 !mShowLandRightDock ? buttonBarHeight : 0);
         hotseatDividerMargins.gravity = mShowLandRightDock ? Gravity.RIGHT : Gravity.BOTTOM;
-        mDockDivider.setPadding(paddingLeft, paddingTop + (mShowLandRightDock ? (mShowSearchBar ||
-                mShowAppsButton ? searchBarHeight : 0) : 0), paddingRight, paddingBottom);
+        mDockDivider.setPadding(paddingLeft, paddingTop + (mShowLandRightDock ? ((mShowSearchBar ||
+                mShowAppsButton) && !mShowLandLeftSearch ? searchBarHeight : 0) : 0), paddingRight, paddingBottom);
         if (mShowDockDivider) mDockDivider.setLayoutParams(hotseatDividerMargins);
 
         if (!mShowSearchBackground) mSearchDropTargetBar.mQSBSearchBar.setBackgroundDrawable(null);
