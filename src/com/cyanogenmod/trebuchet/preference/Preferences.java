@@ -97,6 +97,8 @@ public class Preferences extends Activity {
                 DrawerFragmentActivity.class, null);
         mTabsAdapter.addTab(bar.newTab().setText(R.string.preferences_interface_gestures_title),
                 GestureFragmentActivity.class, null);
+        mTabsAdapter.addTab(bar.newTab().setText(R.string.accessibility_search_button),
+                SearchFragmentActivity.class, null);
 
         if (savedInstanceState != null) {
             bar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));

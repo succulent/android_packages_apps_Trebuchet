@@ -83,32 +83,7 @@ public class HomescreenFragmentActivity extends PreferenceFragment {
                 LauncherModel.getCellCountY() + "|" + LauncherModel.getCellCountX());
         String[] gridArray = hg.split("\\|");
         mHomescreenGrid.setSummary(gridArray[1] + " x " + gridArray[0]);
-/*
-        Resources r = getActivity().getResources();
-        boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(mContext);
-        int cellWidth = r.getDimensionPixelSize(largeIcons ? R.dimen.workspace_cell_width_large :
-                R.dimen.workspace_cell_width);
-        int cellHeight = r.getDimensionPixelSize(largeIcons ? R.dimen.workspace_cell_height_large :
-                R.dimen.workspace_cell_height);
-        DisplayMetrics displayMetrics = r.getDisplayMetrics();
-        final float screenWidth = r.getConfiguration().screenWidthDp * displayMetrics.density;
-        final float screenHeight = r.getConfiguration().screenHeightDp * displayMetrics.density;
-        final float smallestScreenDim = screenHeight > screenWidth ? screenWidth : screenHeight;
-        boolean showHotseat = PreferencesProvider.Interface.Dock.getShowHotseat(mContext);
-        boolean showLandRightDock = PreferencesProvider.Interface.Dock.getShowLandRightDock(mContext)
-                && r.getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE
-                && showHotseat;
-        int searchBarHeight = r.getDimensionPixelSize(R.dimen.qsb_bar_height);
-        int buttonBarHeightPlus = r.getDimensionPixelSize(largeIcons
-                ? R.dimen.button_bar_height_plus_padding_large :
-                R.dimen.button_bar_height_plus_padding);
 
-        int buttonBarHeight = (showHotseat && !showLandRightDock ? buttonBarHeightPlus : 0) +
-                ((PreferencesProvider.Interface.Homescreen.getShowSearchBar(mContext)
-                || PreferencesProvider.Interface.Dock.getShowAppsButton(mContext)) ?
-                searchBarHeight : 0);
-        mHomescreenGrid.setMax1((int) ((smallestScreenDim - buttonBarHeight) / cellHeight));
-        mHomescreenGrid.setMax2((int) (smallestScreenDim / cellWidth));*/
         mHomescreenGrid.setMax1(LauncherModel.getMaxCellCountY());
         mHomescreenGrid.setMax2(LauncherModel.getMaxCellCountX());
     }

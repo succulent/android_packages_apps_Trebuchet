@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:launcher="http://schemas.android.com/apk/res/com.cyanogenmod.trebuchet">
+
+        <CheckBoxPreference android:key="ui_homescreen_general_search"
+            android:title="@string/preferences_interface_homescreen_general_search_title"
+            android:defaultValue="true" />
+
+        <CheckBoxPreference android:key="ui_show_apps_button"
+            android:title="@string/preferences_interface_dock_apps_button_title"
+            android:defaultValue="false" />
+
+        <ListPreference android:key="ui_land_left_search"
+            android:entries="@array/preferences_interface_land_search_position_entries"
+            android:entryValues="@array/preferences_interface_land_search_position_values"
+            android:defaultValue="0"
+            android:title="@string/preferences_interface_left_land_search_title" />
+
+        <CheckBoxPreference android:key="ui_search_background"
+            android:title="@string/preferences_interface_homescreen_search_background_title"
+            android:defaultValue="true" />
+
+</PreferenceScreen>
