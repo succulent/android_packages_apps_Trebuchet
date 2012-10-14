@@ -115,8 +115,6 @@ public class Workspace extends SmoothPagedView
     private IBinder mWindowToken;
     private static final float WALLPAPER_SCREENS_SPAN = 2f;
 
-    private int mDefaultPage;
-
     /**
      * CellInfo for the cell that is currently being dragged
      */
@@ -268,7 +266,7 @@ public class Workspace extends SmoothPagedView
 
     // Preferences
     private int mNumberHomescreens;
-    private int mDefaultHomescreen;
+    private int mDefaultPage;
     private boolean mShowSearchBar;
     private boolean mResizeAnyWidget;
     private boolean mHideIconLabels;
@@ -361,23 +359,6 @@ public class Workspace extends SmoothPagedView
                 ? 0 : (tabletMode == 0 ? (hasNavBar ? (navigationBarHeight + systemBarHeight) :
                 systemBarHeight) : navigationBarHeight))) / cellHeight);
 
-/*        if (!landscape && showLandRightDock && showHotseat) {
-            if ((!hasNavBar && largeIcons && (showSearchBar || showAppsButton)) || (!hasNavBar && !largeIcons &&
-                    (!(showSearchBar || showAppsButton)))) cellCountY++;
-        }
-        if (!landscape && showHotseat && !showLandRightDock) {
-            cellCountY = cellCountY - (((!largeIcons && (showSearchBar || showAppsButton)) ||
-                    (!largeIcons && hasNavBar && !(showSearchBar || showAppsButton)) ||
-                    largeIcons && hasNavBar && (showSearchBar || showAppsButton)) ? 1 :
-                    (largeIcons && !(showSearchBar || showAppsButton) ? 1 : 0));
-        }
-        if (!landscape && !showHotseat && (((showSearchBar || showAppsButton) && !largeIcons) ||
-                ((!showSearchBar && !showAppsButton) && largeIcons) || (hasNavBar && !largeIcons &&
-                !(showSearchBar || showAppsButton)) || (largeIcons && hasNavBar &&
-                (showSearchBar || showAppsButton)))) {
-            cellCountY = cellCountY - 1;//((showSearchBar || showAppsButton) ? 1 : (largeIcons ? 1 : 0));
-        }*/
-
         LauncherModel.updateMaxWorkspaceLayoutCells(cellCountX, cellCountY);
 
         mSpringLoadedShrinkFactor =
@@ -404,10 +385,10 @@ public class Workspace extends SmoothPagedView
 
         // Preferences
         mNumberHomescreens = PreferencesProvider.Interface.Homescreen.getNumberHomescreens(context);
-        mDefaultHomescreen = PreferencesProvider.Interface.Homescreen.getDefaultHomescreen(context,
+        mDefaultPage = PreferencesProvider.Interface.Homescreen.getDefaultHomescreen(context,
                 mNumberHomescreens / 2);
-        if (mDefaultHomescreen >= mNumberHomescreens) {
-            mDefaultHomescreen = mNumberHomescreens / 2;
+        if (mDefaultPage > mNumberHomescreens) {
+            mDefaultPage = mNumberHomescreens;
         }
         mShowSearchBar = PreferencesProvider.Interface.Homescreen.getShowSearchBar(context);
         mResizeAnyWidget = PreferencesProvider.Interface.Homescreen.getResizeAnyWidget(context);

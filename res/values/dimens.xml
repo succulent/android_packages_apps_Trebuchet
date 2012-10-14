@@ -180,10 +180,10 @@
     <dimen name="apps_customize_cell_height_large">108dp</dimen>
 
 <!-- Workspace cell size -->
-    <dimen name="workspace_cell_width_land_large">82dp</dimen>
-    <dimen name="workspace_cell_width_port_large">82dp</dimen>
-    <dimen name="workspace_cell_height_land_large">82dp</dimen>
-    <dimen name="workspace_cell_height_port_large">82dp</dimen>
+    <dimen name="workspace_cell_width_land_large">80dp</dimen>
+    <dimen name="workspace_cell_width_port_large">80dp</dimen>
+    <dimen name="workspace_cell_height_land_large">80dp</dimen>
+    <dimen name="workspace_cell_height_port_large">80dp</dimen>
 
 
     <dimen name="workspace_icon_text_size_large">12sp</dimen>
