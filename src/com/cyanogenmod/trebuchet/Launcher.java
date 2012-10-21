@@ -1109,7 +1109,9 @@ public final class Launcher extends Activity
                 buttonBarHeightPlus : FrameLayout.LayoutParams.MATCH_PARENT, mShowLandRightDock ?
                 FrameLayout.LayoutParams.MATCH_PARENT : buttonBarHeightPlus);
         hotseatMargins.gravity = mShowLandRightDock ? Gravity.RIGHT : Gravity.BOTTOM;
-        mHotseat.setPadding(mShowLandLeftSearch && !mShowLandRightDock ? searchBarHeight : 0, mShowLandRightDock && !mShowLandLeftSearch ? searchBarHeight : 0, 0, 0);
+        mHotseat.setPadding(mShowLandLeftSearch && !mShowLandRightDock ? searchBarHeight : 0,
+                mShowLandRightDock && (!mShowLandLeftSearch && (mShowSearchBar || mShowAppsButton))
+                ? searchBarHeight : 0, 0, 0);
         if (mShowHotseat) mHotseat.setLayoutParams(hotseatMargins);
 
         FrameLayout.LayoutParams hotseatDividerMargins = new FrameLayout.LayoutParams(
