@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.cyanogenmod.trebuchet.preference;
+package com.sbradymobile.launchhome.preference;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -27,11 +27,11 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 
-import com.cyanogenmod.trebuchet.R;
+import com.sbradymobile.launchhome.R;
 
 public class SearchFragmentActivity extends PreferenceFragment {
 
-    private static final String TAG = "Trebuchet_Search";
+    private static final String TAG = "Search";
 
     private NumberPickerPreference mHomescreens;
     private NumberPickerPreference mDefaultHomescreen;

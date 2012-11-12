@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.cyanogenmod.trebuchet;
+package com.sbradymobile.launchhome;
 
 public class SpringLoadedDragController implements OnAlarmListener {
     // how long the user must hover over a mini-screen before it unshrinks

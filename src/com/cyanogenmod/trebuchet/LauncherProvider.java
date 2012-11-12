@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.cyanogenmod.trebuchet;
+package com.sbradymobile.launchhome;
 
 import android.app.SearchManager;
 import android.appwidget.AppWidgetHost;
@@ -49,8 +49,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Xml;
 
-import com.cyanogenmod.trebuchet.R;
-import com.cyanogenmod.trebuchet.LauncherSettings.Favorites;
+import com.sbradymobile.launchhome.R;
+import com.sbradymobile.launchhome.LauncherSettings.Favorites;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -68,7 +68,7 @@ public class LauncherProvider extends ContentProvider {
 
     private static final int DATABASE_VERSION = 12;
 
-    static final String AUTHORITY = "com.cyanogenmod.trebuchet.settings";
+    static final String AUTHORITY = "com.sbradymobile.launchhome.settings";
 
     static final String TABLE_FAVORITES = "favorites";
     static final String PARAMETER_NOTIFY = "notify";
@@ -76,7 +76,7 @@ public class LauncherProvider extends ContentProvider {
             "DB_CREATED_BUT_DEFAULT_WORKSPACE_NOT_LOADED";
 
     private static final String ACTION_APPWIDGET_DEFAULT_WORKSPACE_CONFIGURE =
-            "com.cyanogenmod.trebuchet.action.APPWIDGET_DEFAULT_WORKSPACE_CONFIGURE";
+            "com.sbradymobile.launchhome.action.APPWIDGET_DEFAULT_WORKSPACE_CONFIGURE";
 
     /**
      * {@link Uri} triggered at any registered {@link android.database.ContentObserver} when

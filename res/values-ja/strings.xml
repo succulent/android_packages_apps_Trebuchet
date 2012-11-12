@@ -112,7 +112,7 @@
     <string name="custom_workspace_cling_description_2" msgid="2758258454975288377"></string>
 
     <string name="cancel_target_label">キャンセル</string>
-    <string name="menu_preferences">Trebuchet設定</string>
+    <string name="menu_preferences">LaunchHome設定</string>
     <string name="menu_apps_sort_title">名前</string>
     <string name="menu_apps_sort_install_date">インストール日時</string>
     <string name="all_apps_sort_cling_title">アプリの並び替え</string>

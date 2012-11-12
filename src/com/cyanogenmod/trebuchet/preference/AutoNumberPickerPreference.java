@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.cyanogenmod.trebuchet.preference;
+package com.sbradymobile.launchhome.preference;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -27,7 +27,7 @@ import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.NumberPicker;
-import com.cyanogenmod.trebuchet.R;
+import com.sbradymobile.launchhome.R;
 
 public class AutoNumberPickerPreference extends DialogPreference implements
             View.OnClickListener {

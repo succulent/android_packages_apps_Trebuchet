@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.cyanogenmod.trebuchet.preference;
+package com.sbradymobile.launchhome.preference;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -30,9 +30,9 @@ import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.LinearLayout;
-import com.cyanogenmod.trebuchet.R;
+import com.sbradymobile.launchhome.R;
 
-import com.cyanogenmod.trebuchet.LauncherApplication;
+import com.sbradymobile.launchhome.LauncherApplication;
 
 /*
  * @author Danesh

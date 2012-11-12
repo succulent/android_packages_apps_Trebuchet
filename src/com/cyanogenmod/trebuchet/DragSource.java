@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.cyanogenmod.trebuchet;
+package com.sbradymobile.launchhome;
 
 import android.view.View;
 
-import com.cyanogenmod.trebuchet.DropTarget.DragObject;
+import com.sbradymobile.launchhome.DropTarget.DragObject;
 
 /**
  * Interface defining an object that can originate a drag.

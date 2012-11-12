@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.cyanogenmod.trebuchet;
+package com.sbradymobile.launchhome;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -29,9 +29,9 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-import com.cyanogenmod.trebuchet.LauncherApplication;
-import com.cyanogenmod.trebuchet.R;
-import com.cyanogenmod.trebuchet.preference.PreferencesProvider;
+import com.sbradymobile.launchhome.LauncherApplication;
+import com.sbradymobile.launchhome.R;
+import com.sbradymobile.launchhome.preference.PreferencesProvider;
 
 /*
  * Ths bar will manage the transition between the QSB search bar and the delete drop

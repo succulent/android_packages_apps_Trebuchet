@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.cyanogenmod.trebuchet;
+package com.sbradymobile.launchhome;
 
 import android.appwidget.AppWidgetHost;
 import android.appwidget.AppWidgetHostView;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.cyanogenmod.trebuchet;
+package com.sbradymobile.launchhome;
 
 import android.app.SearchManager;
 import android.appwidget.AppWidgetManager;
@@ -47,8 +47,8 @@ import android.os.RemoteException;
 import android.os.SystemClock;
 import android.util.Log;
 
-import com.cyanogenmod.trebuchet.R;
-import com.cyanogenmod.trebuchet.InstallWidgetReceiver.WidgetMimeTypeHandlerData;
+import com.sbradymobile.launchhome.R;
+import com.sbradymobile.launchhome.InstallWidgetReceiver.WidgetMimeTypeHandlerData;
 
 import java.lang.ref.WeakReference;
 import java.net.URISyntaxException;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:launcher="http://schemas.android.com/apk/res/com.cyanogenmod.trebuchet">
+        xmlns:launcher="http://schemas.android.com/apk/res/com.sbradymobile.launchhome">
 
                 <CheckBoxPreference android:key="ui_homescreen_general_show_hotseat"
                     android:title="@string/preferences_interface_homescreen_general_show_hotseat_title" />
@@ -14,7 +14,7 @@
                 <CheckBoxPreference android:key="ui_homescreen_indicator_background"
                     android:dependency="ui_homescreen_general_show_hotseat"
                     android:title="@string/preferences_interface_homescreen_indicator_background_title" />
-                <com.cyanogenmod.trebuchet.preference.NumberPickerPreference
+                <com.sbradymobile.launchhome.preference.NumberPickerPreference
                     android:key="ui_hotseat_apps"
                     android:dependency="ui_homescreen_general_show_hotseat"
                     android:title="@string/preferences_interface_homescreen_general_hotseat_apps"
@@ -24,7 +24,7 @@
                 <CheckBoxPreference android:key="ui_homescreen_general_show_hotseat_allapps"
                     android:dependency="ui_homescreen_general_show_hotseat"
                     android:title="@string/preferences_interface_homescreen_general_show_hotseat_allapps_title" />
-                <com.cyanogenmod.trebuchet.preference.AutoNumberPickerPreference
+                <com.sbradymobile.launchhome.preference.AutoNumberPickerPreference
                     android:key="ui_hotseat_all_apps"
                     android:title="@string/preferences_interface_homescreen_general_hotseat_all_apps"
                     android:dependency="ui_homescreen_general_show_hotseat_allapps"

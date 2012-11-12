@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.cyanogenmod.trebuchet;
+package com.sbradymobile.launchhome;
 
-import com.cyanogenmod.trebuchet.R;
+import com.sbradymobile.launchhome.R;
 
 import android.app.Activity;
 import android.app.DialogFragment;

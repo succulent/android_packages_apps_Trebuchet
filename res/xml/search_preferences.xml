@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:launcher="http://schemas.android.com/apk/res/com.cyanogenmod.trebuchet">
+        xmlns:launcher="http://schemas.android.com/apk/res/com.sbradymobile.launchhome">
 
         <CheckBoxPreference android:key="ui_homescreen_general_search"
             android:title="@string/preferences_interface_homescreen_general_search_title"

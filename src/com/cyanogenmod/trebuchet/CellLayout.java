@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.cyanogenmod.trebuchet;
+package com.sbradymobile.launchhome;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
@@ -50,9 +50,9 @@ import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LayoutAnimationController;
 
-import com.cyanogenmod.trebuchet.R;
-import com.cyanogenmod.trebuchet.FolderIcon.FolderRingAnimator;
-import com.cyanogenmod.trebuchet.preference.PreferencesProvider;
+import com.sbradymobile.launchhome.R;
+import com.sbradymobile.launchhome.FolderIcon.FolderRingAnimator;
+import com.sbradymobile.launchhome.preference.PreferencesProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;

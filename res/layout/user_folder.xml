@@ -14,15 +14,15 @@
      limitations under the License.
 -->
 
-<com.cyanogenmod.trebuchet.Folder
+<com.sbradymobile.launchhome.Folder
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:launcher="http://schemas.android.com/apk/res/com.cyanogenmod.trebuchet"
+    xmlns:launcher="http://schemas.android.com/apk/res/com.sbradymobile.launchhome"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/portal_container_holo">
 
-    <com.cyanogenmod.trebuchet.CellLayout
+    <com.sbradymobile.launchhome.CellLayout
         android:id="@+id/folder_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
         launcher:cellWidthLarge="@dimen/folder_cell_width_large"
         launcher:cellHeightLarge="@dimen/folder_cell_height_large" />
 
-    <com.cyanogenmod.trebuchet.FolderEditText
+    <com.sbradymobile.launchhome.FolderEditText
         android:id="@+id/folder_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -54,4 +54,4 @@
         android:gravity="center_horizontal"
         android:singleLine="true"
         android:imeOptions="flagNoExtractUi"/>
-</com.cyanogenmod.trebuchet.Folder>
+</com.sbradymobile.launchhome.Folder>

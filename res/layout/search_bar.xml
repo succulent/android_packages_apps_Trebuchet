@@ -21,7 +21,7 @@
     android:layout_gravity="top|center_horizontal"
     android:background="@drawable/search_frame">
    <!-- Global search icon -->
-   <com.cyanogenmod.trebuchet.HolographicImageView
+   <com.sbradymobile.launchhome.HolographicImageView
         style="@style/SearchButton"
         android:id="@+id/search_button"
         android:layout_width="wrap_content"
@@ -46,7 +46,7 @@
         android:clickable="true" />
 
     <!-- Voice search icon -->
-    <com.cyanogenmod.trebuchet.HolographicImageView
+    <com.sbradymobile.launchhome.HolographicImageView
         style="@style/SearchButton.Voice"
         android:id="@+id/voice_button"
         android:layout_width="wrap_content"
@@ -59,7 +59,7 @@
         android:contentDescription="@string/accessibility_voice_search_button" />
 
     <!-- AppsCustomize icon -->
-    <com.cyanogenmod.trebuchet.HolographicImageView
+    <com.sbradymobile.launchhome.HolographicImageView
         android:id="@+id/all_apps_button"
         android:onClick="onClickAllAppsButton"
         android:layout_width="wrap_content"

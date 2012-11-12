@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.cyanogenmod.trebuchet;
+package com.sbradymobile.launchhome;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -25,8 +25,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import com.cyanogenmod.trebuchet.R;
-import com.cyanogenmod.trebuchet.preference.PreferencesProvider;
+import com.sbradymobile.launchhome.R;
+import com.sbradymobile.launchhome.preference.PreferencesProvider;
 
 public class Hotseat extends FrameLayout {
     @SuppressWarnings("unused")

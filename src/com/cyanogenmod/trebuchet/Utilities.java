@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.cyanogenmod.trebuchet;
+package com.sbradymobile.launchhome;
 
 import java.util.Random;
 
@@ -35,8 +35,8 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PaintDrawable;
 import android.util.DisplayMetrics;
 
-import com.cyanogenmod.trebuchet.preference.PreferencesProvider;
-import com.cyanogenmod.trebuchet.R;
+import com.sbradymobile.launchhome.preference.PreferencesProvider;
+import com.sbradymobile.launchhome.R;
 
 /**
  * Various utilities shared amongst the Launcher's classes.

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.cyanogenmod.trebuchet;
+package com.sbradymobile.launchhome;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -101,9 +101,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.common.Search;
-import com.cyanogenmod.trebuchet.R;
-import com.cyanogenmod.trebuchet.DropTarget.DragObject;
-import com.cyanogenmod.trebuchet.preference.*;
+import com.sbradymobile.launchhome.R;
+import com.sbradymobile.launchhome.DropTarget.DragObject;
+import com.sbradymobile.launchhome.preference.*;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

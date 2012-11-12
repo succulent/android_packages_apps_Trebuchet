@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package com.cyanogenmod.trebuchet.preference;
+package com.sbradymobile.launchhome.preference;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.SharedPreferences;
 import android.util.DisplayMetrics;
 
-import com.cyanogenmod.trebuchet.LauncherApplication;
+import com.sbradymobile.launchhome.LauncherApplication;
 
 public final class PreferencesProvider {
-    public static final String PREFERENCES_KEY = "com.cyanogenmod.trebuchet_preferences";
+    public static final String PREFERENCES_KEY = "com.sbradymobile.launchhome_preferences";
 
     public static final String PREFERENCES_CHANGED = "preferences_changed";
 
