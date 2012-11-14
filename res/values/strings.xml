@@ -420,4 +420,12 @@ s -->
     <string name="preferences_interface_workspace_background_title">Workspace background shading</string>
 
     <string name="preferences_interface_left_land_search_title">Search bar landscape position</string>
+
+    <string name="app_drawer">App Drawer</string>
+    <string name="toggle_statusbar">Toggle Status Bar</string>
+    <string name="expand_statusbar">Expand Status Bar</string>
+
+    <string name="next_page">Next Page</string>
+    <string name="previous_page">Previous Page</string>
+
 </resources>

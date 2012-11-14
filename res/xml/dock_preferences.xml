@@ -9,7 +9,7 @@
                     android:dependency="ui_homescreen_general_show_hotseat"
                     android:entries="@array/preferences_interface_land_dock_position_entries"
                     android:entryValues="@array/preferences_interface_land_dock_position_values"
-                    android:defaultValue="0"
+                    android:defaultValue="1"
                     android:title="@string/preferences_interface_right_land_dock_title" />
                 <CheckBoxPreference android:key="ui_homescreen_indicator_background"
                     android:dependency="ui_homescreen_general_show_hotseat"
@@ -21,16 +21,4 @@
                     android:defaultValue="7"
                     launcher:max="7"
                     launcher:min="1" />
-                <CheckBoxPreference android:key="ui_homescreen_general_show_hotseat_allapps"
-                    android:dependency="ui_homescreen_general_show_hotseat"
-                    android:title="@string/preferences_interface_homescreen_general_show_hotseat_allapps_title" />
-                <com.sbradymobile.launchhome.preference.AutoNumberPickerPreference
-                    android:key="ui_hotseat_all_apps"
-                    android:title="@string/preferences_interface_homescreen_general_hotseat_all_apps"
-                    android:dependency="ui_homescreen_general_show_hotseat_allapps"
-                    android:defaultValue="0"
-                    launcher:maxExternal="ui_hotseat_apps"
-                    launcher:max="7"
-                    launcher:min="1" />
-
 </PreferenceScreen>

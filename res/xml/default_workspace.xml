@@ -26,4 +26,11 @@
     <!-- Far-right screen [4] -->
 
     <!-- Hotseat (We use the screen as the position of the item in the hotseat) -->
+    <favorite
+        launcher:packageName="com.sbradymobile.launchhome"
+        launcher:className="com.sbradymobile.launchhome.OpenDrawer"
+        launcher:container="-101"
+        launcher:screen="3"
+        launcher:x="3"
+        launcher:y="0" />
 </favorites>

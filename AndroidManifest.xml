@@ -101,12 +101,80 @@
         </activity>
 
         <activity android:name="com.sbradymobile.launchhome.RocketLauncher"
+            android:taskAffinity="com.sbradymobile.launchhome.RocketLauncher"
             android:label="@string/dream_name"
+            android:icon="@drawable/rocket_launcher"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DREAM" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="com.sbradymobile.launchhome.OpenDrawer"
+            android:taskAffinity="com.sbradymobile.launchhome.OpenDrawer"
+            android:excludeFromRecents="true"
+            android:label="@string/app_drawer"
+            android:icon="@drawable/ic_allapps_large"
+            android:theme="@style/Theme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="com.sbradymobile.launchhome.ToggleStatusBar"
+            android:taskAffinity="com.sbradymobile.launchhome.ToggleStatusBar"
+            android:excludeFromRecents="true"
+            android:label="@string/toggle_statusbar"
+            android:icon="@drawable/ic_lock_hide_statusbar"
+            android:theme="@style/Theme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="com.sbradymobile.launchhome.ExpandStatusBar"
+            android:taskAffinity="com.sbradymobile.launchhome.ExpandStatusBar"
+            android:excludeFromRecents="true"
+            android:label="@string/expand_statusbar"
+            android:icon="@drawable/ic_lock_notify"
+            android:theme="@style/Theme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="com.sbradymobile.launchhome.NextPage"
+            android:taskAffinity="com.sbradymobile.launchhome.NextPage"
+            android:excludeFromRecents="true"
+            android:label="@string/next_page"
+            android:icon="@drawable/next_page"
+            android:theme="@style/Theme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="com.sbradymobile.launchhome.PreviousPage"
+            android:taskAffinity="com.sbradymobile.launchhome.PreviousPage"
+            android:excludeFromRecents="true"
+            android:label="@string/previous_page"
+            android:icon="@drawable/previous_page"
+            android:theme="@style/Theme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 

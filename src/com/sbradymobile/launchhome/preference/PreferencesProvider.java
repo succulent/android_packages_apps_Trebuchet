@@ -286,7 +286,7 @@ public final class PreferencesProvider {
             }
             public static boolean getShowLandRightDock(Context context) {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
-                return preferences.getString("ui_land_right_dock", "0").equals("0");
+                return preferences.getString("ui_land_right_dock", "1").equals("0");
             }
         }
 

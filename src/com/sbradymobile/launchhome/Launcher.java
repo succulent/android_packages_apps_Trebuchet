@@ -217,6 +217,13 @@ public final class Launcher extends Activity
 
     private final BroadcastReceiver mCloseSystemDialogsReceiver
             = new CloseSystemDialogsIntentReceiver();
+
+    private final BroadcastReceiver mDrawerReceiver
+            = new DrawerIntentReceiver();
+
+    private final BroadcastReceiver mStatusBarReceiver
+            = new StatusBarIntentReceiver();
+
     private final ContentObserver mWidgetObserver = new AppWidgetResetObserver();
 
     private LayoutInflater mInflater;
@@ -460,6 +467,15 @@ public final class Launcher extends Activity
 
         IntentFilter filter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         registerReceiver(mCloseSystemDialogsReceiver, filter);
+
+        IntentFilter drawerFilter = new IntentFilter("com.sbradymobile.launchhome.open_drawer");
+        registerReceiver(mDrawerReceiver, drawerFilter);
+
+        IntentFilter statusbarFilter = new IntentFilter("com.sbradymobile.launchhome.toggle_statusbar");
+        statusbarFilter.addAction("com.sbradymobile.launchhome.expand_statusbar");
+        statusbarFilter.addAction("com.sbradymobile.launchhome.next_page");
+        statusbarFilter.addAction("com.sbradymobile.launchhome.previous_page");
+        registerReceiver(mStatusBarReceiver, statusbarFilter);
 
         //updateGlobalIcons();
 
@@ -1665,6 +1681,8 @@ public final class Launcher extends Activity
 
         getContentResolver().unregisterContentObserver(mWidgetObserver);
         unregisterReceiver(mCloseSystemDialogsReceiver);
+        unregisterReceiver(mDrawerReceiver);
+        unregisterReceiver(mStatusBarReceiver);
 
         mDragLayer.clearAllResizeFrames();
         ((ViewGroup) mWorkspace.getParent()).removeAllViews();
@@ -1722,7 +1740,7 @@ public final class Launcher extends Activity
         Intent manageApps = new Intent(Settings.ACTION_MANAGE_ALL_APPLICATIONS_SETTINGS);
         manageApps.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-		Intent preferences = new Intent().setClass(this, Preferences.class);
+        Intent preferences = new Intent().setClass(this, Preferences.class);
         preferences.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         Intent settings = new Intent(android.provider.Settings.ACTION_SETTINGS);
@@ -3418,6 +3436,34 @@ public final class Launcher extends Activity
         @Override
         public void onReceive(Context context, Intent intent) {
             closeSystemDialogs();
+        }
+    }
+
+    /**
+     * Receives notifications when drawer intent is chosen.
+     */
+    private class DrawerIntentReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            onClickAllAppsButton(null);
+        }
+    }
+
+    /**
+     * Receives notifications when status bar intent is chosen.
+     */
+    private class StatusBarIntentReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals("com.sbradymobile.launchhome.toggle_statusbar")) {
+                performGesture(2, 0);
+            } else if (intent.getAction().equals("com.sbradymobile.launchhome.next_page")) {
+                mWorkspace.snapToPage(mWorkspace.getCurrentPage() + 1);
+            } else if (intent.getAction().equals("com.sbradymobile.launchhome.previous_page")) {
+                mWorkspace.snapToPage(mWorkspace.getCurrentPage() - 1);
+            } else {
+                performGesture(3, 0);
+            }
         }
     }
 
