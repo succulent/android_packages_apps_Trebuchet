@@ -42,18 +42,18 @@ import com.sbradymobile.launchhome.R;
  */
 public class InstallWidgetReceiver {
     public static final String ACTION_INSTALL_WIDGET =
-            "com.sbradymobile.launchhome.action.INSTALL_WIDGET";
+            "com.android.launcher.action.INSTALL_WIDGET";
     public static final String ACTION_SUPPORTS_CLIPDATA_MIMETYPE =
-            "com.sbradymobile.launchhome.action.SUPPORTS_CLIPDATA_MIMETYPE";
+            "com.android.launcher.action.SUPPORTS_CLIPDATA_MIMETYPE";
 
     // Currently not exposed.  Put into Intent when we want to make it public.
     // TEMP: Should we call this "EXTRA_APPWIDGET_PROVIDER"?
     public static final String EXTRA_APPWIDGET_COMPONENT =
-        "com.sbradymobile.launchhome.extra.widget.COMPONENT";
+        "com.android.launcher.extra.widget.COMPONENT";
     public static final String EXTRA_APPWIDGET_CONFIGURATION_DATA_MIME_TYPE =
-        "com.sbradymobile.launchhome.extra.widget.CONFIGURATION_DATA_MIME_TYPE";
+        "com.android.launcher.extra.widget.CONFIGURATION_DATA_MIME_TYPE";
     public static final String EXTRA_APPWIDGET_CONFIGURATION_DATA =
-        "com.sbradymobile.launchhome.extra.widget.CONFIGURATION_DATA";
+        "com.android.launcher.extra.widget.CONFIGURATION_DATA";
 
     /**
      * A simple data class that contains per-item information that the adapter below can reference.

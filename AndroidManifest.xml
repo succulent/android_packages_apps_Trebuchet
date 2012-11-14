@@ -68,7 +68,7 @@
         android:name="com.sbradymobile.launchhome.LauncherApplication"
         android:label="@string/application_name"
         android:icon="@drawable/ic_launcher_home"
-        android:hardwareAccelerated="@bool/config_hardwareAccelerated"
+        android:hardwareAccelerated="true"
         android:largeHeap="@bool/config_largeHeap">
         <activity
             android:name="com.sbradymobile.launchhome.Launcher"
@@ -86,8 +86,8 @@
         </activity>
 
         <activity
-            android:name="com.sbradymobile.launchhome.WallpaperChooser"
-            style="@style/Theme.WallpaperPicker"
+            android:name="com.android.launcher2.WallpaperChooser"
+            android:theme="@style/Theme.WallpaperPicker"
             android:label="@string/pick_wallpaper"
             android:icon="@drawable/ic_launcher_wallpaper"
             android:finishOnCloseSystemDialogs="true"
@@ -212,10 +212,20 @@
             </intent-filter>
         </receiver>
 
+        <!-- New user initialization; set up initial wallpaper -->
+        <receiver
+            android:name="com.android.launcher2.UserInitializeReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.USER_INITIALIZE" />
+            </intent-filter>
+        </receiver>
+        
         <!-- The settings provider contains Home's data, like the workspace favorites -->
         <provider
             android:name="com.sbradymobile.launchhome.LauncherProvider"
             android:authorities="com.sbradymobile.launchhome.settings"
+            android:exported="true"
             android:writePermission="com.android.launcher.permission.WRITE_SETTINGS"
             android:readPermission="com.android.launcher.permission.READ_SETTINGS" />
 

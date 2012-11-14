@@ -48,7 +48,7 @@ public class InstallShortcutReceiver extends BroadcastReceiver {
 
     // A mime-type representing shortcut data
     public static final String SHORTCUT_MIMETYPE =
-            "com.sbradymobile.launchhome/shortcut";
+            "com.android.launcher/shortcut";
 
     // The set of shortcuts that are pending install
     private static ArrayList<PendingInstallShortcutInfo> mInstallQueue =

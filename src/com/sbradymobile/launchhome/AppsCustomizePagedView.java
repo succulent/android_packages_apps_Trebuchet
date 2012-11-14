@@ -47,6 +47,8 @@ import android.graphics.TableMaskFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
 import android.os.Process;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -236,7 +238,7 @@ class RectCache extends WeakReferenceThreadLocal<Rect> {
  * The Apps/Customize page that displays all the applications, widgets, and shortcuts.
  */
 public class AppsCustomizePagedView extends PagedViewWithDraggableItems implements
-        AllAppsView, View.OnClickListener, View.OnKeyListener, DragSource,
+        View.OnClickListener, View.OnKeyListener, DragSource,
         PagedViewIcon.PressedCallback, PagedViewWidget.ShortPressListener,
         LauncherTransitionable {
     static final String TAG = "AppsCustomizePagedView";
@@ -322,12 +324,16 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
     PendingAddWidgetInfo mCreateWidgetInfo = null;
     private boolean mDraggingWidget = false;
 
+    private Toast mWidgetInstructionToast;
+
     // Deferral of loading widget previews during launcher transitions
     private boolean mInTransition;
     private ArrayList<AsyncTaskPageData> mDeferredSyncWidgetPageItems =
         new ArrayList<AsyncTaskPageData>();
     private ArrayList<Runnable> mDeferredPrepareLoadWidgetPreviewsTasks =
         new ArrayList<Runnable>();
+
+    private Rect mTmpRect = new Rect();
 
     // Used for drawing shortcut previews
     BitmapCache mCachedShortcutPreviewBitmap = new BitmapCache();
@@ -367,7 +373,6 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
 
         // Save the default widget preview background
         Resources resources = context.getResources();
-        mDefaultWidgetBackground = resources.getDrawable(R.drawable.default_widget_preview_holo);
         boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(context);
         mAppIconSize = resources.getDimensionPixelSize(largeIcons ? R.dimen.app_icon_size_large :
                 R.dimen.app_icon_size);
@@ -398,11 +403,6 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         mClingFocusedY = a.getInt(R.styleable.AppsCustomizePagedView_clingFocusedY, 0);
         a.recycle();
         mWidgetSpacingLayout = new PagedViewCellLayout(getContext());
-
-        // The max widget span is the length N, such that NxN is the largest bounds that the widget
-        // preview can be before applying the widget scaling
-        mMinWidgetSpan = 1;
-        mMaxWidgetSpan = 3;
 
         // The padding on the non-matched dimension for the default widget preview icons
         // (top + bottom)
@@ -571,6 +571,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         // Force a measure to update recalculate the gaps
         int widthSpec = MeasureSpec.makeMeasureSpec(getMeasuredWidth(), MeasureSpec.AT_MOST);
         int heightSpec = MeasureSpec.makeMeasureSpec(getMeasuredHeight(), MeasureSpec.AT_MOST);
+        //mWidgetSpacingLayout.calculateCellCount(width, height, maxCellCountX, maxWidgetCellCountY);
         mWidgetSpacingLayout.measure(widthSpec, heightSpec);
         mContentWidth = mWidgetSpacingLayout.getContentWidth();
 
@@ -595,7 +596,6 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
     }
 
     void showAllAppsCling() {
-        Cling allAppsCling = (Cling) getTabHost().findViewById(R.id.all_apps_cling);
         if (!mHasShownAllAppsCling && isDataReady()) {
             mHasShownAllAppsCling = true;
             // Calculate the position for the cling punch through
@@ -607,10 +607,6 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
                     offset[0];
             pos[1] += offset[1];
             mLauncher.showFirstRunAllAppsCling(pos);
-        } else if (!mHasShownAllAppsSortCling && isDataReady() &&
-                allAppsCling != null && allAppsCling.isDismissed()) {
-            mHasShownAllAppsSortCling = true;
-            mLauncher.showFirstRunAllAppsSortCling();
         }
     }
 
@@ -636,25 +632,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
-    public void onPackagesUpdated(boolean immediate) {
-        if (immediate) {
-            updatePackages();
-        } else {
-            // TODO: this isn't ideal, but we actually need to delay here. This call is triggered
-            // by a broadcast receiver, and in order for it to work correctly, we need to know that
-            // the AppWidgetService has already received and processed the same broadcast. Since there
-            // is no guarantee about ordering of broadcast receipt, we just delay here. This is a
-            // workaround until we add a callback from AppWidgetService to AppWidgetHost when widget
-            // packages are added, updated or removed.
-            postDelayed(new Runnable() {
-               public void run() {
-                   updatePackages();
-               }
-            }, 1500);
-        }
-    }
-
-    public void updatePackages() {
+    public void onPackagesUpdated() {
         // Get the list of widgets and shortcuts
         mWidgets.clear();
         List<AppWidgetProviderInfo> widgets =
@@ -710,16 +688,20 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
 
         } else if (v instanceof PagedViewWidget) {
             // Let the user know that they have to long press to add a widget
-            Toast.makeText(getContext(), R.string.long_press_widget_to_add,
-                    Toast.LENGTH_SHORT).show();
+            if (mWidgetInstructionToast != null) {
+                mWidgetInstructionToast.cancel();
+            }
+            mWidgetInstructionToast = Toast.makeText(getContext(),R.string.long_press_widget_to_add,
+                Toast.LENGTH_SHORT);
+            mWidgetInstructionToast.show();
 
             // Create a little animation to show that the widget can move
             float offsetY = getResources().getDimensionPixelSize(R.dimen.dragViewOffsetY);
             final ImageView p = (ImageView) v.findViewById(R.id.widget_preview);
-            AnimatorSet bounce = new AnimatorSet();
-            ValueAnimator tyuAnim = ObjectAnimator.ofFloat(p, "translationY", offsetY);
+            AnimatorSet bounce = LauncherAnimUtils.createAnimatorSet();
+            ValueAnimator tyuAnim = LauncherAnimUtils.ofFloat(p, "translationY", offsetY);
             tyuAnim.setDuration(125);
-            ValueAnimator tydAnim = ObjectAnimator.ofFloat(p, "translationY", 0f);
+            ValueAnimator tydAnim = LauncherAnimUtils.ofFloat(p, "translationY", 0f);
             tydAnim.setDuration(100);
             bounce.play(tyuAnim).before(tydAnim);
             bounce.setInterpolator(new AccelerateInterpolator());
@@ -744,9 +726,36 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         mLauncher.getWorkspace().beginDragShared(v, this);
     }
 
+    Bundle getDefaultOptionsForWidget(Launcher launcher, PendingAddWidgetInfo info) {
+        Bundle options = null;
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            AppWidgetResizeFrame.getWidgetSizeRanges(mLauncher, info.spanX, info.spanY, mTmpRect);
+            Rect padding = AppWidgetHostView.getDefaultPaddingForWidget(mLauncher,
+                    info.componentName, null);
+
+            float density = getResources().getDisplayMetrics().density;
+            int xPaddingDips = (int) ((padding.left + padding.right) / density);
+            int yPaddingDips = (int) ((padding.top + padding.bottom) / density);
+
+            options = new Bundle();
+            options.putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH,
+                    mTmpRect.left - xPaddingDips);
+            options.putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT,
+                    mTmpRect.top - yPaddingDips);
+            options.putInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH,
+                    mTmpRect.right - xPaddingDips);
+            options.putInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT,
+                    mTmpRect.bottom - yPaddingDips);
+        }*/
+        return options;
+    }
+
     private void preloadWidget(final PendingAddWidgetInfo info) {
         final AppWidgetProviderInfo pInfo = info.info;
+        final Bundle options = getDefaultOptionsForWidget(mLauncher, info);
+
         if (pInfo.configure != null) {
+            info.bindOptions = options;
             return;
         }
 
@@ -755,10 +764,19 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
             @Override
             public void run() {
                 mWidgetLoadingId = mLauncher.getAppWidgetHost().allocateAppWidgetId();
-                if (AppWidgetManager.getInstance(mLauncher)
-                            .bindAppWidgetIdIfAllowed(mWidgetLoadingId, info.componentName)) {
-                    mWidgetCleanupState = WIDGET_BOUND;
-                }
+                // Options will be null for platforms with JB or lower, so this serves as an
+                // SDK level check.
+                if (options == null) {
+                    if (AppWidgetManager.getInstance(mLauncher).bindAppWidgetIdIfAllowed(
+                            mWidgetLoadingId, info.componentName)) {
+                        mWidgetCleanupState = WIDGET_BOUND;
+                    }
+                }/* else {
+                    if (AppWidgetManager.getInstance(mLauncher).bindAppWidgetIdIfAllowed(
+                            mWidgetLoadingId, info.componentName, options)) {
+                        mWidgetCleanupState = WIDGET_BOUND;
+                    }
+                }*/
             }
         };
         post(mBindWidgetRunnable);
@@ -766,6 +784,9 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         mInflateWidgetRunnable = new Runnable() {
             @Override
             public void run() {
+                if (mWidgetCleanupState != WIDGET_BOUND) {
+                    return;
+                }
                 AppWidgetHostView hostView = mLauncher.
                         getAppWidgetHost().createView(getContext(), mWidgetLoadingId, pInfo);
                 info.boundWidget = hostView;
@@ -905,24 +926,17 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
             createItemInfo.spanX = createItemInfo.spanY = 1;
         }
 
-        // We use a custom alpha clip table for the default widget previews
-        Paint alphaClipPaint = null;
-        if (createItemInfo instanceof PendingAddWidgetInfo) {
-            if (((PendingAddWidgetInfo) createItemInfo).previewImage != 0) {
-                MaskFilter alphaClipTable = TableMaskFilter.CreateClipTable(0, 255);
-                alphaClipPaint = new Paint();
-                alphaClipPaint.setMaskFilter(alphaClipTable);
-            }
-        }
+        // Don't clip alpha values for the drag outline if we're using the default widget preview
+        boolean clipAlpha = !(createItemInfo instanceof PendingAddWidgetInfo &&
+                (((PendingAddWidgetInfo) createItemInfo).previewImage == 0));
 
         // Save the preview for the outline generation, then dim the preview
         outline = Bitmap.createScaledBitmap(preview, preview.getWidth(), preview.getHeight(),
                 false);
 
         // Start the drag
-        alphaClipPaint = null;
         mLauncher.lockScreenOrientation();
-        mLauncher.getWorkspace().onDragStartedWithItem(createItemInfo, outline, alphaClipPaint);
+        mLauncher.getWorkspace().onDragStartedWithItem(createItemInfo, outline, clipAlpha);
         mDragController.startDrag(image, preview, this, createItemInfo,
                 DragController.DRAG_ACTION_COPY, null, scale);
         outline.recycle();
@@ -1380,7 +1394,6 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
                 getResources().getDimensionPixelOffset(R.dimen.shortcut_preview_padding_right);
 
         int scaledIconWidth = (maxWidth - paddingLeft - paddingRight);
-        float scaleSize = scaledIconWidth / (float) mAppIconSize;
 
         renderDrawableToBitmap(
                 icon, tempBitmap, paddingLeft, paddingTop, scaledIconWidth, scaledIconWidth);
@@ -1468,7 +1481,6 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
                         (int) ((previewDrawableHeight - mAppIconSize * iconScale) / 2);
                 if (iconId > 0)
                     icon = mIconCache.getFullResIcon(packageName, iconId);
-                Resources resources = mLauncher.getResources();
                 if (icon != null) {
                     renderDrawableToBitmap(icon, defaultPreview, hoffset,
                             yoffset, (int) (mAppIconSize * iconScale),
@@ -1853,44 +1865,19 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
 
     @Override
     protected void onPageEndMoving() {
-        if (mFadeScrollingIndicator) {
-            hideScrollingIndicator(false);
-        }
+        super.onPageEndMoving();
         mForceDrawAllChildrenNextFrame = true;
-
         // We reset the save index when we change pages so that it will be recalculated on next
         // rotation
         mSaveInstanceStateItemIndex = -1;
     }
 
-    @Override
-    protected void flashScrollingIndicator(boolean animated) {
-        if (mFadeScrollingIndicator) {
-            super.flashScrollingIndicator(animated);
-        } else {
-            showScrollingIndicator(false);
-        }
-    }
-
     /*
      * AllAppsView implementation
      */
-    @Override
     public void setup(Launcher launcher, DragController dragController) {
         mLauncher = launcher;
         mDragController = dragController;
-    }
-    @Override
-    public void zoom(float zoom, boolean animate) {
-        // TODO-APPS_CUSTOMIZE: Call back to mLauncher.zoomed()
-    }
-    @Override
-    public boolean isVisible() {
-        return (getVisibility() == VISIBLE);
-    }
-    @Override
-    public boolean isAnimating() {
-        return false;
     }
 
     /**
@@ -1922,7 +1909,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         mSortMode = sortMode;
 
         if (mSortMode == SortMode.Title) {
-            Collections.sort(mApps, LauncherModel.APP_NAME_COMPARATOR);
+            Collections.sort(mApps, LauncherModel.getAppNameComparator());
         } else if (mSortMode == SortMode.InstallDate) {
             Collections.sort(mApps, LauncherModel.APP_INSTALL_TIME_COMPARATOR);
         }
@@ -1940,11 +1927,10 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         }
     }
 
-    @Override
     public void setApps(ArrayList<ApplicationInfo> list) {
         mApps = list;
         if (mSortMode == SortMode.Title) {
-            Collections.sort(mApps, LauncherModel.APP_NAME_COMPARATOR);
+            Collections.sort(mApps, LauncherModel.getAppNameComparator());
         } else if (mSortMode == SortMode.InstallDate) {
             Collections.sort(mApps, LauncherModel.APP_INSTALL_TIME_COMPARATOR);
         }
@@ -1958,7 +1944,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
             ApplicationInfo info = list.get(i);
             int index = 0;
             if (mSortMode == SortMode.Title) {
-                index = Collections.binarySearch(mApps, info, LauncherModel.APP_NAME_COMPARATOR);
+                index = Collections.binarySearch(mApps, info, LauncherModel.getAppNameComparator());
             } else if (mSortMode == SortMode.InstallDate) {
                 index = Collections.binarySearch(mApps, info, LauncherModel.APP_INSTALL_TIME_COMPARATOR);
             }
@@ -1967,7 +1953,6 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
             }
         }
     }
-    @Override
     public void addApps(ArrayList<ApplicationInfo> list) {
         addAppsWithoutInvalidate(list);
         updatePageCounts();
@@ -1984,6 +1969,16 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         }
         return -1;
     }
+    private int findAppByPackage(List<ApplicationInfo> list, String packageName) {
+        int length = list.size();
+        for (int i = 0; i < length; ++i) {
+            ApplicationInfo info = list.get(i);
+            if (ItemInfo.getPackageName(info.intent).equals(packageName)) {
+                return i;
+            }
+        }
+        return -1;
+    }
     private void removeAppsWithoutInvalidate(ArrayList<ApplicationInfo> list) {
         // loop through all the apps and remove apps that have the same component
         int length = list.size();
@@ -1995,13 +1990,21 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
             }
         }
     }
-    @Override
-    public void removeApps(ArrayList<ApplicationInfo> list) {
-        removeAppsWithoutInvalidate(list);
+    private void removeAppsWithPackageNameWithoutInvalidate(ArrayList<String> packageNames) {
+        // loop through all the package names and remove apps that have the same package name
+        for (String pn : packageNames) {
+            int removeIndex = findAppByPackage(mApps, pn);
+            while (removeIndex > -1) {
+                mApps.remove(removeIndex);
+                removeIndex = findAppByPackage(mApps, pn);
+            }
+        }
+    }
+    public void removeApps(ArrayList<String> packageNames) {
+        removeAppsWithPackageNameWithoutInvalidate(packageNames);
         updatePageCounts();
         invalidateOnDataChange();
     }
-    @Override
     public void updateApps(ArrayList<ApplicationInfo> list) {
         // We remove and re-add the updated applications list because it's properties may have
         // changed (ie. the title), and this will ensure that the items will be in their proper
@@ -2012,7 +2015,6 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         invalidateOnDataChange();
     }
 
-    @Override
     public void reset() {
         // If we have reset, then we should not continue to restore the previous state
         mSaveInstanceStateItemIndex = -1;
@@ -2044,7 +2046,6 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         return (AppsCustomizeTabHost) mLauncher.findViewById(R.id.apps_customize_pane);
     }
 
-    @Override
     public void dumpState() {
         // TODO: Dump information related to current list of Applications, Widgets, etc.
         ApplicationInfo.dumpApplicationInfoList(TAG, "mApps", mApps);
@@ -2069,7 +2070,6 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         }
     }
 
-    @Override
     public void surrender() {
         // TODO: If we are in the middle of any process (ie. for holographic outlines, etc) we
         // should stop this now.

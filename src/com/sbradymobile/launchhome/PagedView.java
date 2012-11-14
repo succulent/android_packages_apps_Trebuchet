@@ -18,7 +18,6 @@ package com.sbradymobile.launchhome;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -60,6 +59,7 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
     private static final int MIN_LENGTH_FOR_FLING = 25;
 
     protected static final int PAGE_SNAP_ANIMATION_DURATION = 550;
+    protected static final int MAX_PAGE_SNAP_DURATION = 750;
     protected static final int SLOW_PAGE_SNAP_ANIMATION_DURATION = 950;
     protected static final float NANOTIME_DIV = 1000000000.0f;
 
@@ -181,8 +181,8 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
     private boolean mShouldShowScrollIndicatorImmediately = false;
     protected static final int sScrollIndicatorFadeInDuration = 150;
     protected static final int sScrollIndicatorFadeOutDuration = 650;
-    protected static final int sScrollIndicatorFadeOutShortDuration = 150;
     protected static final int sScrollIndicatorFlashDuration = 650;
+    private boolean mScrollingPaused = false;
 
     // If set, will defer loading associated pages until the scrolling settles
     private boolean mDeferLoadAssociatedPagesUntilScrollCompletes;
@@ -305,6 +305,24 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
         mScroller.forceFinished(true);
     }
 
+    /**
+     * Called during AllApps/Home transitions to avoid unnecessary work. When that other animation
+     * ends, {@link #resumeScrolling()} should be called, along with
+     * {@link #updateCurrentPageScroll()} to correctly set the final state and re-enable scrolling.
+     */
+    void pauseScrolling() {
+        mScroller.forceFinished(true);
+        cancelScrollingIndicatorAnimations();
+        mScrollingPaused = true;
+    }
+
+    /**
+     * Enables scrolling again.
+     * @see #pauseScrolling()
+     */
+    void resumeScrolling() {
+        mScrollingPaused = false;
+    }
     /**
      * Sets the current page.
      */
@@ -792,20 +810,11 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
                 canvas.clipRect(getScrollX(), getScrollY(), getScrollX() + getRight() - getLeft(),
                         getScrollY() + getBottom() - getTop());
 
-                // On certain graphics drivers, if you draw to a off-screen buffer that's not
-                // used, it can lead to poor performance. We were running into this when
-                // setChildrenLayersEnabled was called on a CellLayout; that triggered a re-draw
-                // of that CellLayout's hardware layer, even if that CellLayout wasn't visible.
-                // As a fix, below we set pages that aren't going to be rendered are to be
-                // View.INVISIBLE, preventing re-drawing of their hardware layer
                 for (int i = getChildCount() - 1; i >= 0; i--) {
                     final View v = getPageAt(i);
                     if (mForceDrawAllChildrenNextFrame ||
                                (leftScreen <= i && i <= rightScreen && shouldDrawChild(v))) {
-                        v.setVisibility(VISIBLE);
                         drawChild(canvas, v, drawingTime);
-                    } else {
-                        v.setVisibility(INVISIBLE);
                     }
                 }
                 mForceDrawAllChildrenNextFrame = false;
@@ -1484,6 +1493,7 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
         // user flings, so we scale the duration by a value near to the derivative of the scroll
         // interpolator at zero, ie. 5. We use 4 to make it a little slower.
         duration = 4 * Math.round(1000 * Math.abs(distance / velocity));
+        duration = Math.min(duration, MAX_PAGE_SNAP_DURATION);
 
         snapToPage(whichPage, delta, duration);
     }
@@ -1758,11 +1768,11 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
             updateScrollingIndicatorPosition();
             mScrollIndicator.setVisibility(View.VISIBLE);
             cancelScrollingIndicatorAnimations();
-            if (immediately) {
+            if (immediately || mScrollingPaused) {
                 mScrollIndicator.setAlpha(1f);
             } else {
-                mScrollIndicatorAnimator = ObjectAnimator.ofFloat(mScrollIndicator, "alpha", 1f);
-                mScrollIndicatorAnimator.setDuration(duration);
+                mScrollIndicatorAnimator = LauncherAnimUtils.ofFloat(mScrollIndicator, "alpha", 1f);
+                mScrollIndicatorAnimator.setDuration(sScrollIndicatorFadeInDuration);
                 mScrollIndicatorAnimator.start();
             }
         }
@@ -1787,12 +1797,12 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
             // Fade the indicator out
             updateScrollingIndicatorPosition();
             cancelScrollingIndicatorAnimations();
-            if (immediately) {
+            if (immediately || mScrollingPaused) {
                 mScrollIndicator.setVisibility(View.INVISIBLE);
                 mScrollIndicator.setAlpha(0f);
             } else {
-                mScrollIndicatorAnimator = ObjectAnimator.ofFloat(mScrollIndicator, "alpha", 0f);
-                mScrollIndicatorAnimator.setDuration(duration);
+                mScrollIndicatorAnimator = LauncherAnimUtils.ofFloat(mScrollIndicator, "alpha", 0f);
+                mScrollIndicatorAnimator.setDuration(sScrollIndicatorFadeOutDuration);
                 mScrollIndicatorAnimator.addListener(new AnimatorListenerAdapter() {
                     private boolean cancelled = false;
                     @Override
