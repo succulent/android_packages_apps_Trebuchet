@@ -40,9 +40,11 @@ public class DockFragmentActivity extends PreferenceFragment {
     private static final String TAG = "Dock";
 
     private static NumberPickerPreference mHotseatPositions;
+    private static AutoNumberPickerPreference mHotseatAllAppsPosition;
 
     private CheckBoxPreference mShowDock;
     private CheckBoxPreference mShowDockDivider;
+    private CheckBoxPreference mShowDockAppsButton;
 
     private SharedPreferences mPrefs;
     private Context mContext;
@@ -63,11 +65,17 @@ public class DockFragmentActivity extends PreferenceFragment {
         mHotseatPositions = (NumberPickerPreference)
                 prefSet.findPreference(Preferences.HOTSEAT_POSITIONS);
 
+        mHotseatAllAppsPosition = (AutoNumberPickerPreference)
+                prefSet.findPreference(Preferences.HOTSEAT_ALLAPPS_POSITION);
+
         mShowDock = (CheckBoxPreference)
                 prefSet.findPreference(Preferences.SHOW_DOCK);
 
         mShowDockDivider = (CheckBoxPreference)
                 prefSet.findPreference(Preferences.SHOW_DOCK_DIVIDER);
+
+        mShowDockAppsButton = (CheckBoxPreference)
+                prefSet.findPreference(Preferences.SHOW_DOCK_APPS_BUTTON);
 
         mShowDockDivider = (CheckBoxPreference)
                 prefSet.findPreference(Preferences.SHOW_DOCK_DIVIDER);
@@ -76,27 +84,36 @@ public class DockFragmentActivity extends PreferenceFragment {
     public void onResume() {
         super.onResume();
 
-        int hotseatPositions = mPrefs.getInt(Preferences.HOTSEAT_POSITIONS, 0);
+        mHotseatPositions.setSummary(Integer.toString(mPrefs.getInt(
+                Preferences.HOTSEAT_POSITIONS, 7)));
 
-        int hotseatMax = LauncherModel.getCellCountX();
-
-        if (hotseatPositions < 1) {
-            hotseatPositions = hotseatMax;
-            mPrefs.edit().putInt(Preferences.HOTSEAT_POSITIONS, hotseatPositions).commit();
-        }
-
-        mHotseatPositions.setMaxValue(hotseatMax);
-
-        mHotseatPositions.setSummary(Integer.toString(hotseatPositions));
+        int hp = mPrefs.getInt(Preferences.HOTSEAT_ALLAPPS_POSITION, 0);
+        mHotseatAllAppsPosition.setSummary(hp == 0 ? mContext.getString(
+                R.string.preferences_auto_number_picker) : Integer.toString(hp));
 
         mShowDock.setChecked(PreferencesProvider.Interface.Dock.getShowHotseat(mContext));
 
         mShowDockDivider.setChecked(
                 PreferencesProvider.Interface.Homescreen.Indicator.getShowDockDivider(mContext));
 
+        mShowDockAppsButton.setChecked(
+                PreferencesProvider.Interface.Dock.getShowAllAppsHotseat(mContext));
+
         if (!mShowDock.isChecked()) {
             mShowDockDivider.setChecked(false);
         }
+/*
+        Resources r = getActivity().getResources();
+        boolean largeIcons = PreferencesProvider.Interface.Homescreen.getLargeIconSize(mContext);
+        int cellWidth = r.getDimensionPixelSize(largeIcons ? R.dimen.hotseat_cell_width_large :
+                R.dimen.hotseat_cell_width);
+        DisplayMetrics displayMetrics = r.getDisplayMetrics();
+        final float screenWidth = r.getConfiguration().screenWidthDp * displayMetrics.density;
+        final float screenHeight = r.getConfiguration().screenHeightDp * displayMetrics.density;
+        final float smallestScreenDim = screenHeight > screenWidth ? screenWidth : screenHeight;
+
+        mHotseatPositions.setMaxValue((int) (smallestScreenDim / cellWidth));*/
+        mHotseatPositions.setMaxValue(LauncherModel.getCellCountX());
     }
 
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {

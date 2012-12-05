@@ -61,7 +61,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -346,12 +345,10 @@ public class Workspace extends SmoothPagedView
         boolean fullscreen = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.FULLSCREEN_MODE, 0) == 1;
 
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        Point size = new Point();
-        display.getRealSize(size);
-
-        final float smallestScreenDim = (float) (size.x > size.y ? size.y : size.x);
+        final float screenWidth = res.getConfiguration().screenWidthDp * displayMetrics.density;
+        final float screenHeight = res.getConfiguration().screenHeightDp * displayMetrics.density;
+        final float smallestScreenDim = (tabletMode == 2 ? 600 :
+                res.getConfiguration().smallestScreenWidthDp) * displayMetrics.density;
         final float systemBarHeight = res.getDimension(com.android.internal.R.dimen.status_bar_height);
         final float navigationBarHeight = res.getDimension(com.android.internal.R.dimen.navigation_bar_height);
         int buttonBarHeightPlus = res.getDimensionPixelSize(largeIcons
