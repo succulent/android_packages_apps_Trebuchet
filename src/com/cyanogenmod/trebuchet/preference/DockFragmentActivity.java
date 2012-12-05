@@ -40,6 +40,7 @@ public class DockFragmentActivity extends PreferenceFragment {
     private static final String TAG = "Launcher2_Dock";
 
     private static NumberPickerPreference mHotseatPositions;
+    private static NumberPickerPreference mHotseatScale;
     private static AutoNumberPickerPreference mHotseatAllAppsPosition;
 
     private CheckBoxPreference mShowDock;
@@ -65,6 +66,9 @@ public class DockFragmentActivity extends PreferenceFragment {
         mHotseatPositions = (NumberPickerPreference)
                 prefSet.findPreference(Preferences.HOTSEAT_POSITIONS);
 
+        mHotseatScale = (NumberPickerPreference)
+                prefSet.findPreference(Preferences.HOTSEAT_SCALE);
+
         mHotseatAllAppsPosition = (AutoNumberPickerPreference)
                 prefSet.findPreference(Preferences.HOTSEAT_ALLAPPS_POSITION);
 
@@ -86,6 +90,9 @@ public class DockFragmentActivity extends PreferenceFragment {
 
         mHotseatPositions.setSummary(Integer.toString(mPrefs.getInt(
                 Preferences.HOTSEAT_POSITIONS, 7)));
+
+        mHotseatScale.setSummary(Integer.toString(mPrefs.getInt(
+                Preferences.HOTSEAT_POSITIONS, 100)) + " %");
 
         int hp = mPrefs.getInt(Preferences.HOTSEAT_ALLAPPS_POSITION, 0);
         mHotseatAllAppsPosition.setSummary(hp == 0 ? mContext.getString(

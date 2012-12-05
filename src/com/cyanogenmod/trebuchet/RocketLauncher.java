@@ -30,7 +30,7 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Handler;
-import android.support.v13.dreams.BasicDream;
+import android.service.dreams.DreamService;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -44,7 +44,7 @@ import com.cyanogenmod.trebuchet.R;
 import java.util.HashMap;
 import java.util.Random;
 
-public class RocketLauncher extends BasicDream {
+public class RocketLauncher extends DreamService {
     public static final boolean ROCKET_LAUNCHER = true;
 
     public static class Board extends FrameLayout
@@ -394,8 +394,8 @@ public class RocketLauncher extends BasicDream {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onDreamingStarted() {
+        super.onDreamingStarted();
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -408,10 +408,4 @@ public class RocketLauncher extends BasicDream {
         b.setY((metrics.heightPixels - longside) / 2);
     }
 
-    @Override
-    public void onUserInteraction() {
-        if (!ROCKET_LAUNCHER) {
-            finish();
-        }
-    }
 }

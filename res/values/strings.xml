@@ -343,6 +343,7 @@ s -->
     <string name="preferences_interface_homescreen_search_background_title">Search bar background</string>
     <string name="preferences_interface_homescreen_general_hotseat_all_apps">App drawer shortcut position in dock</string>
     <string name="preferences_interface_homescreen_general_large_icons_title">Homescreen icon size</string>
+    <string name="preferences_interface_homescreen_general_hotseat_scale">Dock icon scale</string>
 
     <!-- Drawer -->
     <string name="preferences_interface_drawer_title">Drawer</string>
@@ -396,6 +397,7 @@ s -->
     <string name="preferences_interface_gestures_open_drawer">Open drawer</string>
     <string name="preferences_interface_gestures_toggle_status_bar">Toggle status bar</string>
     <string name="preferences_interface_gestures_expand_status_bar">Expand status bar notifications</string>
+    <string name="preferences_interface_gestures_expand_status_bar_settings">Expand status bar settings</string>
     <string name="preferences_interface_gestures_preferences">Launch Trebuchet Settings</string>
     <string name="preferences_interface_gestures_launch_application">Launch activity</string>
     <string name="preferences_interface_gestures_rocket_launcher">Rocket Launcher</string>

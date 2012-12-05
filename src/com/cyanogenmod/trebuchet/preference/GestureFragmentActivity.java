@@ -63,7 +63,7 @@ public class GestureFragmentActivity extends PreferenceFragment implements
         mHomescreenSwipeUp.setOnPreferenceChangeListener(this);
 
         mHomescreenDoubleTap.setSummary(mHomescreenDoubleTap.getEntry());
-        if (mHomescreenDoubleTap.getValue().equals("6")) {
+        if (mHomescreenDoubleTap.getValue().equals("5")) {
             try {
                 mHomescreenDoubleTap.setIcon(getActivity().getPackageManager().getActivityIcon(
                         Intent.parseUri(mPrefs.getString("hdt_application", ""), 0)));
@@ -71,7 +71,7 @@ public class GestureFragmentActivity extends PreferenceFragment implements
             }
         }
         mHomescreenSwipeDown.setSummary(mHomescreenSwipeDown.getEntry());
-        if (mHomescreenSwipeDown.getValue().equals("6")) {
+        if (mHomescreenSwipeDown.getValue().equals("5")) {
             try {
                 mHomescreenSwipeDown.setIcon(getActivity().getPackageManager().getActivityIcon(
                         Intent.parseUri(mPrefs.getString("hsd_application", ""), 0)));
@@ -79,7 +79,7 @@ public class GestureFragmentActivity extends PreferenceFragment implements
             }
         }
         mHomescreenSwipeUp.setSummary(mHomescreenSwipeUp.getEntry());
-        if (mHomescreenSwipeUp.getValue().equals("6")) {
+        if (mHomescreenSwipeUp.getValue().equals("5")) {
             try {
                 mHomescreenSwipeUp.setIcon(getActivity().getPackageManager().getActivityIcon(
                         Intent.parseUri(mPrefs.getString("hsu_application", ""), 0)));
@@ -92,7 +92,7 @@ public class GestureFragmentActivity extends PreferenceFragment implements
         if (preference == mHomescreenDoubleTap) {
             CharSequence doubleTapIndex[] = mHomescreenDoubleTap.getEntries();
             int doubleTapValue = Integer.parseInt((String) newValue);
-            if (doubleTapValue == 6) {
+            if (doubleTapValue == 5) {
                 // Pick an application
                 Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
                 mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -108,7 +108,7 @@ public class GestureFragmentActivity extends PreferenceFragment implements
         } else if (preference == mHomescreenSwipeDown) {
             CharSequence homeSwipeDownIndex[] = mHomescreenSwipeDown.getEntries();
             int hSDValue = Integer.parseInt((String) newValue);
-            if (hSDValue == 6) {
+            if (hSDValue == 5) {
                 // Pick an application
                 Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
                 mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -124,7 +124,7 @@ public class GestureFragmentActivity extends PreferenceFragment implements
         } else if (preference == mHomescreenSwipeUp) {
             CharSequence homeSwipeUpIndex[] = mHomescreenSwipeUp.getEntries();
             int hSUValue = Integer.parseInt((String) newValue);
-            if (hSUValue == 6) {
+            if (hSUValue == 5) {
                 // Pick an application
                 Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
                 mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);

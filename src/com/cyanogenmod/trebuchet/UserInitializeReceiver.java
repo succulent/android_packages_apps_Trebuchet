@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.sbradymobile.launchhome;
+package com.cyanogenmod.trebuchet;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-import com.sbradymobile.launchhome.R;
+import com.cyanogenmod.trebuchet.R;
 
 import android.app.WallpaperManager;
 import android.content.BroadcastReceiver;
@@ -36,7 +36,7 @@ public class UserInitializeReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         final Resources resources = context.getResources();
         // Context.getPackageName() may return the "original" package name,
-        // com.android.launcher2; Resources needs the real package name,
+        // com.cyanogenmod.trebuchet; Resources needs the real package name,
         // com.android.launcher. So we ask Resources for what it thinks the
         // package name should be.
         final String packageName = resources.getResourcePackageName(R.array.wallpapers);
@@ -47,13 +47,13 @@ public class UserInitializeReceiver extends BroadcastReceiver {
                 Context.WALLPAPER_SERVICE);
         for (int i=1; i<list.size(); i++) {
             int resid = list.get(i);
-            //if (!wpm.hasResourceWallpaper(resid)) {
+            if (!wpm.hasResourceWallpaper(resid)) {
                 try {
                     wpm.setResource(resid);
                 } catch (IOException e) {
                 }
                 return;
-            //}
+            }
         }
     }
 

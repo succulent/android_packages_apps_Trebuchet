@@ -288,6 +288,10 @@ public final class PreferencesProvider {
                 final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
                 return preferences.getString("ui_land_right_dock", "0").equals("0");
             }
+            public static int getHotseatScale(Context context) {
+                final SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, 0);
+                return preferences.getInt("ui_hotseat_scale", 100);
+            }
         }
 
         public static class Icons {

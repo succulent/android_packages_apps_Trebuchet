@@ -284,7 +284,6 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
 
     // Caching
     private Canvas mCanvas;
-    private Drawable mDefaultWidgetBackground;
     private IconCache mIconCache;
 
     // Dimens
@@ -403,6 +402,11 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         mClingFocusedY = a.getInt(R.styleable.AppsCustomizePagedView_clingFocusedY, 0);
         a.recycle();
         mWidgetSpacingLayout = new PagedViewCellLayout(getContext());
+
+        // The max widget span is the length N, such that NxN is the largest bounds that the widget
+        // preview can be before applying the widget scaling
+        mMinWidgetSpan = 1;
+        mMaxWidgetSpan = 3;
 
         // The padding on the non-matched dimension for the default widget preview icons
         // (top + bottom)
@@ -596,17 +600,25 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
     }
 
     void showAllAppsCling() {
-        if (!mHasShownAllAppsCling && isDataReady()) {
-            mHasShownAllAppsCling = true;
-            // Calculate the position for the cling punch through
-            int[] offset = new int[2];
-            int[] pos = mWidgetSpacingLayout.estimateCellPosition(mClingFocusedX, mClingFocusedY);
-            mLauncher.getDragLayer().getLocationInDragLayer(this, offset);
-            // PagedViews are centered horizontally but top aligned
-            pos[0] += (getMeasuredWidth() - mWidgetSpacingLayout.getMeasuredWidth()) / 2 +
-                    offset[0];
-            pos[1] += offset[1];
-            mLauncher.showFirstRunAllAppsCling(pos);
+        AppsCustomizeTabHost tabHost = getTabHost();
+        if (tabHost != null) {
+            Cling allAppsCling = (Cling) tabHost.findViewById(R.id.all_apps_cling);
+            if (!mHasShownAllAppsCling && isDataReady()) {
+                mHasShownAllAppsCling = true;
+                // Calculate the position for the cling punch through
+                int[] offset = new int[2];
+                int[] pos = mWidgetSpacingLayout.estimateCellPosition(mClingFocusedX, mClingFocusedY);
+                mLauncher.getDragLayer().getLocationInDragLayer(this, offset);
+                // PagedViews are centered horizontally but top aligned
+                pos[0] += (getMeasuredWidth() - mWidgetSpacingLayout.getMeasuredWidth()) / 2 +
+                        offset[0];
+                pos[1] += offset[1];
+                mLauncher.showFirstRunAllAppsCling(pos);
+            } else if (!mHasShownAllAppsSortCling && isDataReady() &&
+                    allAppsCling != null && allAppsCling.isDismissed()) {
+                mHasShownAllAppsSortCling = true;
+                //mLauncher.showFirstRunAllAppsSortCling();
+            }
         }
     }
 
@@ -728,7 +740,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
 
     Bundle getDefaultOptionsForWidget(Launcher launcher, PendingAddWidgetInfo info) {
         Bundle options = null;
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             AppWidgetResizeFrame.getWidgetSizeRanges(mLauncher, info.spanX, info.spanY, mTmpRect);
             Rect padding = AppWidgetHostView.getDefaultPaddingForWidget(mLauncher,
                     info.componentName, null);
@@ -746,7 +758,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
                     mTmpRect.right - xPaddingDips);
             options.putInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT,
                     mTmpRect.bottom - yPaddingDips);
-        }*/
+        }
         return options;
     }
 
@@ -771,12 +783,12 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
                             mWidgetLoadingId, info.componentName)) {
                         mWidgetCleanupState = WIDGET_BOUND;
                     }
-                }/* else {
+                } else {
                     if (AppWidgetManager.getInstance(mLauncher).bindAppWidgetIdIfAllowed(
                             mWidgetLoadingId, info.componentName, options)) {
                         mWidgetCleanupState = WIDGET_BOUND;
                     }
-                }*/
+                }
             }
         };
         post(mBindWidgetRunnable);
@@ -1865,11 +1877,23 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
 
     @Override
     protected void onPageEndMoving() {
-        super.onPageEndMoving();
+        if (mFadeScrollingIndicator) {
+            hideScrollingIndicator(false);
+        }
         mForceDrawAllChildrenNextFrame = true;
+
         // We reset the save index when we change pages so that it will be recalculated on next
         // rotation
         mSaveInstanceStateItemIndex = -1;
+    }
+
+    @Override
+    protected void flashScrollingIndicator(boolean animated) {
+        if (mFadeScrollingIndicator) {
+            super.flashScrollingIndicator(animated);
+        } else {
+            showScrollingIndicator(false);
+        }
     }
 
     /*
@@ -2132,7 +2156,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
                 count = mNumWidgetPages;
             }
 
-            return String.format(mContext.getString(stringId), page + 1, count);
+            return String.format(getContext().getString(stringId), page + 1, count);
         } else {
             switch (mContentType) {
             case Applications:
@@ -2142,7 +2166,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
                 stringId = R.string.apps_customize_widgets_scroll_format;
                 break;
             }
-            return String.format(mContext.getString(stringId), page + 1, getChildCount());
+            return String.format(getContext().getString(stringId), page + 1, getChildCount());
         }
     }
 }

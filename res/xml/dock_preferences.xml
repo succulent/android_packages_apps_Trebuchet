@@ -32,5 +32,12 @@
                     launcher:maxExternal="ui_hotseat_apps"
                     launcher:max="7"
                     launcher:min="1" />
+                <com.cyanogenmod.trebuchet.preference.NumberPickerPreference
+                    android:key="ui_hotseat_scale"
+                    android:dependency="ui_homescreen_general_show_hotseat"
+                    android:title="@string/preferences_interface_homescreen_general_hotseat_scale"
+                    android:defaultValue="100"
+                    launcher:max="100"
+                    launcher:min="20" />
 
 </PreferenceScreen>

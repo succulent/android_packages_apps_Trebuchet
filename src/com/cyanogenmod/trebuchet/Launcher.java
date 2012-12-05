@@ -1051,7 +1051,6 @@ public final class Launcher extends Activity
         if (mShowWallpaper) mAppsCustomizeTabHost.setBackgroundColor(0x00000000);
         mAppsCustomizeContent = (AppsCustomizePagedView)
                 mAppsCustomizeTabHost.findViewById(R.id.apps_customize_pane_content);
-        mAppsCustomizeTabHost.setup(this);
         mAppsCustomizeContent.setup(this, dragController);
 
         // Get the all apps button
@@ -1973,13 +1972,13 @@ public final class Launcher extends Activity
             Bundle options = info.bindOptions;
 
             boolean success = false;
-            //if (options != null) {
-            //    success = mAppWidgetManager.bindAppWidgetIdIfAllowed(appWidgetId,
-            //            info.componentName, options);
-            //} else {
+            if (options != null) {
+                success = mAppWidgetManager.bindAppWidgetIdIfAllowed(appWidgetId,
+                        info.componentName, options);
+            } else {
                 success = mAppWidgetManager.bindAppWidgetIdIfAllowed(appWidgetId,
                         info.componentName);
-            //}
+            }
             if (success) {
                 addAppWidgetImpl(appWidgetId, info, null, info.info);
             } else {
@@ -2977,13 +2976,13 @@ public final class Launcher extends Activity
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     if (!mShowWallpaper) updateWallpaperVisibility(true);
-                    mWorkspace.setVisibility(View.VISIBLE);
                     showDockDivider(true);
                     showHotseat(true);
                     fromView.setVisibility(View.GONE);
                     dispatchOnLauncherTransitionEnd(fromView, animated, true);
                     dispatchOnLauncherTransitionEnd(toView, animated, true);
                     if (mWorkspace != null) {
+                        mWorkspace.setVisibility(View.VISIBLE);
                         mWorkspace.hideScrollingIndicator(false);
                     }
                     if (onCompleteRunnable != null) {
@@ -3936,12 +3935,29 @@ public final class Launcher extends Activity
             break;
         }
 
+        boolean reverseRotation = false;
+        try {
+            reverseRotation = getResources().getBoolean(
+                 com.android.internal.R.bool.config_reverseDefaultRotation);
+        } catch (Exception e){
+        }
+        boolean naturalPortrait = naturalOri == Configuration.ORIENTATION_PORTRAIT;
+
         int[] oriMap = {
+                (!naturalPortrait && reverseRotation) ?
+                ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT :
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT,
+                (naturalPortrait && reverseRotation) ?
+                ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE :
                 ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE,
+                (!naturalPortrait && reverseRotation) ?
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT :
                 ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT,
+                (naturalPortrait && reverseRotation) ?
+                ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE :
                 ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
         };
+
         // Since the map starts at portrait, we need to offset if this device's natural orientation
         // is landscape.
         int indexOffset = 0;
@@ -4119,6 +4135,7 @@ public final class Launcher extends Activity
     }
 
     public void performGesture(int action, int index) {
+        StatusBarManager sbm = (StatusBarManager) getSystemService(Context.STATUS_BAR_SERVICE);
         switch (action) {
             case 0:
                 break;
@@ -4126,17 +4143,10 @@ public final class Launcher extends Activity
                 onClickAllAppsButton(null);
                 break;
             case 2:
-                StatusBarManager sbm = (StatusBarManager) getSystemService(Context.STATUS_BAR_SERVICE);
-                sbm.toggleVisibility();
+                sbm.expandNotificationsPanel();
                 break;
             case 3:
-                try {
-                    Object service  = getSystemService("statusbar");
-                    Class<?> statusbarManager = Class.forName("android.app.StatusBarManager");
-                    Method expand = statusbarManager.getMethod("expand");
-                    expand.invoke(service);
-                } catch (Exception e) {
-                }
+                sbm.expandSettingsPanel();
                 break;
             case 4:
                 Intent preferences = new Intent().setClass(this, Preferences.class);
@@ -4144,12 +4154,6 @@ public final class Launcher extends Activity
                 startActivity(preferences);
                 break;
             case 5:
-                Intent rocketLauncher = new Intent().setClass(this, RocketLauncher.class);
-                rocketLauncher.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
-                        Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivity(rocketLauncher);
-                break;
-            case 6:
                 SharedPreferences prefs =
                         getSharedPreferences(PreferencesProvider.PREFERENCES_KEY, Context.MODE_PRIVATE);
                 String shortcutUri = new String();

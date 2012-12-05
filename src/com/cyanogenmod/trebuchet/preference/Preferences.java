@@ -38,7 +38,8 @@ import com.cyanogenmod.trebuchet.R;
 
 import java.util.ArrayList;
 
-public class Preferences extends Activity {
+public class Preferences extends Activity
+        implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final String PHONE_SEARCH_BAR = "ui_homescreen_general_search";
     public static final String HIDE_DRAWER_TAB = "ui_drawer_hide_topbar";
@@ -64,6 +65,7 @@ public class Preferences extends Activity {
     public static final String LAND_APP_GRID = "ui_drawer_grid_land";
     public static final String PORT_WIDGET_GRID = "ui_drawer_widgets";
     public static final String LAND_WIDGET_GRID = "ui_drawer_widgets_land";
+    public static final String HOTSEAT_SCALE = "ui_hotseat_scale";
 
     private SharedPreferences mPrefs;
 
@@ -75,9 +77,6 @@ public class Preferences extends Activity {
         super.onCreate(savedInstanceState);
 
         mPrefs = getSharedPreferences(PreferencesProvider.PREFERENCES_KEY, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = mPrefs.edit();
-                editor.putBoolean(PreferencesProvider.PREFERENCES_CHANGED, true);
-                editor.commit();
 
         mViewPager = new ViewPager(this);
         mViewPager.setId(R.id.viewPager);
@@ -109,6 +108,24 @@ public class Preferences extends Activity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPrefs.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        mPrefs.unregisterOnSharedPreferenceChangeListener(this);
+        super.onPause();
+    }
+
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        SharedPreferences.Editor editor = mPrefs.edit();
+        editor.putBoolean(PreferencesProvider.PREFERENCES_CHANGED, true);
+        editor.commit();
     }
 
     public static class TabsAdapter extends FragmentPagerAdapter

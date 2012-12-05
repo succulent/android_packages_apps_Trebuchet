@@ -155,7 +155,6 @@ public class Cling extends FrameLayout {
         return new int[]{-1, -1};
     }
 
-    @Override
     public View findViewToTakeAccessibilityFocusFromHover(View child, View descendant) {
         if (descendant.includeForAccessibility()) {
             return descendant;

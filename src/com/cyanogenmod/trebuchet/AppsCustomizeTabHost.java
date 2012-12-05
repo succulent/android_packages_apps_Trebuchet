@@ -23,7 +23,6 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -58,8 +57,6 @@ public class AppsCustomizeTabHost extends TabHost implements LauncherTransitiona
     private boolean mResetAfterTransition;
     private Runnable mRelayoutAndMakeVisible;
 
-    private Launcher mLauncher;
-
     // Preferences
     private boolean mJoinWidgetsApps;
     private boolean mFadeScrollingIndicator;
@@ -74,15 +71,9 @@ public class AppsCustomizeTabHost extends TabHost implements LauncherTransitiona
                 }
             };
 
-        mLauncher = (Launcher) context;
-
         // Preferences
         mJoinWidgetsApps = PreferencesProvider.Interface.Drawer.getJoinWidgetsApps(context);
         mFadeScrollingIndicator = PreferencesProvider.Interface.Drawer.Indicator.getFadeScrollingIndicator(context);
-    }
-
-    public void setup(Launcher launcher) {
-        mLauncher = launcher;
     }
 
     /**
@@ -100,13 +91,10 @@ public class AppsCustomizeTabHost extends TabHost implements LauncherTransitiona
     }
     void selectAppsTab() {
         setContentTypeImmediate(AppsCustomizePagedView.ContentType.Applications);
-        setCurrentTabByTag(APPS_TAB_TAG);
     }
     void selectWidgetsTab() {
         setContentTypeImmediate(AppsCustomizePagedView.ContentType.Widgets);
         mAppsCustomizePane.setCurrentPageToWidgets();
-
-        setCurrentTabByTag(WIDGETS_TAB_TAG);
     }
 
     /**
@@ -145,7 +133,6 @@ public class AppsCustomizeTabHost extends TabHost implements LauncherTransitiona
         tabView.setContentDescription(label);
         tabView.setOnLongClickListener(new View.OnLongClickListener() {
                 public boolean onLongClick(View v) {
-                    mLauncher.onLongClickAppsTab(v);
                     return true;
                 }
         });

@@ -219,7 +219,7 @@ public class CellLayout extends ViewGroup {
         setAlwaysDrawnWithCacheEnabled(false);
 
         final Resources res = getResources();
-        mHotseatScale = 1;//(res.getInteger(R.integer.hotseat_item_scale_percentage) / 100f);
+        mHotseatScale = PreferencesProvider.Interface.Dock.getHotseatScale(getContext()) / 100f;
 
         mNormalBackground = res.getDrawable(R.drawable.homescreen_blue_normal_holo);
         mActiveGlowBackground = res.getDrawable(R.drawable.homescreen_blue_strong_holo);

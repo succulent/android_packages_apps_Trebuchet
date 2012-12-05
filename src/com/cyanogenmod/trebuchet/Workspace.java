@@ -61,6 +61,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -262,6 +263,12 @@ public class Workspace extends SmoothPagedView
     private float[] mNewRotationYs;
     private float mTransitionProgress;
 
+    private final Runnable mBindPages = new Runnable() {
+        @Override
+        public void run() {
+            mLauncher.getModel().bindRemainingSynchronousPages();
+        }
+    };
     // Preferences
     private int mNumberHomescreens;
     private int mDefaultPage;
@@ -278,13 +285,6 @@ public class Workspace extends SmoothPagedView
     private Runnable mSwipeDownCallback = null;
     private Runnable mDoubleTapCallback = null;
     private final Handler mHandler = new Handler();
-
-    private final Runnable mBindPages = new Runnable() {
-        @Override
-        public void run() {
-            mLauncher.getModel().bindRemainingSynchronousPages();
-        }
-    };
 
     /**
      * Used to inflate the Workspace from XML.
@@ -340,15 +340,17 @@ public class Workspace extends SmoothPagedView
                 R.dimen.workspace_cell_height);
         DisplayMetrics displayMetrics = res.getDisplayMetrics();
 
-        int tabletMode = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.TABLET_MODE, 0);
-        boolean fullscreen = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.FULLSCREEN_MODE, 0) == 1;
+        int tabletMode = 0;//Settings.System.getInt(mContext.getContentResolver(),
+                //Settings.System.TABLET_MODE, 0);
+        boolean fullscreen = false;//Settings.System.getInt(mContext.getContentResolver(),
+                //Settings.System.FULLSCREEN_MODE, 0) == 1;
 
-        final float screenWidth = res.getConfiguration().screenWidthDp * displayMetrics.density;
-        final float screenHeight = res.getConfiguration().screenHeightDp * displayMetrics.density;
-        final float smallestScreenDim = (tabletMode == 2 ? 600 :
-                res.getConfiguration().smallestScreenWidthDp) * displayMetrics.density;
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getRealSize(size);
+
+        final float smallestScreenDim = (float) (size.x > size.y ? size.y : size.x);
         final float systemBarHeight = res.getDimension(com.android.internal.R.dimen.status_bar_height);
         final float navigationBarHeight = res.getDimension(com.android.internal.R.dimen.navigation_bar_height);
         int buttonBarHeightPlus = res.getDimensionPixelSize(largeIcons
@@ -365,6 +367,14 @@ public class Workspace extends SmoothPagedView
         int cellCountY = (int) ((smallestScreenDim - buttonBarHeight - (fullscreen
                 ? 0 : (tabletMode == 0 ? (hasNavBar ? (navigationBarHeight + systemBarHeight) :
                 systemBarHeight) : navigationBarHeight))) / cellHeight);
+
+        TypedArray a = context.obtainStyledAttributes(attrs,
+                R.styleable.Workspace, defStyle, 0);
+        if (cellCountX < 4 || cellCountY < 4) {
+            cellCountX = a.getInt(R.styleable.Workspace_cellCountX, cellCountX);
+            cellCountY = a.getInt(R.styleable.Workspace_cellCountY, cellCountY);
+        }
+        a.recycle();
 
         LauncherModel.updateMaxWorkspaceLayoutCells(cellCountX, cellCountY);
 
