@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sbradymobile.launchhome;
+package com.cyanogenmod.trebuchet;
 
 import android.content.Context;
 import android.graphics.Canvas;

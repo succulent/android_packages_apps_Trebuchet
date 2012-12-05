@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sbradymobile.launchhome;
+package com.cyanogenmod.trebuchet;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -41,7 +41,7 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.SpinnerAdapter;
 
-import com.sbradymobile.launchhome.R;
+import com.cyanogenmod.trebuchet.R;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class WallpaperChooserDialogFragment extends DialogFragment implements
         AdapterView.OnItemSelectedListener, AdapterView.OnItemClickListener {
 
     private static final String TAG = "Launcher.WallpaperChooserDialogFragment";
-    private static final String EMBEDDED_KEY = "com.sbradymobile.launchhome."
+    private static final String EMBEDDED_KEY = "com.cyanogenmod.trebuchet."
             + "WallpaperChooserDialogFragment.EMBEDDED_KEY";
 
     private boolean mEmbedded;
@@ -194,8 +194,8 @@ public class WallpaperChooserDialogFragment extends DialogFragment implements
 
         final Resources resources = getResources();
         // Context.getPackageName() may return the "original" package name,
-        // com.sbradymobile.launchhome; Resources needs the real package name,
-        // com.sbradymobile.launchhome. So we ask Resources for what it thinks the
+        // com.cyanogenmod.trebuchet; Resources needs the real package name,
+        // com.cyanogenmod.trebuchet. So we ask Resources for what it thinks the
         // package name should be.
         final String packageName = resources.getResourcePackageName(R.array.wallpapers);
 

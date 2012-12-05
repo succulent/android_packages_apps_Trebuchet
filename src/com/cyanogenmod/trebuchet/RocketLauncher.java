@@ -18,7 +18,7 @@
 // background stellar matter:
 //  - add some slow horizontal parallax motion, or perhaps veeeeery gradual outward drift
 
-package com.sbradymobile.launchhome;
+package com.cyanogenmod.trebuchet;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -39,7 +39,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.sbradymobile.launchhome.R;
+import com.cyanogenmod.trebuchet.R;
 
 import java.util.HashMap;
 import java.util.Random;

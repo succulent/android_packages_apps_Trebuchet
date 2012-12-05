@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sbradymobile.launchhome;
+package com.cyanogenmod.trebuchet;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -23,7 +23,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.sbradymobile.launchhome.R;
+import com.cyanogenmod.trebuchet.R;
 
 public class DrawableStateProxyView extends LinearLayout {
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sbradymobile.launchhome.preference;
+package com.cyanogenmod.trebuchet.preference;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -30,14 +30,14 @@ import android.preference.PreferenceScreen;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
-import com.sbradymobile.launchhome.R;
-import com.sbradymobile.launchhome.LauncherApplication;
-import com.sbradymobile.launchhome.LauncherModel;
+import com.cyanogenmod.trebuchet.R;
+import com.cyanogenmod.trebuchet.LauncherApplication;
+import com.cyanogenmod.trebuchet.LauncherModel;
 
 public class DockFragmentActivity extends PreferenceFragment {
 
     private static final String PREF_ENABLED = "1";
-    private static final String TAG = "Dock";
+    private static final String TAG = "Launcher2_Dock";
 
     private static NumberPickerPreference mHotseatPositions;
     private static AutoNumberPickerPreference mHotseatAllAppsPosition;

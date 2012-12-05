@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sbradymobile.launchhome;
+package com.cyanogenmod.trebuchet;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -24,8 +24,8 @@ import android.view.View;
 import android.view.ViewDebug;
 import android.view.ViewGroup;
 
-import com.sbradymobile.launchhome.preference.PreferencesProvider;
-import com.sbradymobile.launchhome.R;
+import com.cyanogenmod.trebuchet.preference.PreferencesProvider;
+import com.cyanogenmod.trebuchet.R;
 
 /**
  * An abstraction of the original CellLayout which supports laying out items

@@ -7,6 +7,8 @@
 <!-- DragController -->
     <integer name="config_flingToDeleteMinVelocity">-1500</integer>
 
+    <bool name="config_cyanogenmod">false</bool>
+
 <!-- AllApps/Customize/AppsCustomize -->
     <!-- The alpha of the AppsCustomize bg in spring loaded mode -->
     <integer name="config_appsCustomizeSpringLoadedBgAlpha">0</integer>
@@ -83,8 +85,8 @@
     <!-- Allow tablets to set grid size in settings, false disables -->
     <bool name="config_workspaceTabletGrid">false</bool>
 
-    <integer name="cell_count_x">4</integer>
-    <integer name="cell_count_y">4</integer>
+    <integer name="cell_count_x">6</integer>
+    <integer name="cell_count_y">6</integer>
     <integer name="hotseat_cell_count">5</integer>
     <integer name="hotseat_all_apps_index">2</integer>
 </resources>

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sbradymobile.launchhome;
+package com.cyanogenmod.trebuchet;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -33,7 +33,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.inputmethod.InputMethodManager;
 
-import com.sbradymobile.launchhome.R;
+import com.cyanogenmod.trebuchet.R;
 
 import java.util.ArrayList;
 

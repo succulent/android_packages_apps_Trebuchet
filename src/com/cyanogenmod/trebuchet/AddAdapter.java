@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sbradymobile.launchhome;
+package com.cyanogenmod.trebuchet;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -27,7 +27,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import com.sbradymobile.launchhome.R;
+import com.cyanogenmod.trebuchet.R;
 
 /**
  * Adapter showing the types of items that can be added to a {@link Workspace}.

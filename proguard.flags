@@ -1,4 +1,4 @@
--keep class com.sbradymobile.launchhome.Launcher {
+-keep class com.cyanogenmod.trebuchet.Launcher {
   public void previousScreen(android.view.View);
   public void nextScreen(android.view.View);
   public void launchHotSeat(android.view.View);
@@ -12,7 +12,7 @@
   public void dismissAllAppsSortCling(android.view.View);
 }
 
--keep class com.sbradymobile.launchhome.CellLayout {
+-keep class com.cyanogenmod.trebuchet.CellLayout {
   public float getBackgroundAlpha();
   public void setBackgroundAlpha(float);
   public float getDimmableProgress();
@@ -23,7 +23,7 @@
   public void setHoverAlpha(float);
 }
 
--keep class com.sbradymobile.launchhome.DragLayer$LayoutParams {
+-keep class com.cyanogenmod.trebuchet.DragLayer$LayoutParams {
   public void setWidth(int);
   public int getWidth();
   public void setHeight(int);
@@ -34,7 +34,7 @@
   public int getY();
 }
 
--keep class com.sbradymobile.launchhome.CellLayout$LayoutParams {
+-keep class com.cyanogenmod.trebuchet.CellLayout$LayoutParams {
   public void setWidth(int);
   public int getWidth();
   public void setHeight(int);
@@ -45,7 +45,7 @@
   public int getY();
 }
 
--keep class com.sbradymobile.launchhome.Workspace {
+-keep class com.cyanogenmod.trebuchet.Workspace {
   public float getBackgroundAlpha();
   public void setBackgroundAlpha(float);
   public float getChildrenOutlineAlpha();
@@ -56,10 +56,10 @@
   public float getHorizontalWallpaperOffset();
 }
 
--keep class com.sbradymobile.launchhome.AllApps3D$Defines {
+-keep class com.cyanogenmod.trebuchet.AllApps3D$Defines {
   *;
 }
 
--keep class com.sbradymobile.launchhome.ClippedImageView {
+-keep class com.cyanogenmod.trebuchet.ClippedImageView {
   *;
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sbradymobile.launchhome;
+package com.cyanogenmod.trebuchet;
 
 import android.app.SearchManager;
 import android.appwidget.AppWidgetHost;
@@ -49,8 +49,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Xml;
 
-import com.sbradymobile.launchhome.R;
-import com.sbradymobile.launchhome.LauncherSettings.Favorites;
+import com.cyanogenmod.trebuchet.R;
+import com.cyanogenmod.trebuchet.LauncherSettings.Favorites;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -68,17 +68,15 @@ public class LauncherProvider extends ContentProvider {
 
     private static final int DATABASE_VERSION = 12;
 
-    static final String AUTHORITY = "com.sbradymobile.launchhome.settings";
+    static final String AUTHORITY = "com.cyanogenmod.trebuchet.settings";
 
     static final String TABLE_FAVORITES = "favorites";
     static final String PARAMETER_NOTIFY = "notify";
     static final String DB_CREATED_BUT_DEFAULT_WORKSPACE_NOT_LOADED =
             "DB_CREATED_BUT_DEFAULT_WORKSPACE_NOT_LOADED";
-    static final String DEFAULT_WORKSPACE_RESOURCE_ID =
-            "DEFAULT_WORKSPACE_RESOURCE_ID";
 
     private static final String ACTION_APPWIDGET_DEFAULT_WORKSPACE_CONFIGURE =
-            "com.android.launcher.action.APPWIDGET_DEFAULT_WORKSPACE_CONFIGURE";
+            "com.cyanogenmod.trebuchet.action.APPWIDGET_DEFAULT_WORKSPACE_CONFIGURE";
 
     /**
      * {@link Uri} triggered at any registered {@link android.database.ContentObserver} when
@@ -205,27 +203,14 @@ public class LauncherProvider extends ContentProvider {
         return mOpenHelper.generateNewId();
     }
 
-    /**
-     * @param workspaceResId that can be 0 to use default or non-zero for specific resource
-     */
-    synchronized public void loadDefaultFavoritesIfNecessary(int origWorkspaceResId) {
+    synchronized public void loadDefaultFavoritesIfNecessary() {
         String spKey = LauncherApplication.getSharedPreferencesKey();
         SharedPreferences sp = getContext().getSharedPreferences(spKey, Context.MODE_PRIVATE);
         if (sp.getBoolean(DB_CREATED_BUT_DEFAULT_WORKSPACE_NOT_LOADED, false)) {
-            int workspaceResId = origWorkspaceResId;
-
-            // Use default workspace resource if none provided
-            if (workspaceResId == 0) {
-                workspaceResId = sp.getInt(DEFAULT_WORKSPACE_RESOURCE_ID, R.xml.default_workspace);
-            }
-
             // Populate favorites table with initial favorites
             SharedPreferences.Editor editor = sp.edit();
             editor.remove(DB_CREATED_BUT_DEFAULT_WORKSPACE_NOT_LOADED);
-            if (origWorkspaceResId != 0) {
-                editor.putInt(DEFAULT_WORKSPACE_RESOURCE_ID, origWorkspaceResId);
-            }
-            mOpenHelper.loadFavorites(mOpenHelper.getWritableDatabase(), workspaceResId);
+            mOpenHelper.loadFavorites(mOpenHelper.getWritableDatabase(), R.xml.default_workspace);
             editor.commit();
         }
     }
@@ -766,12 +751,12 @@ public class LauncherProvider extends ContentProvider {
         private static final void beginDocument(XmlPullParser parser, String firstElementName)
                 throws XmlPullParserException, IOException {
             int type;
-            while ((type = parser.next()) != XmlPullParser.START_TAG
-                    && type != XmlPullParser.END_DOCUMENT) {
+            while ((type = parser.next()) != parser.START_TAG
+                    && type != parser.END_DOCUMENT) {
                 ;
             }
 
-            if (type != XmlPullParser.START_TAG) {
+            if (type != parser.START_TAG) {
                 throw new XmlPullParserException("No start tag found");
             }
 

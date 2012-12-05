@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sbradymobile.launchhome;
+package com.cyanogenmod.trebuchet;
 
 import android.appwidget.AppWidgetProviderInfo;
 import android.content.Context;
@@ -29,7 +29,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.sbradymobile.launchhome.R;
+import com.cyanogenmod.trebuchet.R;
 
 /**
  * The linear layout used strictly for the widget/wallpaper tab of the customization tray

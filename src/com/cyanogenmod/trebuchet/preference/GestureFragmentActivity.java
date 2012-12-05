@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sbradymobile.launchhome.preference;
+package com.cyanogenmod.trebuchet.preference;
 
 import android.content.Context;
 import android.content.Intent;
@@ -31,13 +31,13 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.util.Log;
 
-import com.sbradymobile.launchhome.R;
+import com.cyanogenmod.trebuchet.R;
 
 public class GestureFragmentActivity extends PreferenceFragment implements
         OnPreferenceChangeListener {
 
     private static final String PREF_ENABLED = "1";
-    private static final String TAG = "Gesture";
+    private static final String TAG = "Trebuchet_Gesture";
 
     private ListPreference mHomescreenDoubleTap;
     private ListPreference mHomescreenSwipeUp;

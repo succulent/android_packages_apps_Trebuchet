@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:launcher="http://schemas.android.com/apk/res/com.sbradymobile.launchhome">
+        xmlns:launcher="http://schemas.android.com/apk/res/com.cyanogenmod.trebuchet">
             <PreferenceCategory android:title="@string/preferences_interface_drawer_grid_category">
-                <com.sbradymobile.launchhome.preference.AutoDoubleNumberPickerPreference android:key="ui_drawer_grid"
+                <com.cyanogenmod.trebuchet.preference.AutoDoubleNumberPickerPreference android:key="ui_drawer_grid"
                     android:title="@string/preferences_interface_drawer_grid_title"
                     launcher:pickerTitle1="@string/preferences_interface_homescreen_general_grid_rows_title"
                     launcher:pickerTitle2="@string/preferences_interface_homescreen_general_grid_columns_title"
@@ -13,7 +13,7 @@
                     launcher:min1="1"
                     launcher:max2="16"
                     launcher:min2="1" />
-                <com.sbradymobile.launchhome.preference.AutoDoubleNumberPickerPreference android:key="ui_drawer_grid_land"
+                <com.cyanogenmod.trebuchet.preference.AutoDoubleNumberPickerPreference android:key="ui_drawer_grid_land"
                     android:title="@string/preferences_interface_drawer_grid_land_title"
                     launcher:pickerTitle1="@string/preferences_interface_homescreen_general_grid_rows_title"
                     launcher:pickerTitle2="@string/preferences_interface_homescreen_general_grid_columns_title"
@@ -23,7 +23,7 @@
                     launcher:min1="1"
                     launcher:max2="16"
                     launcher:min2="1" />
-                <com.sbradymobile.launchhome.preference.AutoDoubleNumberPickerPreference android:key="ui_drawer_widgets"
+                <com.cyanogenmod.trebuchet.preference.AutoDoubleNumberPickerPreference android:key="ui_drawer_widgets"
                     android:title="@string/preferences_interface_drawer_widget_grid_title"
                     launcher:pickerTitle1="@string/preferences_interface_homescreen_general_grid_rows_title"
                     launcher:pickerTitle2="@string/preferences_interface_homescreen_general_grid_columns_title"
@@ -33,7 +33,7 @@
                     launcher:min1="1"
                     launcher:max2="10"
                     launcher:min2="1" />
-                <com.sbradymobile.launchhome.preference.AutoDoubleNumberPickerPreference android:key="ui_drawer_widgets_land"
+                <com.cyanogenmod.trebuchet.preference.AutoDoubleNumberPickerPreference android:key="ui_drawer_widgets_land"
                     android:title="@string/preferences_interface_drawer_widget_grid_land_title"
                     launcher:pickerTitle1="@string/preferences_interface_homescreen_general_grid_rows_title"
                     launcher:pickerTitle2="@string/preferences_interface_homescreen_general_grid_columns_title"

@@ -21,11 +21,11 @@
     <!-- General -->
     <skip />
     <!-- Application name -->
-    <string name="application_name" translatable="false">LaunchHome</string>
+    <string name="application_name" translatable="false">Trebuchet</string>
     <!-- Application copyright -->
-    <string name="application_copyright">Copyright \u00A9 sbradymobile 2012</string>
+    <string name="application_copyright">Copyright \u00A9 CyanogenMod 2012</string>
     <!-- Application version -->
-    <string name="application_version">1</string>
+    <string name="application_version">0.2</string>
     <!-- Accessibility-facing application name -->
     <string name="home">Home</string>
     <!-- Name for all applications running as this uid. -->
@@ -158,7 +158,7 @@ s -->
     <!-- Noun, menu item used to show the system settings -->
     <string name="menu_settings">System settings</string>
     <!-- Noun, menu item used to show the launcher preferences -->
-    <string name="menu_preferences">LaunchHome settings</string>
+    <string name="menu_preferences">Trebuchet settings</string>
     <!-- Noun, menu item used to show help. [CHAR_LIMIT=none] -->
     <string name="menu_help">Help</string>
 
@@ -294,7 +294,7 @@ s -->
     <!--             -->
     <!-- Preferences -->
     <!--             -->
-    <string name="preferences_title">LaunchHome settings</string>
+    <string name="preferences_title">Trebuchet settings</string>
     <!-- UI -->
     <string name="preferences_interface_title">Interface</string>
     <!-- Application -->
@@ -396,7 +396,7 @@ s -->
     <string name="preferences_interface_gestures_open_drawer">Open drawer</string>
     <string name="preferences_interface_gestures_toggle_status_bar">Toggle status bar</string>
     <string name="preferences_interface_gestures_expand_status_bar">Expand status bar notifications</string>
-    <string name="preferences_interface_gestures_preferences">LaunchHome Settings</string>
+    <string name="preferences_interface_gestures_preferences">Launch Trebuchet Settings</string>
     <string name="preferences_interface_gestures_launch_application">Launch activity</string>
     <string name="preferences_interface_gestures_rocket_launcher">Rocket Launcher</string>
 

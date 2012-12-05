@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sbradymobile.launchhome;
+package com.cyanogenmod.trebuchet;
 
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -25,7 +25,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.widget.Toast;
 
-import com.sbradymobile.launchhome.R;
+import com.cyanogenmod.trebuchet.R;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;

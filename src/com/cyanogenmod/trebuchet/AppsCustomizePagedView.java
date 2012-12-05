@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sbradymobile.launchhome;
+package com.cyanogenmod.trebuchet;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -65,9 +65,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.sbradymobile.launchhome.R;
-import com.sbradymobile.launchhome.DropTarget.DragObject;
-import com.sbradymobile.launchhome.preference.PreferencesProvider;
+import com.cyanogenmod.trebuchet.R;
+import com.cyanogenmod.trebuchet.DropTarget.DragObject;
+import com.cyanogenmod.trebuchet.preference.PreferencesProvider;
 
 import java.util.ArrayList;
 import java.util.Collections;

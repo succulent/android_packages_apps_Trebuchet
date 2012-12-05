@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sbradymobile.launchhome;
+package com.cyanogenmod.trebuchet;
 
 import android.app.Application;
 import android.app.SearchManager;
@@ -26,7 +26,7 @@ import android.content.res.Configuration;
 import android.database.ContentObserver;
 import android.os.Handler;
 
-import com.sbradymobile.launchhome.R;
+import com.cyanogenmod.trebuchet.R;
 
 import java.lang.ref.WeakReference;
 
@@ -36,7 +36,7 @@ public class LauncherApplication extends Application {
     private static boolean sIsScreenLarge;
     private static float sScreenDensity;
     private static int sLongPressTimeout = 300;
-    private static final String sSharedPreferencesKey = "com.sbradymobile.launchhome.prefs";
+    private static final String sSharedPreferencesKey = "com.cyanogenmod.trebuchet.prefs";
     WeakReference<LauncherProvider> mLauncherProvider;
 
     @Override

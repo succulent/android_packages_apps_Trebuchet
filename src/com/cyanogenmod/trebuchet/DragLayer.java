@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sbradymobile.launchhome;
+package com.cyanogenmod.trebuchet;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -39,7 +39,7 @@ import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.sbradymobile.launchhome.R;
+import com.cyanogenmod.trebuchet.R;
 
 import java.util.ArrayList;
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sbradymobile.launchhome.preference;
+package com.cyanogenmod.trebuchet.preference;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -34,7 +34,7 @@ import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 
-import com.sbradymobile.launchhome.R;
+import com.cyanogenmod.trebuchet.R;
 
 import java.util.ArrayList;
 

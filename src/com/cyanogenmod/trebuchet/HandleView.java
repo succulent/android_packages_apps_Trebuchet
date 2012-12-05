@@ -15,7 +15,7 @@
  */
 
 
-package com.sbradymobile.launchhome;
+package com.cyanogenmod.trebuchet;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -24,7 +24,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.sbradymobile.launchhome.R;
+import com.cyanogenmod.trebuchet.R;
 
 public class HandleView extends ImageView {
     private static final int ORIENTATION_HORIZONTAL = 1;

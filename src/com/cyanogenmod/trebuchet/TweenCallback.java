@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sbradymobile.launchhome;
+package com.cyanogenmod.trebuchet;
 
 interface TweenCallback {
     void onTweenValueChanged(float value, float oldValue);

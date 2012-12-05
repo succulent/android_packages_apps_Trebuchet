@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sbradymobile.launchhome;
+package com.cyanogenmod.trebuchet;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -25,7 +25,7 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.sbradymobile.launchhome.R;
+import com.cyanogenmod.trebuchet.R;
 
 public class HolographicLinearLayout extends LinearLayout {
 

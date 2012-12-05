@@ -15,7 +15,7 @@
  */
 
 
-package com.sbradymobile.launchhome;
+package com.cyanogenmod.trebuchet;
 
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
@@ -30,7 +30,7 @@ import android.graphics.Rect;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
-import com.sbradymobile.launchhome.R;
+import com.cyanogenmod.trebuchet.R;
 
 public class DragView extends View {
     private static float sDragAlpha = 1f;

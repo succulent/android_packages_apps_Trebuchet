@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sbradymobile.launchhome;
+package com.cyanogenmod.trebuchet;
 
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
@@ -38,7 +38,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
-import com.sbradymobile.launchhome.R;
+import com.cyanogenmod.trebuchet.R;
 
 public class DeleteDropTarget extends ButtonDropTarget {
     private static int DELETE_ANIMATION_DURATION = 285;

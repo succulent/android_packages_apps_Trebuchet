@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sbradymobile.launchhome;
+package com.cyanogenmod.trebuchet;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
@@ -65,10 +65,10 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.sbradymobile.launchhome.R;
-import com.sbradymobile.launchhome.FolderIcon.FolderRingAnimator;
-import com.sbradymobile.launchhome.LauncherSettings.Favorites;
-import com.sbradymobile.launchhome.preference.PreferencesProvider;
+import com.cyanogenmod.trebuchet.R;
+import com.cyanogenmod.trebuchet.FolderIcon.FolderRingAnimator;
+import com.cyanogenmod.trebuchet.LauncherSettings.Favorites;
+import com.cyanogenmod.trebuchet.preference.PreferencesProvider;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -365,15 +365,6 @@ public class Workspace extends SmoothPagedView
         int cellCountY = (int) ((smallestScreenDim - buttonBarHeight - (fullscreen
                 ? 0 : (tabletMode == 0 ? (hasNavBar ? (navigationBarHeight + systemBarHeight) :
                 systemBarHeight) : navigationBarHeight))) / cellHeight);
-
-        TypedArray a = context.obtainStyledAttributes(attrs,
-                R.styleable.Workspace, defStyle, 0);
-
-        if (cellCountX < 2 || cellCountY < 2) {
-            cellCountX = a.getInt(R.styleable.Workspace_cellCountX, cellCountX);
-            cellCountY = a.getInt(R.styleable.Workspace_cellCountY, cellCountY);
-        }
-        a.recycle();
 
         LauncherModel.updateMaxWorkspaceLayoutCells(cellCountX, cellCountY);
 

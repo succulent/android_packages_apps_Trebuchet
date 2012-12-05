@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sbradymobile.launchhome;
+package com.cyanogenmod.trebuchet;
 
 import android.content.res.Configuration;
 import android.view.KeyEvent;
@@ -24,7 +24,7 @@ import android.view.ViewParent;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 
-import com.sbradymobile.launchhome.R;
+import com.cyanogenmod.trebuchet.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
