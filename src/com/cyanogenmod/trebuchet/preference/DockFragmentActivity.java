@@ -92,7 +92,7 @@ public class DockFragmentActivity extends PreferenceFragment {
                 Preferences.HOTSEAT_POSITIONS, 7)));
 
         mHotseatScale.setSummary(Integer.toString(mPrefs.getInt(
-                Preferences.HOTSEAT_POSITIONS, 100)) + " %");
+                Preferences.HOTSEAT_SCALE, 100)));
 
         int hp = mPrefs.getInt(Preferences.HOTSEAT_ALLAPPS_POSITION, 0);
         mHotseatAllAppsPosition.setSummary(hp == 0 ? mContext.getString(
