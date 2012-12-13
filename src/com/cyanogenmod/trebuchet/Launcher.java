@@ -3935,26 +3935,10 @@ public final class Launcher extends Activity
             break;
         }
 
-        boolean reverseRotation = false;
-        try {
-            reverseRotation = getResources().getBoolean(
-                 com.android.internal.R.bool.config_reverseDefaultRotation);
-        } catch (Exception e){
-        }
-        boolean naturalPortrait = naturalOri == Configuration.ORIENTATION_PORTRAIT;
-
         int[] oriMap = {
-                (!naturalPortrait && reverseRotation) ?
-                ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT :
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT,
-                (naturalPortrait && reverseRotation) ?
-                ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE :
                 ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE,
-                (!naturalPortrait && reverseRotation) ?
-                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT :
                 ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT,
-                (naturalPortrait && reverseRotation) ?
-                ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE :
                 ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
         };
 
