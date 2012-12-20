@@ -284,12 +284,6 @@ public class CellLayout extends ViewGroup {
         mForegroundRect = new Rect();
 
         mShortcutsAndWidgets = new ShortcutAndWidgetContainer(context);
-
-        if (!LauncherApplication.isScreenLarge()){
-            mCellWidth = (mCellWidth * 4) / mCountX;
-            mCellHeight = (mCellHeight * 4) / mCountY;
-        }
-
         mShortcutsAndWidgets.setCellDimensions(mCellWidth, mCellHeight, mWidthGap, mHeightGap);
         addView(mShortcutsAndWidgets);
     }
@@ -1008,7 +1002,6 @@ public class CellLayout extends ViewGroup {
             mWidthGap = mOriginalWidthGap;
             mHeightGap = mOriginalHeightGap;
         }
-
 
         // Initial values correspond to widthSpecMode == MeasureSpec.EXACTLY
         int newWidth = widthSpecSize;
