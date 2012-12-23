@@ -141,6 +141,9 @@ public final class PreferencesProvider {
             public static boolean getJoinWidgetsApps() {
                 return getBoolean("ui_drawer_widgets_join_apps", true);
             }
+            public static String getHiddenApps() {
+                return getString("ui_drawer_hidden_apps", "");
+            }
             public static class Scrolling {
                 public static AppsCustomizePagedView.TransitionEffect getTransitionEffect(String def) {
                     try {
@@ -168,6 +171,9 @@ public final class PreferencesProvider {
                 }
                 public static boolean getFadeScrollingIndicator() {
                     return getBoolean("ui_drawer_indicator_fade", true);
+                }
+                public static int getScrollingIndicatorPosition() {
+                    return Integer.parseInt(getString("ui_drawer_indicator_position", "0"));
                 }
             }
         }
