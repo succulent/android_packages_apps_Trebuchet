@@ -31,6 +31,10 @@
             android:targetPackage="com.cyanogenmod.trebuchet"
             android:targetClass="com.cyanogenmod.trebuchet.preference.HiddenAppsActivity"/>
     </Preference>
+    <CheckBoxPreference android:key="ui_drawer_background_show_wallpaper"
+        android:title="@string/preferences_interface_drawer_show_wallpaper_title"
+        android:summary="@string/preferences_interface_drawer_show_wallpaper_summary"
+        android:defaultValue="false" />
     <PreferenceCategory android:title="@string/preferences_interface_drawer_widgets_category">
         <CheckBoxPreference android:key="ui_drawer_widgets_join_apps"
             android:title="@string/preferences_interface_drawer_widgets_join_apps_title"

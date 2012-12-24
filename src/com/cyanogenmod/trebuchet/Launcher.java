@@ -321,6 +321,7 @@ public final class Launcher extends Activity
     private boolean mHideIconLabels;
     private boolean mAutoRotate;
     private boolean mFullscreenMode;
+    private boolean mDrawerShowWallpaper;
 
     private boolean mWallpaperVisible;
 
@@ -401,6 +402,7 @@ public final class Launcher extends Activity
         mHideIconLabels = PreferencesProvider.Interface.Homescreen.getHideIconLabels();
         mAutoRotate = PreferencesProvider.Interface.General.getAutoRotate(getResources().getBoolean(R.bool.allow_rotation));
         mFullscreenMode = PreferencesProvider.Interface.General.getFullscreenMode();
+		mDrawerShowWallpaper = PreferencesProvider.Interface.Drawer.getDrawerShowWallpaper();
 
         if (PROFILE_STARTUP) {
             android.os.Debug.startMethodTracing(
@@ -966,6 +968,7 @@ public final class Launcher extends Activity
         // Setup AppsCustomize
         mAppsCustomizeTabHost = (AppsCustomizeTabHost)
                 findViewById(R.id.apps_customize_pane);
+        if (mDrawerShowWallpaper) mAppsCustomizeTabHost.setBackgroundColor(0x00000000);
         mAppsCustomizeContent = (AppsCustomizePagedView)
                 mAppsCustomizeTabHost.findViewById(R.id.apps_customize_pane_content);
         mAppsCustomizeContent.setup(this, dragController);
@@ -2663,6 +2666,7 @@ public final class Launcher extends Activity
     }
 
     void updateWallpaperVisibility(boolean visible) {
+        if (mDrawerShowWallpaper) return;
         int wpflags = visible && mWallpaperVisible ? WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER : 0;
         int curflags = getWindow().getAttributes().flags
                 & WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;

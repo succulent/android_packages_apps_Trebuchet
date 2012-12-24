@@ -144,6 +144,9 @@ public final class PreferencesProvider {
             public static String getHiddenApps() {
                 return getString("ui_drawer_hidden_apps", "");
             }
+            public static boolean getDrawerShowWallpaper() {
+                return getBoolean("ui_drawer_background_show_wallpaper", false);
+            }
             public static class Scrolling {
                 public static AppsCustomizePagedView.TransitionEffect getTransitionEffect(String def) {
                     try {
