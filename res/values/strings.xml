@@ -85,6 +85,8 @@ s -->
     <string name="group_shortcuts">Shortcuts</string>
     <!-- Options in "Add to Home" dialog box; Title of the group containing the list of all widgets/gadgets -->
     <string name="group_widgets">Widgets</string>
+    <!-- Options in "Add to Home" dialog box; Title of the group containing the list of all launcher actions -->
+    <string name="group_actions">Actions</string>
     <!-- Options in "Add to Home" dialog box; Title of the group containing the list of apps that can set the wallpaper-->
     <string name="group_wallpapers">Wallpapers</string>
     <!-- Error message when user has filled all their home screens -->
@@ -127,6 +129,8 @@ s -->
     <string name="delete_target_uninstall_label">Uninstall</string>
     <!-- Label for the info icon. [CHAR_LIMIT=30] -->
     <string name="info_target_label">App info</string>
+    <!-- Label for the info icon. [CHAR_LIMIT=30] -->
+    <string name="edit_target_label">Edit</string>
 
     <!-- Accessibility: Search button -->
     <string name="accessibility_search_button">Search</string>
@@ -378,6 +382,12 @@ s -->
 
     <!-- Dock -->
     <string name="preferences_interface_dock_title">Dock</string>
+    <string name="preferences_interface_dock_pages_title">Pages</string>
+    <string name="preferences_interface_dock_pages_summary">Number of pages in the dock</string>
+    <string name="preferences_interface_dock_default_page_title">Default page</string>
+    <string name="preferences_interface_dock_default_page_summary">Choose the default page</string>
+    <string name="preferences_interface_dock_icons_title">Icons</string>
+    <string name="preferences_interface_dock_icons_summary">Number of icons/columns in the dock</string>
     <string name="preferences_interface_dock_divider_title">Show dock divider</string>
     <string name="preferences_interface_dock_divider_summary">Show divider between homescreen and dock</string>
 
