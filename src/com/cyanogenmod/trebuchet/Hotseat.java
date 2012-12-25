@@ -119,7 +119,7 @@ public class Hotseat extends PagedView {
         return hasVerticalHotseat() ? (mCellCount - rank - 1) : 0;
     }
     int getScreenFromOrder(int screen) {
-        return hasVerticalHotseat() ? (getChildCount() - screen - 1) : screen;
+        return /*hasVerticalHotseat() ? (getChildCount() - screen - 1) : */screen;
     }
 
     @Override
