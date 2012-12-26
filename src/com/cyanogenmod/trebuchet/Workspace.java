@@ -667,12 +667,7 @@ public class Workspace extends SmoothPagedView
             // of the hotseat in order regardless of which orientation they were added
             y = mLauncher.getHotseat().getCellYFromOrder(x);
             x = mLauncher.getHotseat().getCellXFromOrder(x);
-            screen = mLauncher.getHotseat().getScreenFromOrder(screen);
-            if (screen < 0 || screen >= mLauncher.getHotseat().getChildCount()) {
-                layout = (CellLayout) mLauncher.getHotseat().getLayout();
-            } else {
-                layout = (CellLayout) mLauncher.getHotseat().getPageAt(screen);
-            }
+            layout = (CellLayout) mLauncher.getHotseat().getPageAt(screen);
             child.setOnKeyListener(null);
 
             // Hide titles in the hotseat
@@ -3243,8 +3238,8 @@ public class Workspace extends SmoothPagedView
 
    void mapPointFromSelfToHotseatLayout(Hotseat hotseat, float[] xy) {
        hotseat.getLayout().getMatrix().invert(mTempInverseMatrix);
-       xy[0] = xy[0] - hotseat.getLeft() - hotseat.getLayout().getLeft();
-       xy[1] = xy[1] - hotseat.getTop() - hotseat.getLayout().getTop();
+       xy[0] = xy[0] - hotseat.getLeft();
+       xy[1] = xy[1] - hotseat.getTop();
        mTempInverseMatrix.mapPoints(xy);
    }
 
